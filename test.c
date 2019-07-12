@@ -965,14 +965,15 @@ void test_lambert(void) {
 }
 
 int main(void) {
-    test_dict();
-    test_vector();
-    test_matrix();
-    test_coordinates();
-    test_body();
-    test_orbits();
-    test_orbit_invalid();
-    test_load();
-    test_recipes();
-    test_lambert();
+    test_dict();           printf("."); fflush(stdout);
+    test_vector();         printf("."); fflush(stdout);
+    test_matrix();         printf("."); fflush(stdout);
+    test_coordinates();    printf("."); fflush(stdout);
+    test_body();           printf("."); fflush(stdout);
+    test_orbits();         printf("."); fflush(stdout);
+    test_orbit_invalid();  printf("."); fflush(stdout);
+    test_load();           printf("."); fflush(stdout);
+    test_recipes();        printf("."); fflush(stdout);
+    test_lambert();        printf("."); fflush(stdout);
+    printf("\n");
 }
