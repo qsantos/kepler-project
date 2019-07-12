@@ -26,15 +26,18 @@ char* load_file(const char* filename) {
     // get file size
     if (fseek(f, 0, SEEK_END) < 0) {
         perror("while seeking end of file");
+        fclose(f);
         return NULL;
     }
     long length = ftell(f);
     if (length < 0) {
         perror("while reading file");
+        fclose(f);
         return NULL;
     }
     if (fseek(f, 0, SEEK_SET) < 0) {
         perror("while seeking start of file");
+        fclose(f);
         return NULL;
     }
 

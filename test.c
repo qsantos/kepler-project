@@ -97,11 +97,11 @@ static void assertIsCloseOrbit(Orbit* a, Orbit* b) {
         assertIsCloseAngle(a->longitude_of_ascending_node, b->longitude_of_ascending_node);
     }
 
-    // argument of periapsis
-    if (a->eccentricity != 0.) {  // argument of periapsis not well defined in circular orbits
+    if (a->eccentricity != 0.) {
+        // argument of periapsis
+        // (not well defined in circular orbits)
         double argument_of_periapsis_a = a->argument_of_periapsis;
         double argument_of_periapsis_b = b->argument_of_periapsis;
-
         // when inclination is 0. or M_PI, argument of periapsis and longitude
         // of ascending node must be merged into a single value (gimbal
         // lock), normally called 'longitude of periapsis', since this is a
@@ -114,12 +114,10 @@ static void assertIsCloseOrbit(Orbit* a, Orbit* b) {
             argument_of_periapsis_a -= a->longitude_of_ascending_node;
             argument_of_periapsis_b -= b->longitude_of_ascending_node;
         }
-
         assertIsCloseAngle(argument_of_periapsis_a, argument_of_periapsis_b);
-    }
 
-    // mean anomaly
-    if (a->eccentricity != 0.) {  // mean anomaly not well defined in circular orbits
+        // mean anomaly
+        // (not well defined in circular orbits)
         double mean_anomaly_a = orbit_mean_anomaly_at_time(a, 0.);
         double mean_anomaly_b = orbit_mean_anomaly_at_time(b, 0.);
         assertIsCloseAngle(mean_anomaly_a, mean_anomaly_b);

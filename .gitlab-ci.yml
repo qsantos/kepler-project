@@ -2,5 +2,6 @@ image: registry.gitlab.com/qsantos/orbit/ci
 
 test:
   script:
+    - cppcheck --suppress=missingIncludeSystem --error-exitcode=1 --quiet --enable=all *.h *.c
     - make test clean
     - ./test

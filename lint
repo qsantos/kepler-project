@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Exit at first error
+set -e
+
+# syntax check
+#   .-- lint mode: only parse, treat any warning as an error
+#   v
+gcc -fsyntax-only -Werror "$@" \
+    -std=c99 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -Wvla
+#   ^
+#   `-- usual paranoid options
+
+# static analysis
+#        .-- cppcheck does not need system includes
+#        v
+cppcheck --suppress=missingIncludeSystem --error-exitcode=1 --quiet --enable=all \
+    --suppress=unusedFunction "$@"
+#   ^
+#   `-- partial linting causes unused functions

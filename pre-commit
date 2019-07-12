@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
+# Usage: copy this file to .git/hooks/
+
+# Exit at first error
+set -e
+
 # To handle partially committed files, we must copy the staged changes to a
 # separate location
+# See also https://stackoverflow.com/a/36793330
 TEMPDIR=$(mktemp -d)
 trap "rm -rf $TEMPDIR" EXIT SIGHUP SIGINT SIGQUIT SIGTERM
 git checkout-index --prefix=$TEMPDIR/ -af
 
 git diff --cached --name-only --diff-filter=AM |  # list modified files
     grep '\.[hc]$' |  # filter C files
-    (cd $TEMPDIR;  # lint the committed files from the temporary directory
-    # run gcc in lint mode: only parse, treat any warning as an error
-    xargs --no-run-if-empty gcc -Werror -fsyntax-only \
-    -std=c99 -O3 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -Wvla
-    # ^ usual paranoid options
+    (cd $TEMPDIR  # lint the committed files from the temporary directory
+    xargs --no-run-if-empty ./lint
 )

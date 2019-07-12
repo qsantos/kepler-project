@@ -171,9 +171,9 @@ double rendez_vous_cost2(CelestialBody* origin, CelestialBody* target, double ti
     orbit_from_state(&trajectory_at_escape, origin->orbit->primary, origin_position_at_departure, transfer_velocity_at_escape, time_at_departure);
     // find most efficient time to change plane
     double true_anomaly_at_intercept = orbit_true_anomaly_at_distance(&trajectory_at_escape, vec3_norm(target_position_at_arrival));  // same as projected
+    // Golden Section search
     double a = 0.;  // TODO
     double b = M_PI;  // TODO
-    // Golden Section search
     {
 #define INV_PHI 0.6180339887498949  // (1. / phi)
 #define INV_PHI_2 0.3819660112501051  // (1. / (phi*phi))
@@ -205,8 +205,8 @@ double rendez_vous_cost2(CelestialBody* origin, CelestialBody* target, double ti
             a = c;
         }
     }
-    // use a
-    // END BLOCk A
+    (void) b;
+    // END BLOCK A
 
 
     double plane_change_dv = f(&trajectory_at_escape, true_anomaly_at_intercept, relative_inclination, a);  // TODO
@@ -268,7 +268,7 @@ int main(void) {
 
     double parking_radius = origin->radius + 100e3;
     double apsis1 = target->radius + 100e3;
-    double apsis2 = target->radius + 100e3;
+    double apsis2 = apsis1;
 
     /*
     double parking_radius = origin->radius + 200e3;
