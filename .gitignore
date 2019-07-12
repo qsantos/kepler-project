@@ -1,0 +1,6 @@
+*.d
+*.o
+test
+example
+TODO.md
+junk/

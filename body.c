@@ -1,0 +1,193 @@
+#include "body.h"
+
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "util.h"
+
+static const double G = 6.67384e-11;
+
+void body_init(CelestialBody* body) {
+    memset(body, 0, sizeof(CelestialBody));
+}
+
+void body_clear(CelestialBody* body) {
+    free(body->satellites);
+    free(body->north_pole);
+    free(body->orbit);
+}
+
+static void _body_update_sphere_of_influence(CelestialBody* body) {
+    // sphere of influence
+    if (body->orbit == NULL) {
+        body->sphere_of_influence = INFINITY;
+    } else {
+        double a = body->orbit->semi_major_axis;
+        double mu_p = body->orbit->primary->gravitational_parameter;
+        double mu_b = body->gravitational_parameter;
+        double soi = a * pow(mu_b / mu_p, 0.4);
+        body->sphere_of_influence = soi;
+    }
+}
+
+static void _body_update_surface_velocity(CelestialBody* body) {
+    body->surface_velocity = body->radius * body->rotational_speed;
+}
+
+static void _body_update_tilt(CelestialBody* body) {
+    if (body->north_pole == NULL || body->orbit == NULL) {
+        body->tilt = 0.;
+        return;
+    }
+
+    /* from http://www.krysstal.com/sphertrig.html
+     * the blue great circle is the ecliptic
+     * A is the normal of the ecliptic
+     * B is the north pole of the body
+     * C is the normal of the orbital plane
+     * a is the axial tilt of the body
+     * b is the orbital inclination
+     * c is the complement of the ecliptic latitude of the north pole
+     * B' is the ecliptic longitude of the north pole
+     * C' is orthogonal to the line of nodes
+     */
+    double b = body->orbit->inclination;
+    double c = body->north_pole->ecliptic_latitude - M_PI/2.;
+    if (body->sidereal_day < 0.) {  // retrograde rotation
+        c += M_PI;
+    }
+    double A = body->orbit->longitude_of_ascending_node + M_PI/2. - body->north_pole->ecliptic_longitude;
+    double ca = cos(b)*cos(c) + sin(b)*sin(c)*cos(A);
+    body->tilt = acos(ca);
+}
+
+static void _body_update_solar_day(CelestialBody* body) {
+    if (body->orbit == NULL) {
+        body->synodic_day = NAN;
+        return;
+    }
+
+    double sidereal_day = body->sidereal_day;
+    double sidereal_year = body->orbit->period;
+    double solar_year = sidereal_year - sidereal_day;
+    if (solar_year == 0.) {
+        body->synodic_day = INFINITY;
+    } else {
+        body->synodic_day = sidereal_day * sidereal_year/solar_year;
+    }
+}
+
+static void _body_update_tidal_locking(CelestialBody* body) {
+    if (body->sidereal_day == 0. && body->orbit != NULL) {
+        body->sidereal_day = body->orbit->period;
+    }
+}
+
+void body_set_name(CelestialBody* body, const char* name) {
+    body->name = name;
+}
+
+void body_set_radius(CelestialBody* body, double radius) {
+    body->radius = radius;
+    _body_update_surface_velocity(body);
+
+}
+
+void body_set_gravparam(CelestialBody* body, double gravitational_parameter) {
+    body->mass = gravitational_parameter / G;
+    body->gravitational_parameter = gravitational_parameter;
+    _body_update_sphere_of_influence(body);
+}
+
+void body_set_mass(CelestialBody* body, double mass) {
+    body->mass = mass;
+    body->gravitational_parameter = G * mass;
+    _body_update_sphere_of_influence(body);
+}
+
+void body_set_orbit(CelestialBody* body, Orbit* orbit) {
+    if (body->orbit != NULL) {
+        body_remove_satellite(body->orbit->primary, body);
+    }
+    body->orbit = orbit;
+    if (body->orbit != NULL) {
+        body_append_satellite(body->orbit->primary, body);
+    }
+    _body_update_sphere_of_influence(body);
+    _body_update_tidal_locking(body);
+    _body_update_tilt(body);
+    _body_update_solar_day(body);
+}
+
+void body_set_rotation(CelestialBody* body, double sidereal_day) {
+    body->sidereal_day = sidereal_day;
+    body->rotational_speed = 2.*M_PI / sidereal_day;
+    _body_update_tidal_locking(body);
+    _body_update_tilt(body);
+    _body_update_surface_velocity(body);
+    _body_update_solar_day(body);
+}
+
+void body_set_axis(CelestialBody* body, CelestialCoordinates* north_pole) {
+    body->north_pole = north_pole;
+    _body_update_tilt(body);
+}
+
+double body_gravity(CelestialBody* body, double distance) {
+    double mu = body->gravitational_parameter;
+    if (distance == 0.) {
+        return 0.;
+    } else if (distance < body->radius) {
+        // see https://en.wikipedia.org/wiki/Shell_theorem
+        mu *= pow(distance / body->radius, 3.);
+    }
+    return mu / (distance*distance);
+}
+
+double body_escape_velocity(CelestialBody* body, double distance) {
+    double mu = body->gravitational_parameter;
+    // default escape velocity from surface
+    if (distance < body->radius) {
+        // see https://www.quora.com/What-is-the-escape-velocity-at-the-center-of-the-earth
+        double r = distance;
+        double R = body->radius;
+        return sqrt(mu * (3./R - r*r/(R*R*R)));
+    }
+    return sqrt(2. * mu / distance);
+}
+
+double body_angular_diameter(CelestialBody* body, double distance) {
+    return 2. * asin(body->radius / distance);
+}
+
+void body_append_satellite(CelestialBody* body, CelestialBody* satellite) {
+    body->satellites = REALLOC(body->satellites, sizeof(CelestialBody*) * (body->n_satellites+1));
+    body->satellites[body->n_satellites] = satellite;
+    body->n_satellites += 1;
+}
+
+void body_remove_satellite(CelestialBody* body, CelestialBody* satellite) {
+    for (size_t i = 0; i < body->n_satellites; i += 1) {
+        if (body->satellites[i] == satellite) {
+            body->n_satellites -= 1;
+            body->satellites[i] = body->satellites[body->n_satellites];
+            break;
+        }
+    }
+}
+
+void body_global_position_at_time(Vec3 pos, CelestialBody* body, double time) {
+    if (body->orbit == NULL) {
+        pos[0] = 0.;
+        pos[1] = 0.;
+        pos[2] = 0.;
+        return;
+    }
+    Vec3 primary_position;
+    body_global_position_at_time(primary_position, body->orbit->primary, time);
+    Vec3 relative_position;
+    orbit_position_at_time(relative_position, body->orbit, time);
+    vec3_add(pos, primary_position, relative_position);
+}
