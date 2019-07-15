@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.10.1
 
 RUN apk add gcc cppcheck make libc-dev
 RUN wget "https://github.com/DaveGamble/cJSON/archive/v1.7.12.tar.gz" \
