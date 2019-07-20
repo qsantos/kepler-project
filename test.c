@@ -234,7 +234,7 @@ static void test_vector(void) {
             Vec3 u = {4., 7., 5.};
             Vec3 v = {3., 5., 8.};
             assertIsClose(vec3_angle(u, v), a);
-            assertIsClose(vec3_angle(u, v), a);
+            assertIsClose(vec3_angle(v, u), a);
             assertIsClose(vec3_angle2(u, v, NULL), -a);
         }
         {
