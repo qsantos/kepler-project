@@ -26,7 +26,7 @@ int orbit_orientate(Orbit* o, double longitude_of_ascending_node, double inclina
     o->epoch = epoch;
     o->mean_anomaly_at_epoch = mean_anomaly_at_epoch;
 
-    mat3_from_euler_angles(o->orientation, longitude_of_ascending_node, inclination, argument_of_periapsis);
+    o->orientation = mat3::from_euler_angles(longitude_of_ascending_node, inclination, argument_of_periapsis);
     return 0;
 
 }
@@ -141,56 +141,57 @@ int orbit_from_period2(Orbit* o, CelestialBody* primary, double period, double a
     return orbit_from_semi_major(o, primary, semi_major_axis, eccentricity);
 }
 
-int orbit_from_state(Orbit* o, CelestialBody* primary, Vec3 position, Vec3 velocity, double epoch) {
+int orbit_from_state(Orbit* o, CelestialBody* primary, vec6 state, double epoch) {
+    vec3 position = vec3{state[0], state[1], state[2]};
+    vec3 velocity = vec3{state[3], state[4], state[5]};
+
     double mu = primary->gravitational_parameter;
 
-    double distance = vec3_norm(position);
-    double speed = vec3_norm(velocity);
+    double distance = position.norm();
+    double speed = velocity.norm();
 
-    Vec3 x_axis = {1., 0., 0.};
-    Vec3 z_axis = {0., 0., 1.};
+    vec3 x_axis{1., 0., 0.};
+    vec3 z_axis{0., 0., 1.};
 
-    Vec3 orbital_plane_normal_vector;
-    vec3_cross(orbital_plane_normal_vector, position, velocity);
+    vec3 orbital_plane_normal_vector = position.cross(velocity);
 
     // eccentricity
     double pos_factor = speed*speed/mu - 1 / distance;  // v^2/mu - 1/r
-    double vel_factor = vec3_dot(position, velocity) / mu;  // r.v / mu
-    double eccentricity_vector[3];
-    for (int i = 0; i < 3; i++) {
-        eccentricity_vector[i] = pos_factor*position[i] - vel_factor*velocity[i];
-    }
-    double eccentricity = vec3_norm(eccentricity_vector);
+    double vel_factor = position.dot(velocity) / mu;  // r.v / mu
+    vec3 eccentricity_vector = pos_factor * position - vel_factor * velocity;
+    double eccentricity = eccentricity_vector.norm();
 
     // periapsis
     // from r(t) = 1. / mu * h / (1. + e cos t)
-    double specific_angular_momentum = vec3_norm(orbital_plane_normal_vector);
+    double specific_angular_momentum = orbital_plane_normal_vector.norm();
     double periapsis = specific_angular_momentum*specific_angular_momentum / mu / (1. + eccentricity);
 
     // we have enough information do determine the shape of the orbit
     orbit_from_periapsis(o, primary, periapsis, eccentricity);
 
     // inclination
-    double inclination = vec3_angle(orbital_plane_normal_vector, z_axis);
+    double inclination = orbital_plane_normal_vector.angle(z_axis);
 
     // direction of the ascending node
-    Vec3 ascend_node_dir = {1., 0., 0.};
-    if (inclination != 0. && inclination != M_PI) {
-        vec3_cross(ascend_node_dir, z_axis, orbital_plane_normal_vector);
+    vec3 ascend_node_dir;
+    if (inclination == 0. || inclination == M_PI) {
+        ascend_node_dir = {1., 0., 0.};
+    } else {
+        ascend_node_dir = z_axis.cross(orbital_plane_normal_vector);
     }
 
     // longitude of ascending node
-    double longitude_of_ascending_node = vec3_angle(x_axis, ascend_node_dir);
+    double longitude_of_ascending_node = x_axis.angle(ascend_node_dir);
     if (orbital_plane_normal_vector[0] < 0.) {
         longitude_of_ascending_node = - longitude_of_ascending_node;
     }
 
     // argument of periapsis
-    double* periapsis_dir = eccentricity != 0. ? eccentricity_vector : x_axis;
-    double argument_of_periapsis = vec3_angle2(ascend_node_dir, periapsis_dir, orbital_plane_normal_vector);
+    vec3 periapsis_dir = eccentricity != 0. ? eccentricity_vector : x_axis;
+    double argument_of_periapsis = ascend_node_dir.angle2(periapsis_dir, orbital_plane_normal_vector);
 
     // mean anomaly at epoch
-    double true_anomaly_at_epoch = vec3_angle2(periapsis_dir, position, orbital_plane_normal_vector);
+    double true_anomaly_at_epoch = periapsis_dir.angle2(position, orbital_plane_normal_vector);
     double eccentric_anomaly_at_epoch = orbit_eccentric_anomaly_at_true_anomaly(o, true_anomaly_at_epoch);
     double mean_anomaly_at_epoch = orbit_mean_anomaly_at_eccentric_anomaly(o, eccentric_anomaly_at_epoch);
 
@@ -341,15 +342,14 @@ double orbit_speed_at_distance(Orbit* o, double distance) {
     return sqrt(mu * (2./distance - 1./o->semi_major_axis));
 }
 
-void orbit_position_at_true_anomaly(Vec3 res, Orbit* o, double true_anomaly) {
+vec3 orbit_position_at_true_anomaly(Orbit* o, double true_anomaly) {
     double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
     double c = cos(true_anomaly);
     double s = sin(true_anomaly);
-    Vec3 position = {distance*c, distance*s, 0.};
-    mat3_mulv(res, o->orientation, position);
+    return o->orientation * vec3{distance*c, distance*s, 0.};
 }
 
-void orbit_velocity_at_true_anomaly(Vec3 res, Orbit* o, double true_anomaly) {
+vec3 orbit_velocity_at_true_anomaly(Orbit* o, double true_anomaly) {
     double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
     double c = cos(true_anomaly);
     double s = sin(true_anomaly);
@@ -357,36 +357,38 @@ void orbit_velocity_at_true_anomaly(Vec3 res, Orbit* o, double true_anomaly) {
 
     double d = 1. + e*c;
     double x = o->semi_latus_rectum*e*s/(d*d);
-    Vec3 velocity_direction = {-distance*s + x*c, distance*c + x*s, 0.};
+    vec3 velocity_direction{-distance*s + x*c, distance*c + x*s, 0.};
 
-    double norm_v = vec3_norm(velocity_direction);
     double speed = orbit_speed_at_distance(o, distance);
 
-    Vec3 velocity;
-    vec3_scale(velocity, velocity_direction, speed/norm_v);
-    mat3_mulv(res, o->orientation, velocity);
+    vec3 velocity = velocity_direction * (speed / velocity_direction.norm());
+    return o->orientation * velocity;
 }
 
-void orbit_position_at_time(Vec3 res, Orbit* o, double time) {
+vec3 orbit_position_at_time(Orbit* o, double time) {
     double M = orbit_mean_anomaly_at_time(o, time);
     double E = orbit_eccentric_anomaly_at_mean_anomaly(o, M);
     double f = orbit_true_anomaly_at_eccentric_anomaly(o, E);
-    orbit_position_at_true_anomaly(res, o, f);
+    return orbit_position_at_true_anomaly(o, f);
 }
 
-void orbit_velocity_at_time(Vec3 res, Orbit* o, double time) {
+vec3 orbit_velocity_at_time(Orbit* o, double time) {
     double M = orbit_mean_anomaly_at_time(o, time);
     double E = orbit_eccentric_anomaly_at_mean_anomaly(o, M);
     double f = orbit_true_anomaly_at_eccentric_anomaly(o, E);
-    orbit_velocity_at_true_anomaly(res, o, f);
+    return orbit_velocity_at_true_anomaly(o, f);
 }
 
-void orbit_state_at_time(Vec3 pos, Vec3 vel, Orbit* o, double time) {
+vec6 orbit_state_at_time(Orbit* o, double time) {
     double M = orbit_mean_anomaly_at_time(o, time);
     double E = orbit_eccentric_anomaly_at_mean_anomaly(o, M);
     double f = orbit_true_anomaly_at_eccentric_anomaly(o, E);
-    orbit_position_at_true_anomaly(pos, o, f);
-    orbit_velocity_at_true_anomaly(vel, o, f);
+    vec3 position = orbit_position_at_true_anomaly(o, f);
+    vec3 velocity = orbit_velocity_at_true_anomaly(o, f);
+    return {
+        position[0], position[1], position[2],
+        velocity[0], velocity[1], velocity[2],
+    };
 }
 
 double orbit_distance_at_time(Orbit* o, double time) {

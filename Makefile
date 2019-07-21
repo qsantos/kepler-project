@@ -8,8 +8,8 @@ TARGETS:=test example
 
 all: $(TARGETS)
 
-example: dict.o vector.o body.o orbit.o recipes.o load.o lambert.o
-test: dict.o vector.o body.o orbit.o load.o recipes.o lambert.o
+example: dict.o body.o orbit.o recipes.o load.o lambert.o
+test: dict.o body.o orbit.o load.o recipes.o lambert.o
 
 # handle include dependencies
 -include $(wildcard *.d)

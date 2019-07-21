@@ -101,31 +101,28 @@ static double _householder(double lambda, double Tstar, double M, double x_0) {
     return x;
 }
 
-void lambert(Vec3 v1, Vec3 v2, double mu, Vec3 r1, Vec3 r2, double t, int M, int right_branch) {
+void lambert(vec3& v1, vec3& v2, double mu, vec3 r1, vec3 r2, double t, int M, int right_branch) {
     // TODO: compute M_max and check M
 
     // some scalars
-    Vec3 c;
-    vec3_sub(c, r2, r1);
-    double r1_norm = vec3_norm(r1);
-    double r2_norm = vec3_norm(r2);
-    double c_norm = vec3_norm(c);
-    double s = .5 * (r1_norm + r2_norm + c_norm);
-    double lambda = sqrt(1. - c_norm/s);
+    double r1_norm = r1.norm();
+    double r2_norm = r2.norm();
+    double distance = r1.dist(r2);
+    double s = .5 * (r1_norm + r2_norm + distance);
+    double lambda = sqrt(1. - distance/s);
 
     // various unit vectors
-    Vec3 i_r1, i_r2, i_t1, i_t2, i_h;
-    vec3_scale(i_r1, r1, 1./r1_norm);
-    vec3_scale(i_r2, r2, 1./r2_norm);
-    vec3_cross(i_h, i_r1, i_r2);
-    vec3_scale(i_h, i_h, 1. / vec3_norm(i_h));  // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L67>
+    vec3 i_r1 = r1 / r1_norm;
+    vec3 i_r2 = r2 / r2_norm;
+    vec3 i_h = i_r1.cross(i_r2);
+    i_h /= i_h.norm();  // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L67>
     // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L72-L76>
     if (i_h[2] < 0.) {
         lambda = -lambda;
-        vec3_scale(i_h, i_h, -1.);
+        i_h = -i_h;
     }
-    vec3_cross(i_t1, i_h, i_r1);
-    vec3_cross(i_t2, i_h, i_r2);
+    vec3 i_t1 = i_h.cross(i_r1);
+    vec3 i_t2 = i_h.cross(i_r2);
 
     // make t unitless
     double T = t * sqrt(2.*mu / (s*s*s));
@@ -137,7 +134,7 @@ void lambert(Vec3 v1, Vec3 v2, double mu, Vec3 r1, Vec3 r2, double t, int M, int
 
     // velocity components
     double gamma = sqrt(mu * s / 2.);
-    double rho = (r1_norm - r2_norm) / c_norm;
+    double rho = (r1_norm - r2_norm) / distance;
     double sigma = sqrt(1. - rho*rho);
     double V_r1 =  gamma * ((lambda*y - x) - rho * (lambda*y + x)) / r1_norm;
     double V_r2 = -gamma * ((lambda*y - x) + rho * (lambda*y + x)) / r2_norm;
@@ -145,13 +142,6 @@ void lambert(Vec3 v1, Vec3 v2, double mu, Vec3 r1, Vec3 r2, double t, int M, int
     double V_t2 = gamma * sigma * (y + lambda*x) / r2_norm;
 
     // compute velocity vectors
-    Vec3 tmp1, tmp2;
-    // v1 = V_r1 * i_r1 + V_t1 * i_t1
-    vec3_scale(tmp1, i_r1, V_r1);
-    vec3_scale(tmp2, i_t1, V_t1);
-    vec3_add(v1, tmp1, tmp2);
-    // v2 = V_r2 * i_r2 + V_t2 * i_t2
-    vec3_scale(tmp1, i_r2, V_r2);
-    vec3_scale(tmp2, i_t2, V_t2);
-    vec3_add(v2, tmp1, tmp2);
+    v1 = V_r1 * i_r1 + V_t1 * i_t1;
+    v2 = V_r2 * i_r2 + V_t2 * i_t2;
 }

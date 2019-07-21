@@ -180,16 +180,11 @@ void body_remove_satellite(CelestialBody* body, CelestialBody* satellite) {
     }
 }
 
-void body_global_position_at_time(Vec3 pos, CelestialBody* body, double time) {
+vec3 body_global_position_at_time(CelestialBody* body, double time) {
     if (body->orbit == NULL) {
-        pos[0] = 0.;
-        pos[1] = 0.;
-        pos[2] = 0.;
-        return;
+        return {0, 0, 0};
     }
-    Vec3 primary_position;
-    body_global_position_at_time(primary_position, body->orbit->primary, time);
-    Vec3 relative_position;
-    orbit_position_at_time(relative_position, body->orbit, time);
-    vec3_add(pos, primary_position, relative_position);
+    vec3 primary_position = body_global_position_at_time(body->orbit->primary, time);
+    vec3 relative_position = orbit_position_at_time(body->orbit, time);
+    return primary_position + relative_position;
 }

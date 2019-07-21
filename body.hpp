@@ -3,14 +3,11 @@
 
 struct CelestialBody;
 
+#include "vector.hpp"
 #include "coordinates.hpp"
 #include "orbit.hpp"
 
 #include <stddef.h>
-
-extern "C" {
-#include "vector.h"
-}
 
 struct CelestialBody {
     const char* name;
@@ -54,6 +51,6 @@ double body_angular_diameter(CelestialBody* body, double distance);
 void body_append_satellite(CelestialBody* body, CelestialBody* satellite);
 void body_remove_satellite(CelestialBody* body, CelestialBody* satellite);
 
-void body_global_position_at_time(Vec3 pos, CelestialBody* body, double time);
+vec3 body_global_position_at_time(CelestialBody* body, double time);
 
 #endif

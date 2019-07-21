@@ -3,11 +3,9 @@
 
 struct Orbit;
 
+#include "vector.hpp"
+#include "matrix.hpp"
 #include "body.hpp"
-
-extern "C" {
-#include "vector.h"
-}
 
 struct Orbit {
     // the celestial body being orbited
@@ -32,7 +30,7 @@ struct Orbit {
     double period;  // aka. sidereal period
 
     // cached transform matrix
-    Mat3 orientation;  // NOTE: only use after orbit_orientate() has been called
+    mat3 orientation;  // NOTE: only use after orbit_orientate() has been called
 };
 
 // orbit determination
@@ -42,7 +40,7 @@ int orbit_from_semi_major(Orbit* o, CelestialBody* primary, double semi_major_ax
 int orbit_from_apses     (Orbit* o, CelestialBody* primary, double apsis1, double apsis2);
 int orbit_from_period    (Orbit* o, CelestialBody* primary, double period, double eccentricity);
 int orbit_from_period2   (Orbit* o, CelestialBody* primary, double period, double apsis);
-int orbit_from_state     (Orbit* o, CelestialBody* primary, Vec3 position, Vec3 velocity, double epoch);
+int orbit_from_state     (Orbit* o, CelestialBody* primary, vec6 state, double epoch);
 
 // time/angles conversions
 // t -> M -> E -> v
@@ -60,11 +58,11 @@ double orbit_true_anomaly_at_distance(Orbit* o, double distance);
 double orbit_speed_at_distance       (Orbit* o, double distance);
 // state (position and velocity)
 // NOTE: only use after orbit_orientate() has been called
-void orbit_position_at_true_anomaly(Vec3 res, Orbit* o, double true_anomaly);
-void orbit_velocity_at_true_anomaly(Vec3 res, Orbit* o, double true_anomaly);
-void orbit_position_at_time        (Vec3 res, Orbit* o, double time);
-void orbit_velocity_at_time        (Vec3 res, Orbit* o, double time);
-void orbit_state_at_time           (Vec3 pos, Vec3 vel, Orbit* o, double time);
+vec3 orbit_position_at_true_anomaly(Orbit* o, double true_anomaly);
+vec3 orbit_velocity_at_true_anomaly(Orbit* o, double true_anomaly);
+vec3 orbit_position_at_time        (Orbit* o, double time);
+vec3 orbit_velocity_at_time        (Orbit* o, double time);
+vec6 orbit_state_at_time           (Orbit* o, double time);
 
 // shortcuts
 double orbit_distance_at_time(Orbit* o, double time);
