@@ -1,7 +1,7 @@
 #ifndef ORBIT_H
 #define ORBIT_H
 
-typedef struct orbit Orbit;
+struct Orbit;
 
 #include "body.hpp"
 
@@ -9,7 +9,7 @@ extern "C" {
 #include "vector.h"
 }
 
-struct orbit {
+struct Orbit {
     // the celestial body being orbited
     CelestialBody* primary;
 
