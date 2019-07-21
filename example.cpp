@@ -1,11 +1,13 @@
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
+extern "C" {
 #include "load.h"
 #include "orbit.h"
 #include "lambert.h"
 #include "recipes.h"
+}
 
 // primary                         common primary of origin and target
 // injection orbit                 orbit in origin's SoI used to escape
@@ -255,12 +257,12 @@ int main(void) {
     if (load_bodies(&bodies, data_file) < 0.) {
         exit(EXIT_FAILURE);
     }
-    CelestialBody* origin = dict_get(&bodies, origin_name);
+    CelestialBody* origin = (CelestialBody*) dict_get(&bodies, origin_name);
     if (origin == NULL) {
         printf("Origin body not found\n");
         exit(EXIT_FAILURE);
     }
-    CelestialBody* target = dict_get(&bodies,target_name);
+    CelestialBody* target = (CelestialBody*) dict_get(&bodies,target_name);
     if (target == NULL) {
         printf("Target body not found\n");
         exit(EXIT_FAILURE);
