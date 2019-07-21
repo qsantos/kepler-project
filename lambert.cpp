@@ -1,8 +1,10 @@
-#include "lambert.h"
+#include "lambert.hpp"
 
-#include <assert.h>
+#include <cassert>
 
+extern "C" {
 #include "util.h"
+}
 
 // from "Revisiting Lambert’s Problem" by Dario Izzo
 // see <https://github.com/esa/pykep/blob/master/src/core_functions/lambert_3d.h>

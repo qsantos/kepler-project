@@ -1,3 +1,5 @@
+#include "lambert.hpp"
+
 extern "C" {
 #include "util.h"
 #include "dict.h"
@@ -7,7 +9,6 @@ extern "C" {
 #include "orbit.h"
 #include "load.h"
 #include "recipes.h"
-#include "lambert.h"
 }
 
 #include <cmath>

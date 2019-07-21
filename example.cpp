@@ -1,3 +1,5 @@
+#include "lambert.hpp"
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -5,7 +7,6 @@
 extern "C" {
 #include "load.h"
 #include "orbit.h"
-#include "lambert.h"
 #include "recipes.h"
 }
 
