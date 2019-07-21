@@ -1,3 +1,4 @@
+#include "recipes.hpp"
 #include "lambert.hpp"
 
 extern "C" {
@@ -8,7 +9,6 @@ extern "C" {
 #include "body.h"
 #include "orbit.h"
 #include "load.h"
-#include "recipes.h"
 }
 
 #include <cmath>

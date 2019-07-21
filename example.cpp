@@ -1,3 +1,4 @@
+#include "recipes.hpp"
 #include "lambert.hpp"
 
 #include <cmath>
@@ -7,7 +8,6 @@
 extern "C" {
 #include "load.h"
 #include "orbit.h"
-#include "recipes.h"
 }
 
 // primary                         common primary of origin and target

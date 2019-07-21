@@ -1,9 +1,11 @@
 #ifndef RECIPES_H
 #define RECIPES_H
 
+extern "C" {
 #include "util.h"
 #include "body.h"
 #include "orbit.h"
+}
 
 double darkness_time(Orbit* o);
 double synodic_period(Orbit* a, Orbit* b);

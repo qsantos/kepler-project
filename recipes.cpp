@@ -1,6 +1,8 @@
-#include "recipes.h"
+#include "recipes.hpp"
 
+extern "C" {
 #include "util.h"
+}
 
 double darkness_time(Orbit* o) {
     double x = o->primary->radius / o->semi_minor_axis;
