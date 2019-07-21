@@ -1,3 +1,4 @@
+#include "orbit.hpp"
 #include "load.hpp"
 #include "recipes.hpp"
 #include "lambert.hpp"
@@ -5,10 +6,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-
-extern "C" {
-#include "orbit.h"
-}
 
 // primary                         common primary of origin and target
 // injection orbit                 orbit in origin's SoI used to escape

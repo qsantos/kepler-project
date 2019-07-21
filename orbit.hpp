@@ -3,8 +3,11 @@
 
 typedef struct orbit Orbit;
 
+#include "body.hpp"
+
+extern "C" {
 #include "vector.h"
-#include "body.h"
+}
 
 struct orbit {
     // the celestial body being orbited

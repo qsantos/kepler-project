@@ -1,3 +1,5 @@
+#include "body.hpp"
+#include "orbit.hpp"
 #include "load.hpp"
 #include "recipes.hpp"
 #include "lambert.hpp"
@@ -7,8 +9,6 @@ extern "C" {
 #include "dict.h"
 #include "vector.h"
 #include "coordinates.h"
-#include "body.h"
-#include "orbit.h"
 }
 
 #include <cmath>

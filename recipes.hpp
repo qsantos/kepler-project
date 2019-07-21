@@ -1,10 +1,11 @@
 #ifndef RECIPES_H
 #define RECIPES_H
 
+#include "body.hpp"
+#include "orbit.hpp"
+
 extern "C" {
 #include "util.h"
-#include "body.h"
-#include "orbit.h"
 }
 
 double darkness_time(Orbit* o);

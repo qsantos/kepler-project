@@ -3,10 +3,14 @@
 
 typedef struct celestial_body CelestialBody;
 
+#include "orbit.hpp"
+
 #include <stddef.h>
 
+extern "C" {
+#include "vector.h"
 #include "coordinates.h"
-#include "orbit.h"
+}
 
 struct celestial_body {
     const char* name;

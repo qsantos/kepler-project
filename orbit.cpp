@@ -1,6 +1,8 @@
-#include "orbit.h"
+#include "orbit.hpp"
 
+extern "C" {
 #include "util.h"
+}
 
 #define TWO_TO_THE_MINUS_26 1.4901161193847656e-08  // 2**-26
 

@@ -1,11 +1,13 @@
-#include "body.h"
+#include "body.hpp"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
+extern "C" {
 #include "util.h"
+}
 
 static const double G = 6.67384e-11;
 
@@ -163,7 +165,7 @@ double body_angular_diameter(CelestialBody* body, double distance) {
 }
 
 void body_append_satellite(CelestialBody* body, CelestialBody* satellite) {
-    body->satellites = REALLOC(body->satellites, sizeof(CelestialBody*) * (body->n_satellites+1));
+    body->satellites = (CelestialBody**) REALLOC(body->satellites, sizeof(CelestialBody*) * (body->n_satellites+1));
     body->satellites[body->n_satellites] = satellite;
     body->n_satellites += 1;
 }

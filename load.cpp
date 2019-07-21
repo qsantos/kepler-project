@@ -1,5 +1,7 @@
 #include "load.hpp"
 
+#include "body.hpp"
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -8,7 +10,6 @@
 
 extern "C" {
 #include "util.h"
-#include "body.h"
 }
 
 static double get_param_required(cJSON* json, const char* object_name, const char* param_name);
