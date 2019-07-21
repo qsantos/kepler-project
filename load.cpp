@@ -1,13 +1,15 @@
-#include "load.h"
+#include "load.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include <cjson/cJSON.h>
 
+extern "C" {
 #include "util.h"
 #include "body.h"
+}
 
 static double get_param_required(cJSON* json, const char* object_name, const char* param_name);
 static double get_param_optional(cJSON* json, const char* object_name, const char* param_name);
@@ -42,7 +44,7 @@ char* load_file(const char* filename) {
     }
 
     // read file
-    char* ret = MALLOC((size_t) length + 1);
+    char* ret = (char*) MALLOC((size_t) length + 1);
     if (fread(ret, 1, (size_t) length, f) < (size_t) length) {
         perror("incomplete read");
     }
@@ -106,7 +108,7 @@ static Orbit* parse_orbit(Dict* bodies, cJSON* jbodies, cJSON* jorbit, const cha
     double mean_anomaly_at_epoch       = get_param_optional(jorbit, body_name, "mean_anomaly_at_epoch");
 
     // create Orbit object
-    Orbit* ret = MALLOC(sizeof(Orbit));
+    Orbit* ret = (Orbit*) MALLOC(sizeof(Orbit));
     orbit_from_semi_major(ret, primary, semi_major_axis, eccentricity);
     orbit_orientate(ret, longitude_of_ascending_node, inclination, argument_of_periapsis, epoch, mean_anomaly_at_epoch);
     return ret;
@@ -120,13 +122,13 @@ static CelestialCoordinates* parse_coordinates(cJSON* jcoordinates, const char* 
     double right_ascension = get_param_required(jcoordinates, body_name, "right_ascension");
     double declination     = get_param_required(jcoordinates, body_name, "declination");
     double distance        = get_param_optional(jcoordinates, body_name, "distance");
-    CelestialCoordinates* coordinates = MALLOC(sizeof(CelestialCoordinates));
+    CelestialCoordinates* coordinates = (CelestialCoordinates*) MALLOC(sizeof(CelestialCoordinates));
     coordinates_from_equatorial(coordinates, right_ascension, declination, distance);
     return coordinates;
 }
 
 static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name) {
-    CelestialBody* ret = dict_get(bodies, name);
+    CelestialBody* ret = (CelestialBody*) dict_get(bodies, name);
     if (ret != NULL) {
         return ret;
     }
@@ -137,7 +139,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
         exit(EXIT_FAILURE);
     }
 
-    ret = MALLOC(sizeof(CelestialBody));
+    ret = (CelestialBody*) MALLOC(sizeof(CelestialBody));
     dict_set(bodies, name, ret);
     body_init(ret);
     body_set_name(ret, name);
@@ -206,7 +208,7 @@ int load_bodies(Dict* bodies, const char* filename) {
 
 void unload_bodies(Dict* bodies) {
     for (size_t i = 0; i < bodies->n_slots; i += 1) {  // TODO: dict iteration
-        body_clear(bodies->values[i]);
+        body_clear((CelestialBody*) bodies->values[i]);
     }
     dict_free(bodies);
 }

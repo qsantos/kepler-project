@@ -1,8 +1,9 @@
+#ifndef LOAD_HPP
+#define LOAD_HPP
 
-#ifndef LOAD_H
-#define LOAD_H
-
+extern "C" {
 #include "dict.h"
+}
 
 char* load_file(const char* filename);
 
