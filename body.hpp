@@ -1,7 +1,7 @@
 #ifndef BODY_H
 #define BODY_H
 
-typedef struct celestial_body CelestialBody;
+struct CelestialBody;
 
 #include "orbit.hpp"
 
@@ -12,7 +12,7 @@ extern "C" {
 #include "coordinates.h"
 }
 
-struct celestial_body {
+struct CelestialBody {
     const char* name;
     double radius;
 
