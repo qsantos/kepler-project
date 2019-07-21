@@ -1,6 +1,7 @@
 DBGFLAGS:=-fprofile-arcs -ftest-coverage -g -pg
 DBGFLAGS:=-g
 CFLAGS:=-std=c99 -O3 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -Wvla $(DBGFLAGS)
+CXXFLAGS:=-std=c++11 -O3 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla $(DBGFLAGS)
 LDFLAGS:=-O3
 LDLIBS:=-lm -lcjson
 TARGETS:=test example

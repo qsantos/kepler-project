@@ -1,8 +1,4 @@
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+extern "C" {
 #include "util.h"
 #include "dict.h"
 #include "vector.h"
@@ -12,14 +8,14 @@
 #include "load.h"
 #include "recipes.h"
 #include "lambert.h"
+}
+
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #define countof(A) (sizeof(A)/sizeof((A)[0]))
-
-// dummy CelestialBody
-CelestialBody primary = {
-    .gravitational_parameter = 1e20,
-    .sphere_of_influence = 1e9,
-};
 
 #define d 1e-7
 static const double angle_testset[] = {
@@ -38,6 +34,7 @@ static void _assertEquals(double a, double b, const char* filename, int line, co
 static void _assertIsClose(double a, double b, const char* filename, int line, const char* funcname, const char* codea, const char* codeb);
 static void _assertIsCloseAngle(double a, double b, const char* filename, int line, const char* funcname, const char* codea, const char* codeb);
 
+#undef assert
 #define assert(ret) _assert(ret, __FILE__, __LINE__, __func__, #ret)
 #define assertFails(ret) _assertFails(ret, __FILE__, __LINE__, __func__, #ret)
 #define assertEquals(a, b) _assertEquals(a, b, __FILE__, __LINE__, __func__, #a, #b)
@@ -122,6 +119,52 @@ static void assertIsCloseOrbit(Orbit* a, Orbit* b) {
         double mean_anomaly_b = orbit_mean_anomaly_at_time(b, 0.);
         assertIsCloseAngle(mean_anomaly_a, mean_anomaly_b);
     }
+}
+
+CelestialBody make_dummy_object(double radius, double gravitational_parameter, double sphere_of_influence) {
+    return {
+        NULL,  // name
+        radius,  // radius
+        gravitational_parameter, // gravitational_parameter
+        0,  // mass
+        0,  // n_satellites
+        NULL,  // satellites
+        NULL,  // orbit
+        sphere_of_influence,  // sphere_of_influence
+        NULL, // north_pole
+        0,  // sidereal_day
+        0,  // synodic_day
+        0,  // tilt
+        0,  // surface_velocity
+        0,  // rotational_speed
+    };
+}
+
+CelestialBody primary = make_dummy_object(0, 1e20, 1e9);
+
+Orbit make_dummy_orbit_with_period(double period) {
+    return {
+        NULL,  // primary
+        0,  // periapsis
+        0,  // eccentricity
+        0,  // inclination
+        0,  // longitude_of_ascending_node
+        0,  // argument_of_periapsis
+        0,  // epoch
+        0,  // mean_anomaly_at_epoch
+        0,  // semi_major_axis
+        0,  // semi_minor_axis
+        0,  // apoapsis
+        0,  // semi_latus_rectum
+        0,  // focus
+        0,  // mean_motion
+        period,  // period
+        {
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}, // orientation
+        },
+    };
 }
 
 static void test_dict(void) {
@@ -776,9 +819,9 @@ static void test_load_solar_system(void) {
     assert(dict_get(&solar_system, "Uranus")  != NULL);
     assert(dict_get(&solar_system, "Neptune") != NULL);
 
-    CelestialBody* sun = dict_get(&solar_system, "Sun");
-    CelestialBody* earth = dict_get(&solar_system, "Earth");
-    CelestialBody* moon = dict_get(&solar_system, "Moon");
+    CelestialBody* sun = (CelestialBody*) dict_get(&solar_system, "Sun");
+    CelestialBody* earth = (CelestialBody*) dict_get(&solar_system, "Earth");
+    CelestialBody* moon = (CelestialBody*) dict_get(&solar_system, "Moon");
     if (sun != NULL) {
         assert(sun->n_satellites >= 8);
     }
@@ -812,9 +855,9 @@ static void test_load_kerbol_system(void) {
     assert(dict_get(&kerbol_system, "Jool")   != NULL);
     assert(dict_get(&kerbol_system, "Eeloo")  != NULL);
 
-    CelestialBody* kerbol = dict_get(&kerbol_system, "Kerbol");
-    CelestialBody* kerbin = dict_get(&kerbol_system, "Kerbin");
-    CelestialBody* mun = dict_get(&kerbol_system, "Mun");
+    CelestialBody* kerbol = (CelestialBody*) dict_get(&kerbol_system, "Kerbol");
+    CelestialBody* kerbin = (CelestialBody*) dict_get(&kerbol_system, "Kerbin");
+    CelestialBody* mun = (CelestialBody*) dict_get(&kerbol_system, "Mun");
     if (kerbol != NULL) {
         assert(kerbol->n_satellites == 7);
     }
@@ -837,10 +880,7 @@ static void test_load(void) {
 
 static void test_recipes(void) {
     // dummy object
-    CelestialBody kerbin = {
-        .radius = 600e3,
-        .gravitational_parameter = 3.5316e+12,
-    };
+    CelestialBody kerbin = make_dummy_object(600e3, 3.5316e+12, 0);
 
     // darkness time
     Orbit orbit;
@@ -850,11 +890,11 @@ static void test_recipes(void) {
 
     // synodic period
     // from <https://en.wikipedia.org/wiki/Orbital_period#Examples_of_sidereal_and_synodic_periods>
-    Orbit mercury = { .period = 0.240846 };
-    Orbit venus = { .period = 0.615 };
-    Orbit earth = { .period = 1. };
-    Orbit moon = { .period = 0.0748 };
-    Orbit mars = { .period = 1.881 };
+    Orbit mercury = make_dummy_orbit_with_period(0.240846);
+    Orbit venus = make_dummy_orbit_with_period(0.615);
+    Orbit earth = make_dummy_orbit_with_period(1.);
+    Orbit moon = make_dummy_orbit_with_period(0.0748);
+    Orbit mars = make_dummy_orbit_with_period(1.881);
     assertIsLower(fabs(synodic_period(&earth, &mercury) - 0.317),  1e-3);
     assertIsLower(fabs(synodic_period(&earth, &venus)   - 1.598),  1e-3);
     assertIsLower(fabs(synodic_period(&earth, &moon)    - 0.0809), 1e-4);
