@@ -124,7 +124,7 @@ static CelestialCoordinates* parse_coordinates(cJSON* jcoordinates, const char* 
     double declination     = get_param_required(jcoordinates, body_name, "declination");
     double distance        = get_param_optional(jcoordinates, body_name, "distance");
     CelestialCoordinates* coordinates = (CelestialCoordinates*) MALLOC(sizeof(CelestialCoordinates));
-    coordinates_from_equatorial(coordinates, right_ascension, declination, distance);
+    *coordinates = CelestialCoordinates::from_equatorial(right_ascension, declination, distance);
     return coordinates;
 }
 

@@ -3,13 +3,13 @@
 
 struct CelestialBody;
 
+#include "coordinates.hpp"
 #include "orbit.hpp"
 
 #include <stddef.h>
 
 extern "C" {
 #include "vector.h"
-#include "coordinates.h"
 }
 
 struct CelestialBody {

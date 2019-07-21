@@ -1,6 +1,7 @@
 #include "body.hpp"
 #include "orbit.hpp"
 #include "load.hpp"
+#include "coordinates.hpp"
 #include "recipes.hpp"
 #include "lambert.hpp"
 
@@ -8,7 +9,6 @@ extern "C" {
 #include "util.h"
 #include "dict.h"
 #include "vector.h"
-#include "coordinates.h"
 }
 
 #include <cmath>
@@ -472,12 +472,11 @@ static void test_coordinates(void) {
         double declination = (89. + 15./60. + 50.8/3600.) / 360. * 2.*M_PI;
         double distance = 433. * 86400. * 365.25 * 299792458.;
         // close enough to the output of https://ned.ipac.caltech.edu/forms/calculator.html
-        CelestialCoordinates c;
-        coordinates_from_equatorial(&c, right_ascension, declination, distance);
+        auto c = CelestialCoordinates::from_equatorial(right_ascension, declination, distance);
         assertIsCloseAngle(c.ecliptic_longitude, 1.5375118630442743);
         assertIsCloseAngle(c.ecliptic_latitude, 1.15090057073079);
         // convert back and check consistency
-        coordinates_from_ecliptic(&c, c.ecliptic_longitude, c.ecliptic_latitude, c.distance);
+        c = CelestialCoordinates::from_ecliptic(c.ecliptic_longitude, c.ecliptic_latitude, c.distance);
         assertIsCloseAngle(c.right_ascension, right_ascension);
         assertIsCloseAngle(c.declination, declination);
     }
@@ -489,9 +488,8 @@ static void test_coordinates(void) {
                 double right_ascension = angle_testset[i];
                 double declination = angle_testset[j] / 2.;
                 //fprintf(stderr, "α = %f δ = %f\n", right_ascension, declination);
-                CelestialCoordinates c;
-                coordinates_from_equatorial(&c, right_ascension, declination, 0.);
-                coordinates_from_ecliptic(&c, c.ecliptic_longitude, c.ecliptic_latitude, 0.);
+                auto c = CelestialCoordinates::from_equatorial(right_ascension, declination, 0.);
+                c = CelestialCoordinates::from_ecliptic(c.ecliptic_longitude, c.ecliptic_latitude, 0.);
                 if (!isclose(fmod2(declination, M_PI), M_PI/2.)) {
                     assertIsCloseAngle(c.right_ascension, right_ascension);
                 }
@@ -502,9 +500,8 @@ static void test_coordinates(void) {
                 double ecliptic_longitude = angle_testset[i];
                 double ecliptic_latitude = angle_testset[j] / 2.;
                 //fprintf(stderr, "λ = %f β = %f\n", ecliptic_longitude, ecliptic_latitude);
-                CelestialCoordinates c;
-                coordinates_from_ecliptic(&c, ecliptic_longitude, ecliptic_latitude, 0.);
-                coordinates_from_equatorial(&c, c.right_ascension, c.declination, 0.);
+                auto c = CelestialCoordinates::from_ecliptic(ecliptic_longitude, ecliptic_latitude, 0.);
+                c = CelestialCoordinates::from_equatorial(c.right_ascension, c.declination, 0.);
                 if (!isclose(fmod2(ecliptic_latitude, M_PI), M_PI/2.)) {
                     assertIsCloseAngle(c.ecliptic_longitude, ecliptic_longitude);
                 }
@@ -563,7 +560,7 @@ static void test_body(void) {
         // Venus north pole
         double right_ascension = radians(272.76);
         double declination = radians(67.16);
-        coordinates_from_equatorial(&north_pole, right_ascension, declination, INFINITY);
+        north_pole = CelestialCoordinates::from_equatorial(right_ascension, declination, INFINITY);
         body_set_axis(&b, &north_pole);
         assertIsCloseAngle(b.tilt, radians(2.6378801547605204));
         // a negative rotational period should invert the tilt
