@@ -4,6 +4,27 @@
 #include <chrono>
 #include <iostream>
 
+struct State : vec6 {
+    State(vec6 values) : vec6{values} {}
+    State(vec3 position, vec3 velocity) :
+        vec6{
+            position[0], position[1], position[2],
+            velocity[0], velocity[1], velocity[2],
+        }
+    {
+    }
+
+    vec3 position() const {
+        const State& self = *this;
+        return {self[0], self[1], self[2]};
+    }
+
+    vec3 velocity() const {
+        const State& self = *this;
+        return {self[3], self[4], self[5]};
+    }
+};
+
 template<class T>
 T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
     /*
@@ -25,7 +46,7 @@ double gravity(double distance) {
     return gravitational_parameter / (distance * distance);
 }
 
-vec6 f(double t, vec6 state) {
+State f(double t, State state) {
     (void) t;
 
     vec3 position = {state[0], state[1], state[2]};
@@ -39,14 +60,14 @@ vec6 f(double t, vec6 state) {
     // propulsion
     //acceleration += thrust
 
-    return {
-        velocity[0], velocity[1], velocity[2],
-        acceleration[0], acceleration[1], acceleration[2],
-    };
+    return {velocity, acceleration};
 }
 
 int main(void) {
-    vec6 state{6371e3 + 300e3, 0, 0, 0, 7660, 0};
+    State state{
+        vec3{6371e3 + 300e3, 0, 0},
+        vec3{0, 7660, 0},
+    };
     const double dt = 1. / 64;
 
     // simulate
