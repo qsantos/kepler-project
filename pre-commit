@@ -12,7 +12,7 @@ trap "rm -rf $TEMPDIR" EXIT SIGHUP SIGINT SIGQUIT SIGTERM
 git checkout-index --prefix=$TEMPDIR/ -af
 
 git diff --cached --name-only --diff-filter=AM |  # list modified files
-    grep '\.[hc]$' |  # filter C files
+    grep -e '\.[hc]$' -e '\.[hc]pp$' |  # filter C/C++ files
     (cd $TEMPDIR  # lint the committed files from the temporary directory
     xargs --no-run-if-empty ./lint
 )

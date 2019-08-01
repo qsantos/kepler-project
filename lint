@@ -5,8 +5,7 @@ set -e
 # syntax check
 #   .-- lint mode: only parse, treat any warning as an error
 #   v
-gcc -fsyntax-only -Werror "$@" \
-    -std=c99 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wstrict-prototypes -Wvla
+gcc -fsyntax-only -Werror -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla "$@"
 #   ^
 #   `-- usual paranoid options
 
