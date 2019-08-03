@@ -10,9 +10,9 @@ gcc -fsyntax-only -Werror -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla "
 #   `-- usual paranoid options
 
 # static analysis
-#        .-- cppcheck does not need system includes
+#        .-- disable lookup for system includes
 #        v
-cppcheck --suppress=missingIncludeSystem --error-exitcode=1 --quiet --enable=all \
+cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor --error-exitcode=1 --quiet --enable=all \
     --suppress=unusedFunction "$@"
 #   ^
-#   `-- partial linting causes unused functions
+#   `-- partial linting causes false positives
