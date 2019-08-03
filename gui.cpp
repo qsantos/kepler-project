@@ -20,6 +20,7 @@ using std::string;
 struct RenderState {
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
+    CelestialBody* focus;
     GLuint current_shader;
     GLuint vao;
     bool drag_active = false;
@@ -209,12 +210,15 @@ void render(RenderState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    double time = 0.;
+    auto scene_origin = body_global_position_at_time(state->focus, time);
+
     for (auto key_value_pair : state->bodies) {
         auto name = key_value_pair.first;
         auto body = key_value_pair.second;
 
         auto transform = state->model_view_matrix;
-        auto position = body_global_position_at_time(body, 0);
+        auto position = body_global_position_at_time(body, time) - scene_origin;
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
         transform = glm::scale(transform, glm::vec3(float(body->radius)));
 
@@ -240,7 +244,7 @@ void render(RenderState* state) {
         }
 
         auto transform = state->model_view_matrix;
-        auto position = body_global_position_at_time(body->orbit->primary, 0);
+        auto position = body_global_position_at_time(body->orbit->primary, time) - scene_origin;
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
 
         GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
@@ -329,6 +333,7 @@ int main() {
         auto path = "data/textures/kerbol/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
+    state.focus = state.bodies.at("Kerbin");
 
     // disable vsync
     // glfwSwapInterval(0);
