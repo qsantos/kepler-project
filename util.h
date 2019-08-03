@@ -65,4 +65,6 @@ inline void* _realloc(void* p, size_t s, const char* filename, int line, const c
 #define MALLOC(s) _malloc(s, __FILE__, __LINE__, __func__)
 #define REALLOC(p, s) _realloc(p, s, __FILE__, __LINE__, __func__)
 
+char* load_file(const char* filename);
+
 #endif
