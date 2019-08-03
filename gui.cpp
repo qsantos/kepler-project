@@ -20,6 +20,7 @@ using std::string;
 struct RenderState {
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
+    map<string, OrbitMesh> orbit_meshes;
     CelestialBody* focus;
     GLuint current_shader;
     GLuint vao;
@@ -238,6 +239,7 @@ void render(RenderState* state) {
     GLint colorUniform = glGetUniformLocation(state->current_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
+        auto name = key_value_pair.first;
         auto body = key_value_pair.second;
         if (body->orbit == NULL) {
             continue;
@@ -254,8 +256,7 @@ void render(RenderState* state) {
         GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
 
-        OrbitMesh orbit_mesh(body->orbit);
-        orbit_mesh.draw();
+        state->orbit_meshes.at(name).draw();
     }
     glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 }
@@ -334,6 +335,15 @@ int main() {
         state.body_textures[name] = load_texture(path.c_str());
     }
     state.focus = state.bodies.at("Earth");
+
+    for (auto key_value_pair : state.bodies) {
+        auto name = key_value_pair.first;
+        auto body = key_value_pair.second;
+        if (body->orbit == NULL) {
+            continue;
+        }
+        state.orbit_meshes.emplace(name, body->orbit);
+    }
 
     // disable vsync
     // glfwSwapInterval(0);
