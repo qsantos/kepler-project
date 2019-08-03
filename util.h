@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #define M_PI 3.14159265358979323846
 
@@ -64,6 +65,13 @@ inline void* _realloc(void* p, size_t s, const char* filename, int line, const c
 
 #define MALLOC(s) _malloc(s, __FILE__, __LINE__, __func__)
 #define REALLOC(p, s) _realloc(p, s, __FILE__, __LINE__, __func__)
+
+inline double real_clock(void) {
+    /* Clock that measures wall-clock time */
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    return (double) now.tv_sec + (double) now.tv_usec / 1e6;
+}
 
 char* load_file(const char* filename);
 
