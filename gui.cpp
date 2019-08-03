@@ -213,7 +213,11 @@ void render(RenderState* state) {
         auto name = key_value_pair.first;
         auto body = key_value_pair.second;
 
-        auto transform = glm::scale(state->model_view_matrix, glm::vec3(float(body->radius)));
+        auto transform = state->model_view_matrix;
+        auto position = body_global_position_at_time(body, 0);
+        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
+        transform = glm::scale(transform, glm::vec3(float(body->radius)));
+
         GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
         glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
         float aspect = float(state->viewport_width) / float(state->viewport_height);
@@ -296,8 +300,6 @@ int main() {
         auto path = "data/textures/kerbol/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
-    // CelestialBody* kerbol = kerbol_system.at("Kerbol");
-    // (void) kerbol;
 
     // disable vsync
     // glfwSwapInterval(0);
