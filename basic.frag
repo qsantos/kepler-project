@@ -1,13 +1,13 @@
 #version 150 core
 
-uniform sampler2D texture;
+uniform sampler2D Texture0;
 
 varying vec2 f_texcoord;
 
 uniform vec3 f_color;
 
 void setdefaults(void) {
-    vec4 texColor = texture2D(texture, f_texcoord);
+    vec4 texColor = texture2D(Texture0, f_texcoord);
     gl_FragColor = vec4(f_color, 1.) + texColor;
     // gl_FragColor = gl_Color * texColor;
 }

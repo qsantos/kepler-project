@@ -14,8 +14,12 @@ extern "C" {
 
 using std::cout;
 using std::endl;
+using std::map;
+using std::string;
 
 struct RenderState {
+    map<string, CelestialBody*> bodies;
+    map<string, GLuint> body_textures;
     GLuint current_shader;
     GLuint vao;
     bool drag_active = false;
@@ -30,7 +34,9 @@ struct RenderState {
     int windowed_height = 600;
     int viewport_width = 800;
     int viewport_height = 800;
-    UVSphereMesh uv_sphere = UVSphereMesh(600e3f, 64, 64);
+    UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
+    glm::mat4 model_view_projection_matrix;
+    glm::mat4 model_view_matrix;
 };
 
 GLuint compileVertexShader(const char* filename) {
@@ -107,14 +113,14 @@ void setup_matrices(RenderState* state) {
     float aspect = float(state->viewport_width) / float(state->viewport_height);
     glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
 
-    auto model_view_projection_matrix = proj * view * model;
-    auto model_view_matrix = view * model;
+    state->model_view_projection_matrix = proj * view * model;
+    state->model_view_matrix = view * model;
 
     GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
-    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
+    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(state->model_view_projection_matrix));
 
     GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
-    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
+    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(state->model_view_matrix));
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -203,7 +209,23 @@ void render(RenderState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    state->uv_sphere.draw();
+    for (auto key_value_pair : state->bodies) {
+        auto name = key_value_pair.first;
+        auto body = key_value_pair.second;
+
+        auto transform = glm::scale(state->model_view_matrix, glm::vec3(float(body->radius)));
+        GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
+        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
+        float aspect = float(state->viewport_width) / float(state->viewport_height);
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+        GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
+        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+
+        auto texture = state->body_textures.at(name);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        state->uv_sphere.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 int main() {
@@ -248,6 +270,7 @@ int main() {
         framebuffer_size_callback(window, width, height);
     }
 
+    glActiveTexture(GL_TEXTURE0);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_BLEND);
@@ -264,16 +287,17 @@ int main() {
     glUniform3f(colorUniform, 0.1f, 0.0f, 0.0f);
     setup_matrices(&state);
 
-    glActiveTexture(GL_TEXTURE0);
-    GLuint texture = load_texture("data/textures/kerbol/Kerbin.jpg");
-    (void) texture;
-
-    glUniform1i(glGetUniformLocation(state.current_shader, "texture"), 0);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    if (load_bodies(&state.bodies, "kerbol_system.json") < 0) {
+        fprintf(stderr, "Failed to load '%s'\n", "kerbol_system.json");
+        exit(EXIT_FAILURE);
+    }
+    for (auto key_value_pair : state.bodies) {
+        auto name = key_value_pair.first;
+        auto path = "data/textures/kerbol/" + name + ".jpg";
+        state.body_textures[name] = load_texture(path.c_str());
+    }
+    // CelestialBody* kerbol = kerbol_system.at("Kerbol");
+    // (void) kerbol;
 
     // disable vsync
     // glfwSwapInterval(0);
