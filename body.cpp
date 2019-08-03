@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <cstring>
 
 extern "C" {
 #include "util.h"
@@ -12,7 +11,7 @@ extern "C" {
 static const double G = 6.67384e-11;
 
 void body_init(CelestialBody* body) {
-    memset(body, 0, sizeof(CelestialBody));
+    *body = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 
 void body_clear(CelestialBody* body) {
