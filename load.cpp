@@ -70,7 +70,7 @@ static Orbit* parse_orbit(Dict* bodies, cJSON* jbodies, cJSON* jorbit, const cha
     double mean_anomaly_at_epoch       = get_param_optional(jorbit, body_name, "mean_anomaly_at_epoch");
 
     // create Orbit object
-    Orbit* ret = (Orbit*) MALLOC(sizeof(Orbit));
+    Orbit* ret = new Orbit;
     orbit_from_semi_major(ret, primary, semi_major_axis, eccentricity);
     orbit_orientate(ret, longitude_of_ascending_node, inclination, argument_of_periapsis, epoch, mean_anomaly_at_epoch);
     return ret;
@@ -84,7 +84,7 @@ static CelestialCoordinates* parse_coordinates(cJSON* jcoordinates, const char* 
     double right_ascension = get_param_required(jcoordinates, body_name, "right_ascension");
     double declination     = get_param_required(jcoordinates, body_name, "declination");
     double distance        = get_param_optional(jcoordinates, body_name, "distance");
-    CelestialCoordinates* coordinates = (CelestialCoordinates*) MALLOC(sizeof(CelestialCoordinates));
+    CelestialCoordinates* coordinates = new CelestialCoordinates;
     *coordinates = CelestialCoordinates::from_equatorial(right_ascension, declination, distance);
     return coordinates;
 }
@@ -101,7 +101,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
         exit(EXIT_FAILURE);
     }
 
-    CelestialBody* ret = (CelestialBody*) MALLOC(sizeof(CelestialBody));
+    CelestialBody* ret = new CelestialBody;
     (*bodies)[name] = ret;
     body_init(ret);
     body_set_name(ret, name);
