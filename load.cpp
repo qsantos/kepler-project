@@ -104,7 +104,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
     CelestialBody* ret = new CelestialBody;
     (*bodies)[name] = ret;
     body_init(ret);
-    body_set_name(ret, name);
+    body_set_name(ret, strdup(name));
 
     double radius = get_param_optional(jbody, name, "radius");
     if (radius != 0.) {

@@ -768,6 +768,7 @@ static void test_load_solar_system(void) {
     CelestialBody* earth = solar_system["Earth"];
     CelestialBody* moon = solar_system["Moon"];
     if (sun != NULL) {
+        assert(std::string(sun->name) == std::string("Sun"));
         assert(sun->n_satellites >= 8);
     }
     if (sun != NULL && earth != NULL) {
@@ -805,6 +806,7 @@ static void test_load_kerbol_system(void) {
     CelestialBody* kerbin = kerbol_system["Kerbin"];
     CelestialBody* mun = kerbol_system["Mun"];
     if (kerbol != NULL) {
+        assert(std::string(kerbol->name) == std::string("Kerbol"));
         assert(kerbol->n_satellites == 7);
     }
     if (kerbol != NULL && kerbin != NULL) {
