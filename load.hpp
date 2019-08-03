@@ -1,9 +1,11 @@
 #ifndef LOAD_HPP
 #define LOAD_HPP
 
-extern "C" {
-#include "dict.h"
-}
+#include "body.hpp"
+
+#include <map>
+
+using Dict = std::map<std::string, CelestialBody*>;
 
 int parse_bodies(Dict* bodies, const char* json);
 

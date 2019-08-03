@@ -9,7 +9,6 @@
 
 extern "C" {
 #include "util.h"
-#include "dict.h"
 }
 
 #include <cmath>
@@ -167,33 +166,6 @@ Orbit make_dummy_orbit_with_period(double period) {
             {0, 0, 0}, // orientation
         },
     };
-}
-
-static void test_dict(void) {
-    Dict dict;
-    dict_init(&dict);
-    int x, y, z;
-
-    // insertion
-    dict_set(&dict, "key1", &x);
-    dict_set(&dict, "key2", &y);
-    dict_set(&dict, "key3", &z);
-    assert(dict_get(&dict, "key3") == &z);
-    assert(dict_get(&dict, "key1") == &x);
-    assert(dict_get(&dict, "key2") == &y);
-    assert(dict_get(&dict, "key4") == NULL);
-
-    // modification
-    dict_set(&dict, "key2", &x);
-    assert(dict_get(&dict, "key2") == &x);
-
-    // deletion
-    dict_del(&dict, "key2");
-    assert(dict_get(&dict, "key2") == NULL);
-    assert(dict_get(&dict, "key1") == &x);
-    assert(dict_get(&dict, "key3") == &z);
-
-    dict_free(&dict);
 }
 
 static void test_vector(void) {
@@ -780,20 +752,21 @@ static void test_load_solar_system(void) {
         exit(EXIT_FAILURE);
     }
 
-    assert(dict_get(&solar_system, "Sun")     != NULL);
-    assert(dict_get(&solar_system, "Mercury") != NULL);
-    assert(dict_get(&solar_system, "Venus")   != NULL);
-    assert(dict_get(&solar_system, "Earth")   != NULL);
-    assert(dict_get(&solar_system, "Moon")    != NULL);
-    assert(dict_get(&solar_system, "Mars")    != NULL);
-    assert(dict_get(&solar_system, "Jupiter") != NULL);
-    assert(dict_get(&solar_system, "Saturn")  != NULL);
-    assert(dict_get(&solar_system, "Uranus")  != NULL);
-    assert(dict_get(&solar_system, "Neptune") != NULL);
+    assert(solar_system.count("Sun")     == 1);
+    assert(solar_system.count("Mercury") == 1);
+    assert(solar_system.count("Venus")   == 1);
+    assert(solar_system.count("Earth")   == 1);
+    assert(solar_system.count("Moon")    == 1);
+    assert(solar_system.count("Mars")    == 1);
+    assert(solar_system.count("Jupiter") == 1);
+    assert(solar_system.count("Saturn")  == 1);
+    assert(solar_system.count("Uranus")  == 1);
+    assert(solar_system.count("Neptune") == 1);
+    assert(solar_system.count("XXX")     == 0);
 
-    CelestialBody* sun = (CelestialBody*) dict_get(&solar_system, "Sun");
-    CelestialBody* earth = (CelestialBody*) dict_get(&solar_system, "Earth");
-    CelestialBody* moon = (CelestialBody*) dict_get(&solar_system, "Moon");
+    CelestialBody* sun = solar_system["Sun"];
+    CelestialBody* earth = solar_system["Earth"];
+    CelestialBody* moon = solar_system["Moon"];
     if (sun != NULL) {
         assert(sun->n_satellites >= 8);
     }
@@ -816,20 +789,21 @@ static void test_load_kerbol_system(void) {
         exit(EXIT_FAILURE);
     }
 
-    assert(dict_get(&kerbol_system, "Kerbol") != NULL);
-    assert(dict_get(&kerbol_system, "Moho")   != NULL);
-    assert(dict_get(&kerbol_system, "Eve")   != NULL);
-    assert(dict_get(&kerbol_system, "Kerbin") != NULL);
-    assert(dict_get(&kerbol_system, "Mun")    != NULL);
-    assert(dict_get(&kerbol_system, "Minmus") != NULL);
-    assert(dict_get(&kerbol_system, "Duna")   != NULL);
-    assert(dict_get(&kerbol_system, "Dres")   != NULL);
-    assert(dict_get(&kerbol_system, "Jool")   != NULL);
-    assert(dict_get(&kerbol_system, "Eeloo")  != NULL);
+    assert(kerbol_system.count("Kerbol") == 1);
+    assert(kerbol_system.count("Moho")   == 1);
+    assert(kerbol_system.count("Eve")    == 1);
+    assert(kerbol_system.count("Kerbin") == 1);
+    assert(kerbol_system.count("Mun")    == 1);
+    assert(kerbol_system.count("Minmus") == 1);
+    assert(kerbol_system.count("Duna")   == 1);
+    assert(kerbol_system.count("Dres")   == 1);
+    assert(kerbol_system.count("Jool")   == 1);
+    assert(kerbol_system.count("Eeloo")  == 1);
+    assert(kerbol_system.count("XXX")    == 0);
 
-    CelestialBody* kerbol = (CelestialBody*) dict_get(&kerbol_system, "Kerbol");
-    CelestialBody* kerbin = (CelestialBody*) dict_get(&kerbol_system, "Kerbin");
-    CelestialBody* mun = (CelestialBody*) dict_get(&kerbol_system, "Mun");
+    CelestialBody* kerbol = kerbol_system["Kerbol"];
+    CelestialBody* kerbin = kerbol_system["Kerbin"];
+    CelestialBody* mun = kerbol_system["Mun"];
     if (kerbol != NULL) {
         assert(kerbol->n_satellites == 7);
     }
@@ -975,7 +949,6 @@ void test_lambert(void) {
 }
 
 int main(void) {
-    test_dict();           printf("."); fflush(stdout);
     test_vector();         printf("."); fflush(stdout);
     test_matrix();         printf("."); fflush(stdout);
     test_coordinates();    printf("."); fflush(stdout);

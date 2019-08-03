@@ -90,9 +90,9 @@ static CelestialCoordinates* parse_coordinates(cJSON* jcoordinates, const char* 
 }
 
 static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name) {
-    CelestialBody* ret = (CelestialBody*) dict_get(bodies, name);
-    if (ret != NULL) {
-        return ret;
+    auto search = bodies->find(name);
+    if (search != bodies->end()) {
+        return search->second;
     }
 
     cJSON* jbody = cJSON_GetObjectItemCaseSensitive(jbodies, name);
@@ -101,8 +101,8 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
         exit(EXIT_FAILURE);
     }
 
-    ret = (CelestialBody*) MALLOC(sizeof(CelestialBody));
-    dict_set(bodies, name, ret);
+    CelestialBody* ret = (CelestialBody*) MALLOC(sizeof(CelestialBody));
+    (*bodies)[name] = ret;
     body_init(ret);
     body_set_name(ret, name);
 
@@ -150,7 +150,6 @@ int parse_bodies(Dict* bodies, const char* json) {
         return -1;
     }
 
-    dict_init(bodies);
     for (cJSON* body = jbodies->child; body != NULL; body = body->next) {
         parse_body(bodies, jbodies, body->string);
     }
@@ -169,8 +168,7 @@ int load_bodies(Dict* bodies, const char* filename) {
 }
 
 void unload_bodies(Dict* bodies) {
-    for (size_t i = 0; i < bodies->n_slots; i += 1) {  // TODO: dict iteration
-        body_clear((CelestialBody*) bodies->values[i]);
+    for (auto i : *bodies) {
+        body_clear(i.second);
     }
-    dict_free(bodies);
 }

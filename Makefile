@@ -8,10 +8,10 @@ TARGETS:=test example simulation gui
 
 all: $(TARGETS)
 
-example: dict.o body.o orbit.o recipes.o util.o load.o lambert.o
-test: dict.o body.o orbit.o util.o load.o recipes.o lambert.o
-simulation: dict.o body.o orbit.o util.o load.o recipes.o lambert.o
-gui: mesh.o texture.o util.o
+example: body.o orbit.o recipes.o util.o load.o lambert.o
+test: body.o orbit.o util.o load.o recipes.o lambert.o
+simulation: body.o orbit.o util.o load.o recipes.o lambert.o
+gui: mesh.o texture.o body.o orbit.o load.o util.o
 
 # handle include dependencies
 -include $(wildcard *.d)

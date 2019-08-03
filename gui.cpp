@@ -3,6 +3,8 @@ extern "C" {
     #include "texture.h"
 }
 #include "mesh.hpp"
+#include "body.hpp"
+#include "load.hpp"
 
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
