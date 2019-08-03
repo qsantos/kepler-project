@@ -298,7 +298,6 @@ int main() {
         framebuffer_size_callback(window, width, height);
     }
 
-    glActiveTexture(GL_TEXTURE0);
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_BLEND);
