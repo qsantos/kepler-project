@@ -201,7 +201,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 void render(RenderState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     state->uv_sphere.draw();
 }
@@ -249,7 +249,7 @@ int main() {
     }
 
     glEnable(GL_CULL_FACE);
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     //glEnable(GL_BLEND);
     //glEnable(GL_MULTISAMPLE);
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
