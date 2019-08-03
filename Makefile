@@ -17,6 +17,9 @@ simulation: dict.o body.o orbit.o util.o load.o recipes.o lambert.o
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 	$(CC) $(CFLAGS) -MM -o $*.d $<
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -MM -o $*.d $<
 
 clean:
 	rm -f *.o *.d *.gcda *.gcno *.gcov
