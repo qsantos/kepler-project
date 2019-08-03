@@ -324,16 +324,16 @@ int main() {
     float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 
-    if (load_bodies(&state.bodies, "kerbol_system.json") < 0) {
-        fprintf(stderr, "Failed to load '%s'\n", "kerbol_system.json");
+    if (load_bodies(&state.bodies, "solar_system.json") < 0) {
+        fprintf(stderr, "Failed to load '%s'\n", "solar_system.json");
         exit(EXIT_FAILURE);
     }
     for (auto key_value_pair : state.bodies) {
         auto name = key_value_pair.first;
-        auto path = "data/textures/kerbol/" + name + ".jpg";
+        auto path = "data/textures/solar/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
-    state.focus = state.bodies.at("Kerbin");
+    state.focus = state.bodies.at("Earth");
 
     // disable vsync
     // glfwSwapInterval(0);
