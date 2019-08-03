@@ -1,5 +1,6 @@
 #include "mesh.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
 #include <cmath>
@@ -119,4 +120,52 @@ void UVSphereMesh::bind(void) {
 void UVSphereMesh::draw(void) {
     this->bind();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, this->length);
+}
+
+OrbitMesh::OrbitMesh(Orbit* orbit) :
+    components{3},
+    length{256}
+{
+    auto transform = glm::mat4(1.0f);
+    transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
+    transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
+    transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
+    transform = glm::translate(transform, glm::vec3(-orbit->focus, 0.f, 0.f));
+    transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
+
+    std::vector<float> data;
+    data.resize(this->components * this->length);
+    size_t i = 0;
+    for (int j = 0; j < this->length; j += 1) {
+        float theta = M_PIf32 * (2.f * float(j) / float(this->length) - 1.f);
+        auto v = glm::vec4{cosf(theta), sinf(theta), 0.f, 1.f};
+        v = transform * v;
+        data[i++] = v[0];
+        data[i++] = v[1];
+        data[i++] = v[2];
+    }
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void OrbitMesh::bind(void) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+
+    GLint var = glGetAttribLocation(program, "v_position");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void OrbitMesh::draw(void) {
+    this->bind();
+    glDrawArrays(GL_LINE_LOOP, 0, this->length);
 }

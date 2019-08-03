@@ -230,6 +230,30 @@ void render(RenderState* state) {
         state->uv_sphere.draw();
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    GLint colorUniform = glGetUniformLocation(state->current_shader, "f_color");
+    glUniform3f(colorUniform, 1.0f, 1.0f, 1.0f);
+    for (auto key_value_pair : state->bodies) {
+        auto body = key_value_pair.second;
+        if (body->orbit == NULL) {
+            continue;
+        }
+
+        auto transform = state->model_view_matrix;
+        auto position = body_global_position_at_time(body->orbit->primary, 0);
+        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
+
+        GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
+        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
+        float aspect = float(state->viewport_width) / float(state->viewport_height);
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+        GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
+        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+
+        OrbitMesh orbit_mesh(body->orbit);
+        orbit_mesh.draw();
+    }
+    glUniform3f(colorUniform, 0.1f, 0.0f, 0.0f);
 }
 
 int main() {
