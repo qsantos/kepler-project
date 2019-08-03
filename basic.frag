@@ -4,12 +4,10 @@ uniform sampler2D Texture0;
 
 varying vec2 f_texcoord;
 
-uniform vec3 f_color;
+uniform vec4 u_color;
 
 void setdefaults(void) {
-    vec4 texColor = texture2D(Texture0, f_texcoord);
-    gl_FragColor = vec4(f_color, 1.) + texColor;
-    // gl_FragColor = gl_Color * texColor;
+    gl_FragColor = u_color * texture2D(Texture0, f_texcoord);
 }
 
 varying float flogz;

@@ -231,8 +231,8 @@ void render(RenderState* state) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    GLint colorUniform = glGetUniformLocation(state->current_shader, "f_color");
-    glUniform3f(colorUniform, 1.0f, 1.0f, 1.0f);
+    GLint colorUniform = glGetUniformLocation(state->current_shader, "u_color");
+    glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (body->orbit == NULL) {
@@ -253,7 +253,7 @@ void render(RenderState* state) {
         OrbitMesh orbit_mesh(body->orbit);
         orbit_mesh.draw();
     }
-    glUniform3f(colorUniform, 0.1f, 0.0f, 0.0f);
+    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 int main() {
@@ -300,9 +300,9 @@ int main() {
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_BLEND);
-    //glEnable(GL_MULTISAMPLE);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     state.current_shader = compileShaderProgram("basic.vert", "basic.frag");
     glUseProgram(state.current_shader);
@@ -310,9 +310,15 @@ int main() {
     glGenVertexArrays(1, &state.vao);
     glBindVertexArray(state.vao);
 
-    GLint colorUniform = glGetUniformLocation(state.current_shader, "f_color");
-    glUniform3f(colorUniform, 0.1f, 0.0f, 0.0f);
+    GLint colorUniform = glGetUniformLocation(state.current_shader, "u_color");
+    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
     setup_matrices(&state);
+
+    // fill default texture with white for convenience
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 
     if (load_bodies(&state.bodies, "kerbol_system.json") < 0) {
         fprintf(stderr, "Failed to load '%s'\n", "kerbol_system.json");
