@@ -8,7 +8,7 @@
 
 unsigned char* load_image(const char* filename, int* width, int* height) {
     stbi_set_flip_vertically_on_load(1);
-    unsigned char* data = stbi_load(filename, width, height, NULL, 3); 
+    unsigned char* data = stbi_load(filename, width, height, NULL, 3);
     if (data == NULL) {
         fprintf(stderr, "WARNING: failed to load image %s\n", filename);
         return 0;

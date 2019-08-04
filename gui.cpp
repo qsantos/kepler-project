@@ -327,7 +327,7 @@ int main() {
     // main loop
     while (!glfwWindowShouldClose(window)) {
         double now = real_clock();
-        if (now - last > 1.) { 
+        if (now - last > 1.) {
             double fps = (double) n_frames_since_last / (now - last);
             printf("%.1f FPS\n", fps);
             n_frames_since_last = 0;
