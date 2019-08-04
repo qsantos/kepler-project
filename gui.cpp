@@ -14,6 +14,8 @@ extern "C" {
 
 #include <iostream>
 #include <vector>
+#include <clocale>
+#include <ctime>
 
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
@@ -427,6 +429,8 @@ CelestialBody* pick(RenderState* state) {
 }
 
 int main() {
+    setlocale(LC_ALL, "");
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -537,12 +541,22 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         double now = real_clock();
 
-        // check FPS
         if (now - last_fps_measure > 1.) {
+            // display FPS
             double fps = (double) n_frames_since_last / (now - last_fps_measure);
             printf("%.1f FPS\n", fps);
             n_frames_since_last = 0;
             last_fps_measure = now;
+
+            // display local time
+            if (string(state.root->name) == "Sun") {
+                time_t simulation_time = J2000 + (time_t) state.time;
+                struct tm* t = localtime(&simulation_time);
+
+                char buffer[512];
+                strftime(buffer, sizeof(buffer), "%c", t);
+                printf("%s\n", buffer);
+            }
         }
 
         state.time += (now - last_simulation_step) * state.timewarp;
