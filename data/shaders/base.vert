@@ -10,7 +10,6 @@ varying vec2 f_texcoord;
 varying float flogz; // fixed depth
 
 uniform mat4 model_view_projection_matrix;
-uniform mat4 model_view_matrix;
 
 void base(void) {
     gl_Position = model_view_projection_matrix * vec4(v_position, 1.0);

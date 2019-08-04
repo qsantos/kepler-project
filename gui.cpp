@@ -24,14 +24,15 @@ struct RenderState {
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
     CelestialBody* focus;
-    GLuint current_shader;
+    GLuint base_shader;
     GLuint cubemap_shader;
+    GLuint lighting_shader;
     Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
     GLuint vao;
     bool drag_active = false;
     double cursor_x;
     double cursor_y;
-    double view_zoom = 1e-7;
+    double view_zoom = 1e-8;
     double view_theta = 0.;
     double view_phi = -90.;
     int windowed_x = 0;
@@ -61,10 +62,10 @@ void setup_matrices(RenderState* state, bool zoom=true) {
     state->model_view_projection_matrix = proj * view * model;
     state->model_view_matrix = view * model;
 
-    GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
+    GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
     glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(state->model_view_projection_matrix));
 
-    GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
+    GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
     glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(state->model_view_matrix));
 }
 
@@ -160,11 +161,17 @@ void render(RenderState* state) {
     glDisable(GL_DEPTH_TEST);
     state->skybox.draw();
     glEnable(GL_DEPTH_TEST);
-    glUseProgram(state->current_shader);
-    setup_matrices(state);
 
     double time = 0.;
     auto scene_origin = body_global_position_at_time(state->focus, time);
+
+    CelestialBody* root = state->bodies.at("Sun");  // TODO
+    glUseProgram(state->lighting_shader);
+    setup_matrices(state);
+    auto pos = body_global_position_at_time(root, time) - scene_origin;
+    auto pos2 = state->model_view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+    GLint lighting_source = glGetUniformLocation(state->lighting_shader, "lighting_source");
+    glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
     for (auto key_value_pair : state->bodies) {
         auto name = key_value_pair.first;
@@ -175,11 +182,11 @@ void render(RenderState* state) {
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
         transform = glm::scale(transform, glm::vec3(float(body->radius)));
 
-        GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
+        GLint uniMV = glGetUniformLocation(state->lighting_shader, "model_view_matrix");
         glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
         float aspect = float(state->viewport_width) / float(state->viewport_height);
         glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-        GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
+        GLint uniMVP = glGetUniformLocation(state->lighting_shader, "model_view_projection_matrix");
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
 
         auto texture = state->body_textures.at(name);
@@ -188,7 +195,10 @@ void render(RenderState* state) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    GLint colorUniform = glGetUniformLocation(state->current_shader, "u_color");
+    glUseProgram(state->base_shader);
+    setup_matrices(state);
+
+    GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
         auto name = key_value_pair.first;
@@ -201,11 +211,11 @@ void render(RenderState* state) {
         auto position = body_global_position_at_time(body->orbit->primary, time) - scene_origin;
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
 
-        GLint uniMV = glGetUniformLocation(state->current_shader, "model_view_matrix");
+        GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
         glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
         float aspect = float(state->viewport_width) / float(state->viewport_height);
         glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-        GLint uniMVP = glGetUniformLocation(state->current_shader, "model_view_projection_matrix");
+        GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
 
         state->orbit_meshes.at(name).draw();
@@ -266,9 +276,13 @@ int main() {
     glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
     glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
-    state.current_shader = make_program({"base"});
-    glUseProgram(state.current_shader);
-    glUniform4f(glGetUniformLocation(state.current_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+    state.lighting_shader = make_program({"base", "lighting"});
+    glUseProgram(state.lighting_shader);
+    glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+
+    state.base_shader = make_program({"base"});
+    glUseProgram(state.base_shader);
+    glUniform4f(glGetUniformLocation(state.base_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
     glGenVertexArrays(1, &state.vao);
     glBindVertexArray(state.vao);
