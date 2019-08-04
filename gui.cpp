@@ -244,6 +244,9 @@ void render(RenderState* state) {
     for (auto key_value_pair : state->bodies) {
         auto name = key_value_pair.first;
         auto body = key_value_pair.second;
+        if (body == state->focus) {
+            continue;
+        }
         if (body->orbit == NULL) {
             continue;
         }
@@ -260,6 +263,28 @@ void render(RenderState* state) {
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
 
         state->orbit_meshes.at(name).draw();
+    }
+    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
+
+    glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
+    {
+        auto body = state->focus;
+
+        setup_matrices(state);
+        /*
+        auto transform = state->model_view_matrix;
+        auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
+        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
+
+        GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
+        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
+        float aspect = float(state->viewport_width) / float(state->viewport_height);
+        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+        GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
+        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+        */
+
+        FocusedOrbitMesh(body->orbit, state->time).draw();
     }
     glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 }

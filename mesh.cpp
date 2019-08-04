@@ -235,3 +235,77 @@ void CubeMesh::draw(void) {
     this->bind();
     glDrawArrays(GL_TRIANGLES, 0, this->length);
 }
+
+FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
+    components{3},
+    length{256}
+{
+    std::vector<float> data;
+    data.resize(this->components * this->length);
+    size_t i = 0;
+
+    // issues when drawing the orbit of a focused body:
+    // 1. moving to system center and back close to camera induces
+    //    loss of significance and produces jitter
+    // 2. drawing the orbit as segments may put the body visibly out
+    //    of the line when zooming in
+    // 3. line breaks may be visible close to the camera
+
+    // draw the orbit from the body rather than from the orbit focus (1.)
+    if (orbit->eccentricity >= 1.) {  // open orbits
+        // TODO
+    } else {  // closed orbits
+        // TODO: use circle symetry hack to avoid regenerating the mesh
+        // TODO: can the hack be adapted for parabolic and hyperbolic orbits?
+
+        // make tilted ellipse from a circle; and rotate at current anomaly
+        double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
+        double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
+
+        auto transform = glm::mat4(1.0f);
+        transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
+        transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
+        transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
+        // NOTE: do not translate
+        transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
+        transform = glm::rotate(transform, float(eccentric_anomaly - M_PI), glm::vec3(0.f, 0.f, 1.f));
+
+        // the first point of circle_through_origin is (0,0) (2.)
+        // more points are located near the origin (3.)
+        for (int point = 0; point < this->length; point += 1) {
+            // TODO: use lerp
+            float x = 2.f * float(point) / float(this->length) - 1.f;
+            float theta = M_PIf32 * powf(x, 3.f);
+            glm::vec3 pos = transform * glm::vec4(1.f - cosf(theta), sinf(theta), 0.f, 0.f);
+            data[i++] = pos[0];
+            data[i++] = pos[1];
+            data[i++] = pos[2];
+        }
+    }
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+
+void FocusedOrbitMesh::bind(void) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+
+    GLint var = glGetAttribLocation(program, "v_position");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void FocusedOrbitMesh::draw(void) {
+    this->bind();
+    glDrawArrays(GL_LINE_LOOP, 0, this->length);
+    // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
+}

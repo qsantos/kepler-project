@@ -33,4 +33,14 @@ struct CubeMesh {
     unsigned vbo;
 };
 
+struct FocusedOrbitMesh {
+    FocusedOrbitMesh(Orbit* orbit, double time);
+    void bind(void);
+    void draw(void);
+
+    int components;
+    int length;
+    unsigned vbo;
+};
+
 #endif
