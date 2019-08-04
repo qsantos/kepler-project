@@ -48,6 +48,21 @@ struct RenderState {
     glm::mat4 model_view_matrix;
 };
 
+bool is_ancestor_of(CelestialBody* candidate, CelestialBody* target) {
+    if (candidate == target) {
+        return true;
+    }
+
+    while (target->orbit != NULL) {
+        target = target->orbit->primary;
+        if (candidate == target) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void setup_matrices(RenderState* state, bool zoom=true) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
@@ -242,9 +257,8 @@ void render(RenderState* state) {
     GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
-        auto name = key_value_pair.first;
         auto body = key_value_pair.second;
-        if (body == state->focus) {
+        if (is_ancestor_of(body, state->focus)) {
             continue;
         }
         if (body->orbit == NULL) {
@@ -262,18 +276,20 @@ void render(RenderState* state) {
         GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
 
-        state->orbit_meshes.at(name).draw();
+        state->orbit_meshes.at(body->name).draw();
     }
     glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
-    {
-        auto body = state->focus;
+    for (auto key_value_pair : state->bodies) {
+        auto body = key_value_pair.second;
+        if (body == root || !is_ancestor_of(body, state->focus)) {
+            continue;
+        }
 
         setup_matrices(state);
-        /*
         auto transform = state->model_view_matrix;
-        auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
+        auto position = body_global_position_at_time(body, state->time) - scene_origin;
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
 
         GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
@@ -282,7 +298,6 @@ void render(RenderState* state) {
         glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
         GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
         glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
-        */
 
         FocusedOrbitMesh(body->orbit, state->time).draw();
     }
@@ -370,7 +385,7 @@ int main() {
         auto path = "data/textures/solar/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
-    state.focus = state.bodies.at("Earth");
+    state.focus = state.bodies.at("Moon");
 
     for (auto key_value_pair : state.bodies) {
         auto name = key_value_pair.first;
