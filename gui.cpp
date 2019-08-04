@@ -21,6 +21,7 @@ using std::string;
 
 struct RenderState {
     double time = 0.;
+    double timewarp = 1.;
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
@@ -104,6 +105,7 @@ void toggle_fullscreen(GLFWwindow* window) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     (void) scancode;
     (void) mods;
+    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
 
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_ESCAPE) {
@@ -114,6 +116,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         } else if (key == GLFW_KEY_F) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        } else if (key == GLFW_KEY_COMMA) {
+            state->timewarp /= 10.;
+            cout << "Time warp: "  << state->timewarp << endl;
+        } else if (key == GLFW_KEY_PERIOD) {
+            state->timewarp *= 10.;
+            cout << "Time warp: "  << state->timewarp << endl;
+        } else if (key == GLFW_KEY_SLASH) {
+            state->timewarp = 1.;
+            cout << "Time warp: "  << state->timewarp << endl;
         }
     }
 }
@@ -191,7 +202,6 @@ void render(RenderState* state) {
     glUseProgram(state->base_shader);
     setup_matrices(state);
 
-    state->time = 0.;
     auto scene_origin = body_global_position_at_time(state->focus, state->time);
 
     CelestialBody* root = state->bodies.at("Sun");  // TODO
@@ -336,18 +346,24 @@ int main() {
     // disable vsync
     // glfwSwapInterval(0);
 
-    double last = real_clock();
+    double last_simulation_step = real_clock();
+    double last_fps_measure = real_clock();
     size_t n_frames_since_last = 0;
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
         double now = real_clock();
-        if (now - last > 1.) {
-            double fps = (double) n_frames_since_last / (now - last);
+
+        // check FPS
+        if (now - last_fps_measure > 1.) {
+            double fps = (double) n_frames_since_last / (now - last_fps_measure);
             printf("%.1f FPS\n", fps);
             n_frames_since_last = 0;
-            last = now;
+            last_fps_measure = now;
         }
+
+        state.time += (now - last_simulation_step) * state.timewarp;
+        last_simulation_step = now;
 
         render(&state);
 
