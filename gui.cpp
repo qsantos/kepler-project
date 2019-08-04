@@ -15,6 +15,8 @@ extern "C" {
 #include <iostream>
 #include <vector>
 
+const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
+
 using std::cout;
 using std::endl;
 using std::map;
@@ -26,6 +28,7 @@ struct RenderState {
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
+    CelestialBody* root;
     CelestialBody* focus;
     GLuint base_shader;
     GLuint cubemap_shader;
@@ -37,7 +40,7 @@ struct RenderState {
     std::vector<CelestialBody*> picking_objects;
     double cursor_x;
     double cursor_y;
-    double view_zoom = 1e-8;
+    double view_zoom = 1e-7;
     double view_theta = 0.;
     double view_phi = -90.;
     int windowed_x = 0;
@@ -76,7 +79,7 @@ void setup_matrices(RenderState* state, bool zoom=true) {
 
     glm::mat4 view = glm::mat4(1.0f);
     if (zoom) {
-        view = glm::translate(view, glm::vec3(0.f, 0.f, -.1f / state->view_zoom));
+        view = glm::translate(view, glm::vec3(0.f, 0.f, -1.f / state->view_zoom));
     }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -278,22 +281,21 @@ void render(RenderState* state) {
 
     auto scene_origin = body_global_position_at_time(state->focus, state->time);
 
-    CelestialBody* root = state->bodies.at("Sun");  // TODO
-    set_picking_object(state, root);
-    render_body(state, root, scene_origin);
+    set_picking_object(state, state->root);
+    render_body(state, state->root, scene_origin);
     clear_picking_object(state);
 
     // enable lighting
     glUseProgram(state->lighting_shader);
     setup_matrices(state);
-    auto pos = body_global_position_at_time(root, state->time) - scene_origin;
+    auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
     auto pos2 = state->model_view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
     GLint lighting_source = glGetUniformLocation(state->lighting_shader, "lighting_source");
     glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
-        if (body == root) {
+        if (body == state->root) {
             continue;
         }
         set_picking_object(state, body);
@@ -335,7 +337,7 @@ void render(RenderState* state) {
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
-        if (body == root || !is_ancestor_of(body, state->focus)) {
+        if (body == state->root || !is_ancestor_of(body, state->focus)) {
             continue;
         }
 
@@ -504,7 +506,8 @@ int main() {
         auto path = "data/textures/solar/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
-    state.focus = state.bodies.at("Moon");
+    state.focus = state.bodies.at("Earth");
+    state.root = state.bodies.at("Sun");
 
     for (auto key_value_pair : state.bodies) {
         auto name = key_value_pair.first;
@@ -517,6 +520,11 @@ int main() {
 
     // disable vsync
     // glfwSwapInterval(0);
+
+    state.time = 0;
+    if (string(state.root->name) == "Sun") {
+        state.time = (double) (time(NULL) - J2000);
+    }
 
     double last_simulation_step = real_clock();
     double last_fps_measure = real_clock();

@@ -40,4 +40,3 @@ char* load_file(const char* filename) {
     }
     return ret;
 }
-
