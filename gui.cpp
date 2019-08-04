@@ -148,6 +148,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_SLASH) {
             state->timewarp = 1.;
             cout << "Time warp: "  << state->timewarp << endl;
+        } else if (key == GLFW_KEY_I) {
+            state->timewarp *= -1.;
+            cout << "Time warp: "  << state->timewarp << endl;
         }
     }
 }
