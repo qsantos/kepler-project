@@ -175,6 +175,19 @@ void render_body(RenderState* state, CelestialBody* body, vec3 scene_origin) {
     transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
     transform = glm::scale(transform, glm::vec3(float(body->radius)));
 
+    // axial tilt
+    if (body->north_pole != NULL) {
+        double z_angle = body->north_pole->ecliptic_longitude - M_PI / 2.;
+        transform = glm::rotate(transform, float(z_angle), glm::vec3(0.f, 0.f, 1.f));
+        double x_angle = body->north_pole->ecliptic_latitude - M_PI / 2.;
+        transform = glm::rotate(transform, float(x_angle), glm::vec3(1.f, 0.f, 0.f));
+    }
+
+    // OpenGL use single precision while Python has double precision
+    // reducing modulo 2 PI in Python reduces loss of significance
+    double turn_fraction = fmod(state->time / body->sidereal_day, 1.);
+    transform = glm::rotate(transform, 2.f * M_PIf32 * float(turn_fraction), glm::vec3(0.f, 0.f, 1.f));
+
     GLint uniMV = glGetUniformLocation(program, "model_view_matrix");
     glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
     float aspect = float(state->viewport_width) / float(state->viewport_height);
