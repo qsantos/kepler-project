@@ -47,6 +47,9 @@ struct RenderState {
 };
 
 void setup_matrices(RenderState* state, bool zoom=true) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
     glm::mat4 model = glm::mat4(1.0f);
 
     glm::mat4 view = glm::mat4(1.0f);
@@ -62,10 +65,10 @@ void setup_matrices(RenderState* state, bool zoom=true) {
     state->model_view_projection_matrix = proj * view * model;
     state->model_view_matrix = view * model;
 
-    GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
+    GLint uniMVP = glGetUniformLocation(program, "model_view_projection_matrix");
     glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(state->model_view_projection_matrix));
 
-    GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
+    GLint uniMV = glGetUniformLocation(program, "model_view_matrix");
     glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(state->model_view_matrix));
 }
 
