@@ -21,7 +21,7 @@ const vec4 product_specular = light_specular * material_specular;
 void lighting() {
     vec3 perceived_light = normalize(-lighting_vertex); // vector to eye position (0, 0, 0)
     vec3 incident_light = normalize(lighting_source - lighting_vertex);
-    vec3 reflected_light = normalize(reflect(incident_light, lighting_normal));
+    vec3 reflected_light = normalize(-reflect(incident_light, lighting_normal));
 
     // geometry-dependent values
     float component_ambient = 1.0;
