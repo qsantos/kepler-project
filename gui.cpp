@@ -153,6 +153,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_I) {
             state->timewarp *= -1.;
             cout << "Time warp: "  << state->timewarp << endl;
+        } else if (key == GLFW_KEY_EQUAL) {
+            if (string(state->root->name) == "Sun") {
+                state->time = (double) (time(NULL) - J2000);
+                cout << "Back to present" << endl;
+            } else {
+                state->time = 0.f;
+                cout << "Back to epoch" << endl;
+            }
         }
     }
 }
