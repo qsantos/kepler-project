@@ -3,6 +3,7 @@ extern "C" {
     #include "texture.h"
 }
 #include "mesh.hpp"
+#include "shaders.hpp"
 #include "body.hpp"
 #include "load.hpp"
 
@@ -40,69 +41,6 @@ struct RenderState {
     glm::mat4 model_view_projection_matrix;
     glm::mat4 model_view_matrix;
 };
-
-GLuint compileVertexShader(const char* filename) {
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-    GLchar* vertexShaderSource = load_file(filename);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    free(vertexShaderSource);
-    glCompileShader(vertexShader);
-
-    GLint success;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << endl;
-        glfwTerminate();
-        exit(1);
-    }
-    return vertexShader;
-}
-
-GLuint compileFragmentShader(const char* filename) {
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-    GLchar* fragmentShaderSource = load_file(filename);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    free(fragmentShaderSource);
-    glCompileShader(fragmentShader);
-
-    GLint success;
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << endl;
-        glfwTerminate();
-        exit(1);
-    }
-    return fragmentShader;
-}
-
-GLuint compileShaderProgram(const char* vertexFilename, const char* fragmentFilename) {
-    GLuint shaderProgram = glCreateProgram();
-
-    GLuint vertexShader = compileVertexShader(vertexFilename);
-    GLuint fragmentShader = compileFragmentShader(fragmentFilename);
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    GLint success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        cout << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << endl;
-        glfwTerminate();
-        exit(1);
-    }
-    return shaderProgram;
-}
 
 void setup_matrices(RenderState* state) {
     glm::mat4 model = glm::mat4(1.0f);
@@ -309,7 +247,7 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    state.current_shader = compileShaderProgram("basic.vert", "basic.frag");
+    state.current_shader = make_program({"base"});
     glUseProgram(state.current_shader);
 
     glGenVertexArrays(1, &state.vao);
