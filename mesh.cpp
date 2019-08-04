@@ -26,7 +26,7 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
             data[i++] = radius * cosf(angle_j);
             // texcoord
             data[i++] = 1 - float(slice) / float(slices);
-            data[i++] = float(stack) / float(stacks);
+            data[i++] = 1 - float(stack) / float(stacks);
             // normal
             data[i++] = sinf(angle_i) * sinf(angle_j);
             data[i++] = cosf(angle_i) * sinf(angle_j);
