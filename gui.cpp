@@ -20,6 +20,7 @@ using std::map;
 using std::string;
 
 struct RenderState {
+    double time = 0.;
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
@@ -154,6 +155,28 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     setup_matrices(state);
 }
 
+void render_body(RenderState* state, CelestialBody* body, vec3 scene_origin) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
+    auto transform = state->model_view_matrix;
+    auto position = body_global_position_at_time(body, state->time) - scene_origin;
+    transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
+    transform = glm::scale(transform, glm::vec3(float(body->radius)));
+
+    GLint uniMV = glGetUniformLocation(program, "model_view_matrix");
+    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
+    float aspect = float(state->viewport_width) / float(state->viewport_height);
+    glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+    GLint uniMVP = glGetUniformLocation(program, "model_view_projection_matrix");
+    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+
+    auto texture = state->body_textures.at(body->name);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    state->uv_sphere.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void render(RenderState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -165,37 +188,29 @@ void render(RenderState* state) {
     state->skybox.draw();
     glEnable(GL_DEPTH_TEST);
 
-    double time = 0.;
-    auto scene_origin = body_global_position_at_time(state->focus, time);
+    glUseProgram(state->base_shader);
+    setup_matrices(state);
+
+    state->time = 0.;
+    auto scene_origin = body_global_position_at_time(state->focus, state->time);
 
     CelestialBody* root = state->bodies.at("Sun");  // TODO
+    render_body(state, root, scene_origin);
+
+    // enable lighting
     glUseProgram(state->lighting_shader);
     setup_matrices(state);
-    auto pos = body_global_position_at_time(root, time) - scene_origin;
+    auto pos = body_global_position_at_time(root, state->time) - scene_origin;
     auto pos2 = state->model_view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
     GLint lighting_source = glGetUniformLocation(state->lighting_shader, "lighting_source");
     glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
     for (auto key_value_pair : state->bodies) {
-        auto name = key_value_pair.first;
         auto body = key_value_pair.second;
-
-        auto transform = state->model_view_matrix;
-        auto position = body_global_position_at_time(body, time) - scene_origin;
-        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
-        transform = glm::scale(transform, glm::vec3(float(body->radius)));
-
-        GLint uniMV = glGetUniformLocation(state->lighting_shader, "model_view_matrix");
-        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
-        float aspect = float(state->viewport_width) / float(state->viewport_height);
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-        GLint uniMVP = glGetUniformLocation(state->lighting_shader, "model_view_projection_matrix");
-        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
-
-        auto texture = state->body_textures.at(name);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        state->uv_sphere.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
+        if (body == root) {
+            continue;
+        }
+        render_body(state, body, scene_origin);
     }
 
     glUseProgram(state->base_shader);
@@ -211,7 +226,7 @@ void render(RenderState* state) {
         }
 
         auto transform = state->model_view_matrix;
-        auto position = body_global_position_at_time(body->orbit->primary, time) - scene_origin;
+        auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
         transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
 
         GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
