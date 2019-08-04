@@ -169,3 +169,57 @@ void OrbitMesh::draw(void) {
     this->bind();
     glDrawArrays(GL_LINE_LOOP, 0, this->length);
 }
+
+CubeMesh::CubeMesh(double size) :
+    components{3},
+    length{36}
+{
+
+    float s = (float) size;
+
+    float data[] = {
+        // each row is a full triangle, two rows make a face
+        // +X
+        +s, +s, +s,   +s, +s, -s,   +s, -s, +s,
+        +s, -s, +s,   +s, +s, -s,   +s, -s, -s,
+        // -X
+        -s, -s, +s,   -s, -s, -s,   -s, +s, +s,
+        -s, +s, +s,   -s, -s, -s,   -s, +s, -s,
+        // +Y
+        -s, +s, +s,   -s, +s, -s,   +s, +s, +s,
+        +s, +s, +s,   -s, +s, -s,   +s, +s, -s,
+        // -Y
+        +s, -s, +s,   +s, -s, -s,   -s, -s, +s,
+        -s, -s, +s,   +s, -s, -s,   -s, -s, -s,
+        // +Z
+        +s, +s, +s,   +s, -s, +s,   -s, +s, +s,
+        -s, +s, +s,   +s, -s, +s,   -s, -s, +s,
+        // -Z
+        +s, +s, -s,   -s, +s, -s,   +s, -s, -s,
+        +s, -s, -s,   -s, +s, -s,   -s, -s, -s,
+    };
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void CubeMesh::bind(void) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+
+    GLint var = glGetAttribLocation(program, "v_position");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void CubeMesh::draw(void) {
+    this->bind();
+    glDrawArrays(GL_TRIANGLES, 0, this->length);
+}

@@ -12,7 +12,7 @@ using std::endl;
 using std::string;
 
 // how is this not part of the STL?
-string replace(string s, string pattern, string replacement) {
+static string replace(string s, string pattern, string replacement) {
     size_t pos = s.find(pattern);
     while (pos != string::npos) {
         s.replace(pos, pattern.size(), replacement);

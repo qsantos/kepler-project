@@ -3,6 +3,7 @@ extern "C" {
     #include "texture.h"
 }
 #include "mesh.hpp"
+#include "cubemap.hpp"
 #include "shaders.hpp"
 #include "body.hpp"
 #include "load.hpp"
@@ -24,6 +25,8 @@ struct RenderState {
     map<string, OrbitMesh> orbit_meshes;
     CelestialBody* focus;
     GLuint current_shader;
+    GLuint cubemap_shader;
+    Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
     GLuint vao;
     bool drag_active = false;
     double cursor_x;
@@ -42,11 +45,13 @@ struct RenderState {
     glm::mat4 model_view_matrix;
 };
 
-void setup_matrices(RenderState* state) {
+void setup_matrices(RenderState* state, bool zoom=true) {
     glm::mat4 model = glm::mat4(1.0f);
 
     glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.f, 0.f, -.1f / state->view_zoom));
+    if (zoom) {
+        view = glm::translate(view, glm::vec3(0.f, 0.f, -.1f / state->view_zoom));
+    }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -149,6 +154,15 @@ void render(RenderState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    // skybox
+    glUseProgram(state->cubemap_shader);
+    setup_matrices(state, false);
+    glDisable(GL_DEPTH_TEST);
+    state->skybox.draw();
+    glEnable(GL_DEPTH_TEST);
+    glUseProgram(state->current_shader);
+    setup_matrices(state);
+
     double time = 0.;
     auto scene_origin = body_global_position_at_time(state->focus, time);
 
@@ -247,14 +261,18 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    state.cubemap_shader = make_program({"base", "cubemap"});
+    glUseProgram(state.cubemap_shader);
+    glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
+    glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+
     state.current_shader = make_program({"base"});
     glUseProgram(state.current_shader);
+    glUniform4f(glGetUniformLocation(state.current_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
     glGenVertexArrays(1, &state.vao);
     glBindVertexArray(state.vao);
 
-    GLint colorUniform = glGetUniformLocation(state.current_shader, "u_color");
-    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
     setup_matrices(&state);
 
     // fill default texture with white for convenience
