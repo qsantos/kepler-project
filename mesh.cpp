@@ -6,12 +6,54 @@
 #include <cmath>
 #include <vector>
 
+Mesh::Mesh(int mode_, int length_, bool is_3d_) :
+    mode{mode_},
+    length{length_},
+    is_3d{is_3d_},
+    vbo{0}
+{
+}
+
+Mesh::~Mesh(void) {
+    glDeleteBuffers(1, &this->vbo);
+}
+
+void Mesh::bind(void) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+
+    if (this->is_3d) {
+        GLint var = glGetAttribLocation(program, "v_position");
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), NULL);
+
+        var = glGetAttribLocation(program, "v_texcoord");
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(3 * sizeof(float)));
+
+        var = glGetAttribLocation(program, "v_normal");
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(5 * sizeof(float)));
+    } else {
+        GLint var = glGetAttribLocation(program, "v_position");
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Mesh::draw(void) {
+    this->bind();
+    glDrawArrays(this->mode, 0, this->length);
+}
+
 UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
-    components{8},
-    length{2 * (slices + 2) * stacks}
+    Mesh(GL_TRIANGLE_STRIP, 2 * (slices + 2) * stacks, true)
 {
     std::vector<float> data;
-    data.resize(this->components * this->length);
+    data.resize(8 * this->length);
 
     size_t i = 0;
     for (GLsizei stack = 0; stack < stacks ; stack += 1) {
@@ -103,40 +145,8 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void UVSphereMesh::bind(void) {
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-
-    GLint var = glGetAttribLocation(program, "v_position");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
-    }
-
-    var = glGetAttribLocation(program, "v_texcoord");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), (GLvoid*)(3 * sizeof(float)));
-    }
-
-    var = glGetAttribLocation(program, "v_normal");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), (GLvoid*)(5 * sizeof(float)));
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void UVSphereMesh::draw(void) {
-    this->bind();
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, this->length);
-}
-
 OrbitMesh::OrbitMesh(Orbit* orbit) :
-    components{3},
-    length{256}
+    Mesh(GL_LINE_LOOP, 256, false)
 {
     auto transform = glm::mat4(1.0f);
     transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
@@ -146,7 +156,7 @@ OrbitMesh::OrbitMesh(Orbit* orbit) :
     transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
 
     std::vector<float> data;
-    data.resize(this->components * this->length);
+    data.resize(3 * this->length);
     size_t i = 0;
     for (int j = 0; j < this->length; j += 1) {
         float theta = M_PIf32 * (2.f * float(j) / float(this->length) - 1.f);
@@ -163,28 +173,8 @@ OrbitMesh::OrbitMesh(Orbit* orbit) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void OrbitMesh::bind(void) {
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-
-    GLint var = glGetAttribLocation(program, "v_position");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void OrbitMesh::draw(void) {
-    this->bind();
-    glDrawArrays(GL_LINE_LOOP, 0, this->length);
-}
-
 CubeMesh::CubeMesh(double size) :
-    components{3},
-    length{36}
+    Mesh(GL_TRIANGLES, 36, false)
 {
 
     float s = (float) size;
@@ -217,31 +207,12 @@ CubeMesh::CubeMesh(double size) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void CubeMesh::bind(void) {
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-
-    GLint var = glGetAttribLocation(program, "v_position");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void CubeMesh::draw(void) {
-    this->bind();
-    glDrawArrays(GL_TRIANGLES, 0, this->length);
-}
-
 FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
-    components{3},
-    length{256}
+    // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
+    Mesh(GL_LINE_LOOP, 256, false)
 {
     std::vector<float> data;
-    data.resize(this->components * this->length);
+    data.resize(3 * this->length);
     size_t i = 0;
 
     // issues when drawing the orbit of a focused body:
@@ -287,25 +258,4 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-
-void FocusedOrbitMesh::bind(void) {
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-
-    GLint var = glGetAttribLocation(program, "v_position");
-    if (var >= 0) {
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, this->components * (GLsizei) sizeof(float), NULL);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void FocusedOrbitMesh::draw(void) {
-    this->bind();
-    glDrawArrays(GL_LINE_LOOP, 0, this->length);
-    // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
 }

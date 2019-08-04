@@ -3,44 +3,32 @@
 
 #include "orbit.hpp"
 
-struct UVSphereMesh {
+struct Mesh {
+    Mesh(int mode, int length, bool is_3d);
+    ~Mesh(void);
+    void bind(void);
+    void draw(void);
+
+    int mode;
+    int length;
+    bool is_3d;
+    unsigned vbo;
+};
+
+struct UVSphereMesh : public Mesh {
     UVSphereMesh(float radius, int stacks, int slices);
-    void bind(void);
-    void draw(void);
-
-    int components;
-    int length;
-    unsigned vbo;
 };
 
-struct OrbitMesh {
+struct OrbitMesh : public Mesh {
     OrbitMesh(Orbit* orbit);
-    void bind(void);
-    void draw(void);
-
-    int components;
-    int length;
-    unsigned vbo;
 };
 
-struct CubeMesh {
+struct CubeMesh : public Mesh {
     CubeMesh(double size);
-    void bind(void);
-    void draw(void);
-
-    int components;
-    int length;
-    unsigned vbo;
 };
 
-struct FocusedOrbitMesh {
+struct FocusedOrbitMesh : public Mesh {
     FocusedOrbitMesh(Orbit* orbit, double time);
-    void bind(void);
-    void draw(void);
-
-    int components;
-    int length;
-    unsigned vbo;
 };
 
 #endif
