@@ -18,70 +18,82 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
 
         {
             GLsizei slice = 0;
-            float angle_i = (2.f * M_PIf32) * float(slice) / float(slices);
-            float angle_j = M_PIf32 * float(stack) / float(stacks);
+            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
+            float stack_angle = M_PIf32 * float(stack) / float(stacks);
+            float nx = sinf(stack_angle) * sinf(slice_angle);
+            float ny = sinf(stack_angle) * cosf(slice_angle);
+            float nz = cosf(stack_angle);
             // position
-            data[i++] = radius * sinf(angle_j) * sinf(angle_i);
-            data[i++] = radius * sinf(angle_j) * cosf(angle_i);
-            data[i++] = radius * cosf(angle_j);
+            data[i++] = radius * nx;
+            data[i++] = radius * ny;
+            data[i++] = radius * nz;
             // texcoord
             data[i++] = 1 - float(slice) / float(slices);
             data[i++] = 1 - float(stack) / float(stacks);
             // normal
-            data[i++] = sinf(angle_i) * sinf(angle_j);
-            data[i++] = cosf(angle_i) * sinf(angle_j);
-            data[i++] = cosf(angle_j);
+            data[i++] = nx;
+            data[i++] = ny;
+            data[i++] = nz;
         }
 
         for (GLsizei slice = 0; slice <= slices; slice += 1) {
-            float angle_i = (2.f * M_PIf32) * float(slice) / float(slices);
+            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
 
             {
-                float angle_j = M_PIf32 * float(stack) / float(stacks);
+                float stack_angle = M_PIf32 * float(stack) / float(stacks);
+                float nx = sinf(stack_angle) * sinf(slice_angle);
+                float ny = sinf(stack_angle) * cosf(slice_angle);
+                float nz = cosf(stack_angle);
                 // position
-                data[i++] = radius * sinf(angle_j) * sinf(angle_i);
-                data[i++] = radius * sinf(angle_j) * cosf(angle_i);
-                data[i++] = radius * cosf(angle_j);
+                data[i++] = radius * nx;
+                data[i++] = radius * ny;
+                data[i++] = radius * nz;
                 // texcoord
                 data[i++] = 1 - float(slice) / float(slices);
                 data[i++] = 1 - float(stack) / float(stacks);
                 // normal
-                data[i++] = sinf(angle_i) * sinf(angle_j);
-                data[i++] = cosf(angle_i) * sinf(angle_j);
-                data[i++] = cosf(angle_j);
+                data[i++] = nx;
+                data[i++] = ny;
+                data[i++] = nz;
             }
 
             {
-                float angle_j = M_PIf32 * float(stack+1) / float(stacks);
+                float stack_angle = M_PIf32 * float(stack+1) / float(stacks);
+                float nx = sinf(stack_angle) * sinf(slice_angle);
+                float ny = sinf(stack_angle) * cosf(slice_angle);
+                float nz = cosf(stack_angle);
                 // position
-                data[i++] = radius * sinf(angle_j) * sinf(angle_i);
-                data[i++] = radius * sinf(angle_j) * cosf(angle_i);
-                data[i++] = radius * cosf(angle_j);
+                data[i++] = radius * nx;
+                data[i++] = radius * ny;
+                data[i++] = radius * nz;
                 // texcoord
                 data[i++] = 1 - float(slice) / float(slices);
                 data[i++] = 1 - float(stack+1) / float(stacks);
                 //normal
-                data[i++] = sinf(angle_i) * sinf(angle_j);
-                data[i++] = cosf(angle_i) * sinf(angle_j);
-                data[i++] = cosf(angle_j);
+                data[i++] = nx;
+                data[i++] = ny;
+                data[i++] = nz;
             }
         }
 
         {
             GLsizei slice = slices;
-            float angle_i = (2.f * M_PIf32) * float(slice) / float(slices);
-            float angle_j = M_PIf32 * float(stack+1) / float(stacks);
+            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
+            float stack_angle = M_PIf32 * float(stack+1) / float(stacks);
+            float nx = sinf(stack_angle) * sinf(slice_angle);
+            float ny = sinf(stack_angle) * cosf(slice_angle);
+            float nz = cosf(stack_angle);
             // position
-            data[i++] = radius * sinf(angle_j) * sinf(angle_i);
-            data[i++] = radius * sinf(angle_j) * cosf(angle_i);
-            data[i++] = radius * cosf(angle_j);
+            data[i++] = radius * nx;
+            data[i++] = radius * ny;
+            data[i++] = radius * nz;
             // texcoord
             data[i++] = 1 - float(slice) / float(slices);
             data[i++] = 1 - float(stack+1) / float(stacks);
-            // normal
-            data[i++] = sinf(angle_i) * sinf(angle_j);
-            data[i++] = cosf(angle_i) * sinf(angle_j);
-            data[i++] = cosf(angle_j);
+            //normal
+            data[i++] = nx;
+            data[i++] = ny;
+            data[i++] = nz;
         }
     }
 
