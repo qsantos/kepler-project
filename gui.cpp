@@ -532,7 +532,6 @@ int main() {
 
     // fill default texture with white for convenience
     glBindTexture(GL_TEXTURE_2D, 0);
-
     float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 

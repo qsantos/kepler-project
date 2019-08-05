@@ -22,6 +22,9 @@ unsigned load_texture(const char* filename) {
 
     int width, height;
     unsigned char* data = load_image(filename, &width, &height);
+    if (data == NULL) {
+        return 0;
+    }
 
     // make OpenGL texture
     GLuint texture;
