@@ -2,6 +2,30 @@
 
 #include <stdio.h>
 
+void* _malloc(size_t s, const char* filename, int line, const char* funcname) {
+    if (s == 0) {
+        return NULL;
+    }
+    void* ret = malloc(s);
+    if (ret == NULL) {
+        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
+        exit(EXIT_FAILURE);
+    }
+    return ret;
+}
+
+void* _realloc(void* p, size_t s, const char* filename, int line, const char* funcname) {
+    if (s == 0) {
+        return NULL;
+    }
+    void* ret = realloc(p, s);
+    if (ret == NULL) {
+        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
+        exit(EXIT_FAILURE);
+    }
+    return ret;
+}
+
 char* load_file(const char* filename) {
     FILE* f = fopen(filename, "r");
     if (f == NULL) {

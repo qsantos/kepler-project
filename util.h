@@ -2,11 +2,16 @@
 #define UTIL_H
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846
+#endif
+
+#ifndef M_PIf32
+#define M_PIf32 3.14159265358979323846f
+#endif
 
 inline double fmod2(double x, double y) {
     double r = fmod(x, y);
@@ -39,29 +44,8 @@ inline int isclose(double a, double b) {
     return fabs(a-b) <= fmax(rel_tol * fmax(fabs(a), fabs(b)), abs_tol);
 }
 
-inline void* _malloc(size_t s, const char* filename, int line, const char* funcname) {
-    if (s == 0) {
-        return NULL;
-    }
-    void* ret = malloc(s);
-    if (ret == NULL) {
-        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
-        exit(EXIT_FAILURE);
-    }
-    return ret;
-}
-
-inline void* _realloc(void* p, size_t s, const char* filename, int line, const char* funcname) {
-    if (s == 0) {
-        return NULL;
-    }
-    void* ret = realloc(p, s);
-    if (ret == NULL) {
-        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
-        exit(EXIT_FAILURE);
-    }
-    return ret;
-}
+void* _malloc(size_t s, const char* filename, int line, const char* funcname);
+void* _realloc(void* p, size_t s, const char* filename, int line, const char* funcname);
 
 #define MALLOC(s) _malloc(s, __FILE__, __LINE__, __func__)
 #define REALLOC(p, s) _realloc(p, s, __FILE__, __LINE__, __func__)

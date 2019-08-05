@@ -6,6 +6,19 @@ LDFLAGS:=-O3
 LDLIBS:=-lm -lcjson -lGL -lGLEW -lglfw
 TARGETS:=test example simulation gui
 
+ifeq ($(PLATFORM),win32)
+	export C_INCLUDE_PATH:=/usr/local/x86_64-w64-mingw32/include/
+	export CPLUS_INCLUDE_PATH:=/usr/local/x86_64-w64-mingw32/include/
+	# Cross compilers such as MinGW on Linux ignore LIBRARY_PATH...
+	# export LIBRARY_PATH:=/usr/local/x86_64-w64-mingw32/lib/
+	CC=x86_64-w64-mingw32-gcc
+	CXX=x86_64-w64-mingw32-g++
+	CFLAGS:=$(CFLAGS) -D__USE_MINGW_ANSI_STDIO=1
+	CXXFLAGS:=$(CXXFLAGS) -D__USE_MINGW_ANSI_STDIO=1
+	LDFLAGS:=$(LDFLAGS) -static
+	LDLIBS:=-L/usr/local/x86_64-w64-mingw32/lib -lm -lcjson -lglfw3 -lgdi32 -lopengl32 -lglew32
+endif
+
 all: $(TARGETS)
 
 example: body.o orbit.o recipes.o util.o load.o lambert.o

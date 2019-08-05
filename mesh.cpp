@@ -1,5 +1,9 @@
 #include "mesh.hpp"
 
+extern "C" {
+#include "util.h"
+}
+
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 
