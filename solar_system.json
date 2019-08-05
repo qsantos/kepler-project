@@ -590,6 +590,7 @@
             "primary": "Sun",
             "semi_major_axis": 10122190478507.994
         },
+        "radius": 1163000.0,
         "rotational_period": 93240.0
     },
     "Erriapus": {
@@ -841,6 +842,7 @@
             "primary": "Sun",
             "semi_major_axis": 6482939205845.299
         },
+        "radius": 798000.0,
         "rotational_period": 14095.44
     },
     "Hegemone": {
@@ -1293,6 +1295,7 @@
             "primary": "Sun",
             "semi_major_axis": 6845811578769.814
         },
+        "radius": 715000.0,
         "rotational_period": 80928.0
     },
     "Margaret": {
@@ -2283,6 +2286,7 @@
             "primary": "Sun",
             "semi_major_axis": 74686532443054.73
         },
+        "radius": 497500.0,
         "rotational_period": 36982.799999999996
     },
     "Setebos": {

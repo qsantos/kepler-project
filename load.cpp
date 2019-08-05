@@ -109,6 +109,8 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
     double radius = get_param_optional(jbody, name, "radius");
     if (radius != 0.) {
         body_set_radius(ret, radius);
+    } else {
+        printf("%s has no radius!\n", name);
     }
 
     double gravitational_parameter = get_param_optional(jbody, name, "gravitational_parameter");
