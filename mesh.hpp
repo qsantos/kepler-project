@@ -15,6 +15,10 @@ struct Mesh {
     unsigned vbo;
 };
 
+struct CubeMesh : public Mesh {
+    CubeMesh(double size);
+};
+
 struct UVSphereMesh : public Mesh {
     UVSphereMesh(float radius, int stacks, int slices);
 };
@@ -23,12 +27,16 @@ struct OrbitMesh : public Mesh {
     OrbitMesh(Orbit* orbit);
 };
 
-struct CubeMesh : public Mesh {
-    CubeMesh(double size);
+struct OrbitApsesMesh : public Mesh {
+    OrbitApsesMesh(Orbit* orbit);
 };
 
 struct FocusedOrbitMesh : public Mesh {
     FocusedOrbitMesh(Orbit* orbit, double time);
+};
+
+struct FocusedOrbitApsesMesh : public Mesh {
+    FocusedOrbitApsesMesh(Orbit* orbit, double time);
 };
 
 struct OrbitSystem : public Mesh {

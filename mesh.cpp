@@ -53,6 +53,40 @@ void Mesh::draw(void) {
     glDrawArrays(this->mode, 0, this->length);
 }
 
+CubeMesh::CubeMesh(double size) :
+    Mesh(GL_TRIANGLES, 36, false)
+{
+
+    float s = (float) size;
+
+    float data[] = {
+        // each row is a full triangle, two rows make a face
+        // +X
+        +s, +s, +s,   +s, +s, -s,   +s, -s, +s,
+        +s, -s, +s,   +s, +s, -s,   +s, -s, -s,
+        // -X
+        -s, -s, +s,   -s, -s, -s,   -s, +s, +s,
+        -s, +s, +s,   -s, -s, -s,   -s, +s, -s,
+        // +Y
+        -s, +s, +s,   -s, +s, -s,   +s, +s, +s,
+        +s, +s, +s,   -s, +s, -s,   +s, +s, -s,
+        // -Y
+        +s, -s, +s,   +s, -s, -s,   -s, -s, +s,
+        -s, -s, +s,   +s, -s, -s,   -s, -s, -s,
+        // +Z
+        +s, +s, +s,   +s, -s, +s,   -s, +s, +s,
+        -s, +s, +s,   +s, -s, +s,   -s, -s, +s,
+        // -Z
+        +s, +s, -s,   -s, +s, -s,   +s, -s, -s,
+        +s, -s, -s,   -s, +s, -s,   -s, -s, -s,
+    };
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
     Mesh(GL_TRIANGLE_STRIP, 2 * (slices + 2) * stacks, true)
 {
@@ -177,37 +211,27 @@ OrbitMesh::OrbitMesh(Orbit* orbit) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-CubeMesh::CubeMesh(double size) :
-    Mesh(GL_TRIANGLES, 36, false)
+OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit) :
+    Mesh(GL_POINTS, 2, false)
 {
+    auto transform = glm::mat4(1.0f);
+    transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
+    transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
+    transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
+    transform = glm::translate(transform, glm::vec3(-orbit->focus, 0.f, 0.f));
+    transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
 
-    float s = (float) size;
+    auto periapsis = transform * glm::vec4(+1.f, 0.f, 0.f, 1.f);
+    auto apoapsis  = transform * glm::vec4(-1.f, 0.f, 0.f, 1.f);
 
     float data[] = {
-        // each row is a full triangle, two rows make a face
-        // +X
-        +s, +s, +s,   +s, +s, -s,   +s, -s, +s,
-        +s, -s, +s,   +s, +s, -s,   +s, -s, -s,
-        // -X
-        -s, -s, +s,   -s, -s, -s,   -s, +s, +s,
-        -s, +s, +s,   -s, -s, -s,   -s, +s, -s,
-        // +Y
-        -s, +s, +s,   -s, +s, -s,   +s, +s, +s,
-        +s, +s, +s,   -s, +s, -s,   +s, +s, -s,
-        // -Y
-        +s, -s, +s,   +s, -s, -s,   -s, -s, +s,
-        -s, -s, +s,   +s, -s, -s,   -s, -s, -s,
-        // +Z
-        +s, +s, +s,   +s, -s, +s,   -s, +s, +s,
-        -s, +s, +s,   +s, -s, +s,   -s, -s, +s,
-        // -Z
-        +s, +s, -s,   -s, +s, -s,   +s, -s, -s,
-        +s, -s, -s,   -s, +s, -s,   -s, -s, -s,
+        periapsis[0], periapsis[1], periapsis[2],
+         apoapsis[0],  apoapsis[1],  apoapsis[2],
     };
 
     glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -262,6 +286,25 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+FocusedOrbitApsesMesh::FocusedOrbitApsesMesh(Orbit* orbit, double time) :
+    Mesh(GL_POINTS, 2, false)
+{
+    auto focus_offset = orbit_position_at_time(orbit, time);
+    auto periapsis = orbit_position_at_true_anomaly(orbit, 0.) - focus_offset;
+    auto apoapsis  = orbit_position_at_true_anomaly(orbit, M_PI) - focus_offset;
+
+    float data[] = {
+        (float) periapsis[0], (float) periapsis[1], (float) periapsis[2],
+        (float)  apoapsis[0], (float)  apoapsis[1], (float)  apoapsis[2],
+    };
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 }
 
 static void append_object_and_children_coordinates(std::vector<float>& positions, vec3 scene_origin, double time, CelestialBody* body) {

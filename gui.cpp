@@ -30,6 +30,7 @@ struct RenderState {
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
+    map<string, OrbitApsesMesh> apses_meshes;
     CelestialBody* root;
     CelestialBody* focus;
     GLuint base_shader;
@@ -329,6 +330,8 @@ void render(RenderState* state) {
     glUseProgram(state->base_shader);
     setup_matrices(state);
 
+    glPointSize(5);
+
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
@@ -352,6 +355,7 @@ void render(RenderState* state) {
 
         set_picking_object(state, body);
         state->orbit_meshes.at(body->name).draw();
+        state->apses_meshes.at(body->name).draw();
         clear_picking_object(state);
     }
     glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -377,6 +381,7 @@ void render(RenderState* state) {
 
         set_picking_object(state, body);
         FocusedOrbitMesh(body->orbit, state->time).draw();
+        FocusedOrbitApsesMesh(body->orbit, state->time).draw();
         clear_picking_object(state);
     }
     glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -549,6 +554,7 @@ int main() {
             continue;
         }
         state.orbit_meshes.emplace(name, body->orbit);
+        state.apses_meshes.emplace(name, body->orbit);
     }
 
     // disable vsync
