@@ -31,4 +31,8 @@ struct FocusedOrbitMesh : public Mesh {
     FocusedOrbitMesh(Orbit* orbit, double time);
 };
 
+struct OrbitSystem : public Mesh {
+    OrbitSystem(CelestialBody* root, vec3 scene_origin, double time);
+};
+
 #endif

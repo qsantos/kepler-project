@@ -263,3 +263,28 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+static void append_object_and_children_coordinates(std::vector<float>& positions, vec3 scene_origin, double time, CelestialBody* body) {
+    auto pos = body_global_position_at_time(body, time) - scene_origin;
+    positions.push_back((float) pos[0]);
+    positions.push_back((float) pos[1]);
+    positions.push_back((float) pos[2]);
+    for (size_t i = 0; i < body->n_satellites; i += 1) {
+        append_object_and_children_coordinates(positions, scene_origin, time, body->satellites[i]);
+    }
+}
+
+OrbitSystem::OrbitSystem(CelestialBody* root, vec3 scene_origin, double time) :
+    // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
+    Mesh(GL_POINTS, 0, false)
+{
+    std::vector<float> data;
+    append_object_and_children_coordinates(data, scene_origin, time, root);
+
+    this->length = (int) data.size();
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}

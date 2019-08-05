@@ -35,6 +35,7 @@ struct RenderState {
     GLuint base_shader;
     GLuint cubemap_shader;
     GLuint lighting_shader;
+    GLuint position_marker_shader;
     Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
     GLuint vao;
     bool drag_active = false;
@@ -316,10 +317,18 @@ void render(RenderState* state) {
         clear_picking_object(state);
     }
 
+    GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
+
+    // draw circles around celestial bodies when from far away
+    glPointSize(20);
+    glUseProgram(state->position_marker_shader);
+    setup_matrices(state);
+    glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
+    OrbitSystem(state->root, scene_origin, state->time).draw();
+
     glUseProgram(state->base_shader);
     setup_matrices(state);
 
-    GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
@@ -376,6 +385,8 @@ void render(RenderState* state) {
 CelestialBody* pick(RenderState* state) {
     // render with picking activated
     state->picking_active = true;
+    glUseProgram(state->position_marker_shader);
+    glUniform1i(glGetUniformLocation(state->position_marker_shader, "picking_active"), 1);
     glUseProgram(state->lighting_shader);
     glUniform1i(glGetUniformLocation(state->lighting_shader, "picking_active"), 1);
     glUseProgram(state->base_shader);
@@ -389,6 +400,8 @@ CelestialBody* pick(RenderState* state) {
     glUniform1i(glGetUniformLocation(state->base_shader, "picking_active"), 0);
     glUseProgram(state->lighting_shader);
     glUniform1i(glGetUniformLocation(state->lighting_shader, "picking_active"), 0);
+    glUseProgram(state->position_marker_shader);
+    glUniform1i(glGetUniformLocation(state->position_marker_shader, "picking_active"), 0);
     state->picking_active = false;
 
     // search names in color components
@@ -495,6 +508,11 @@ int main() {
     glUseProgram(state.lighting_shader);
     glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
+
+    state.position_marker_shader = make_program({"base", "position_marker", "picking"});
+    glUseProgram(state.position_marker_shader);
+    glUniform4f(glGetUniformLocation(state.position_marker_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform1i(glGetUniformLocation(state.position_marker_shader, "picking_active"), 0);
 
     state.base_shader = make_program({"base", "picking"});
     glUseProgram(state.base_shader);
