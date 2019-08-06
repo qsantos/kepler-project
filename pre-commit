@@ -11,6 +11,8 @@ TEMPDIR=$(mktemp -d)
 trap "rm -rf $TEMPDIR" EXIT SIGHUP SIGINT SIGQUIT SIGTERM
 git checkout-index --prefix=$TEMPDIR/ -af
 
+export CPPCHECK_FLAGS="--suppress=unusedFunction"
+
 git diff --cached --name-only --diff-filter=AM |  # list modified files
     grep -e '\.[hc]$' -e '\.[hc]pp$' |  # filter C/C++ files
     (cd $TEMPDIR  # lint the committed files from the temporary directory

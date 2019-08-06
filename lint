@@ -12,7 +12,5 @@ gcc -fsyntax-only -Werror -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla "
 # static analysis
 #        .-- disable lookup for system includes
 #        v
-cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor --error-exitcode=1 --quiet --enable=all \
-    --suppress=unusedFunction "$@"
-#   ^
-#   `-- partial linting causes false positives
+cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor \
+    --error-exitcode=1 --quiet --enable=all "${CPPCHECK_FLAGS}" "$@"
