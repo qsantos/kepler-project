@@ -307,7 +307,7 @@ FocusedOrbitApsesMesh::FocusedOrbitApsesMesh(Orbit* orbit, double time) :
 
 }
 
-static void append_object_and_children_coordinates(std::vector<float>& positions, vec3 scene_origin, double time, CelestialBody* body) {
+static void append_object_and_children_coordinates(std::vector<float>& positions, const vec3& scene_origin, double time, CelestialBody* body) {
     auto pos = body_global_position_at_time(body, time) - scene_origin;
     positions.push_back((float) pos[0]);
     positions.push_back((float) pos[1]);
@@ -317,7 +317,7 @@ static void append_object_and_children_coordinates(std::vector<float>& positions
     }
 }
 
-OrbitSystem::OrbitSystem(CelestialBody* root, vec3 scene_origin, double time) :
+OrbitSystem::OrbitSystem(CelestialBody* root, const vec3& scene_origin, double time) :
     // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
     Mesh(GL_POINTS, 0, false)
 {

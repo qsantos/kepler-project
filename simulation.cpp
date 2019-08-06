@@ -5,8 +5,8 @@
 #include <iostream>
 
 struct State : vec6 {
-    State(vec6 values) : vec6{values} {}
-    State(vec3 position, vec3 velocity) :
+    State(const vec6& values) : vec6{values} {}
+    State(const vec3& position, const vec3& velocity) :
         vec6{
             position[0], position[1], position[2],
             velocity[0], velocity[1], velocity[2],

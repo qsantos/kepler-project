@@ -212,7 +212,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     setup_matrices(state);
 }
 
-void render_body(RenderState* state, CelestialBody* body, vec3 scene_origin) {
+void render_body(RenderState* state, CelestialBody* body, const vec3& scene_origin) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
