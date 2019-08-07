@@ -130,28 +130,6 @@ void toggle_fullscreen(GLFWwindow* window) {
     }
 }
 
-// inspired from https://learnopengl.com/In-Practice/Debugging
-GLenum glCheckError_(const char* file, int line) {
-    GLenum errorCode;
-    while ((errorCode = glGetError()) != GL_NO_ERROR) {
-        const char* errormsg;
-        switch (errorCode) {
-            case GL_INVALID_ENUM:                  errormsg = "INVALID_ENUM"; break;
-            case GL_INVALID_VALUE:                 errormsg = "INVALID_VALUE"; break;
-            case GL_INVALID_OPERATION:             errormsg = "INVALID_OPERATION"; break;
-            case GL_STACK_OVERFLOW:                errormsg = "STACK_OVERFLOW"; break;
-            case GL_STACK_UNDERFLOW:               errormsg = "STACK_UNDERFLOW"; break;
-            case GL_OUT_OF_MEMORY:                 errormsg = "OUT_OF_MEMORY"; break;
-            case GL_INVALID_FRAMEBUFFER_OPERATION: errormsg = "INVALID_FRAMEBUFFER_OPERATION"; break;
-            default:                               errormsg = "unknown OpenGL error"; break;
-        }
-        fprintf(stderr, "%s:%i: %s\n", file, line, errormsg);
-    }
-    return errorCode;
-}
-
-#define glCheckError() glCheckError_(__FILE__, __LINE__)
-
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     (void) length;
     (void) userParam;
