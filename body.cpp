@@ -8,7 +8,7 @@ extern "C" {
 #include "util.h"
 }
 
-static const double G = 6.67384e-11;
+static const double G = 6.67259e-11;
 
 void body_init(CelestialBody* body) {
     *body = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
