@@ -33,12 +33,16 @@ void Mesh::bind(void) {
         glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), NULL);
 
         var = glGetAttribLocation(program, "v_texcoord");
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(3 * sizeof(float)));
+        if (var >= 0) {
+            glEnableVertexAttribArray(var);
+            glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(3 * sizeof(float)));
+        }
 
         var = glGetAttribLocation(program, "v_normal");
-        glEnableVertexAttribArray(var);
-        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(5 * sizeof(float)));
+        if (var >= 0) {
+            glEnableVertexAttribArray(var);
+            glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 8 * (GLsizei) sizeof(float), (GLvoid*)(5 * sizeof(float)));
+        }
     } else {
         GLint var = glGetAttribLocation(program, "v_position");
         glEnableVertexAttribArray(var);
