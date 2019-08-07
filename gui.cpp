@@ -27,6 +27,7 @@ using std::string;
 struct RenderState {
     double time = 0.;
     double timewarp = 1.;
+    bool show_helpers = true;
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
@@ -224,6 +225,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_I) {
             state->timewarp *= -1.;
             cout << "Time warp: "  << state->timewarp << endl;
+        } else if (key == GLFW_KEY_O) {
+            state->show_helpers = !state->show_helpers;
         } else if (key == GLFW_KEY_EQUAL) {
             if (string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
@@ -385,6 +388,10 @@ void render(RenderState* state) {
         set_picking_object(state, body);
         render_body(state, body, scene_origin);
         clear_picking_object(state);
+    }
+
+    if (!state->show_helpers) {
+        return;
     }
 
     GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
