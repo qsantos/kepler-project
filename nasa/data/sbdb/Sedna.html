@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+  <head>
+    <title>JPL Small-Body Database Browser</title>
+    <meta name="robots" content="index,nofollow">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+<!-- Include page-specific Javascript functions -->
+<script language="JavaScript" type="text/javascript">
+<!-- Hide script
+//<![CDATA[
+function popUp(URL) {
+day = new Date();
+id = day.getTime();
+eval("pop_page" + id + " = window.open(URL, '" + id + "','toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600');");
+}
+
+function popUpHelp(URL) {
+help_window = window.open(URL, 'help','toolbar=0,scrollbars=1,statusbar=0,menubar=0,resizable=1,width=400,height=200,alwaysRaised=1');
+}
+function select_item(list)
+{
+  var item = list.options[list.selectedIndex].value;
+  list.form.submit();
+}
+
+
+//]]> End script hiding -->
+</script>
+
+<!-- Include standard site Javascript functions -->
+<script language="JavaScript" src="lib/jpl_std.js" type="text/javascript"></script>
+<script language="JavaScript" src="lib/row_hiliter.js" type="text/javascript"></script>
+<!-- Safely import CSS file(s) -->
+<!-- common "safe" CSS file -->
+<link rel="StyleSheet" href="css/ssd.css" type="text/css" media="screen">
+
+<!-- Include "other" CSS file (prevents browsers with partial CSS support from loading) -->
+<style type="text/css">
+<!--
+@import "css/nav_menu.css";
+@import "css/ssd_extra.css";
+-->
+</style>
+
+<!-- Include site-global standard META tags -->
+  <meta name="Author" content="Alan Chamberlin">
+  <meta name="keywords" content="Solar System Dynamics,Solar System,Dynamics,Orbital Mechanics,Orbits">
+  <meta name="JPL-clearance" content="CL 97-0935">
+
+  </head>
+ 
+<body id="bodyID" bgcolor="#000000">
+<!-- Skip navigation link -->
+<a href="#content"><img border="0" src="images/blank.gif" alt="Skip Page Navigation" width="0" height="0"></a>
+
+<!-- black HTML-page background with 10px margins (cellpadding=10, body margin 0px) -->
+    <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#000000" width="100%">
+      <tr valign="top">
+        <td>
+
+          <!-- white content-"page" background with 10px border -->
+          <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#FFFFFF" width="750">
+
+            <tr valign="top">
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF" width="730">
+
+                  <!-- JPL standard header -->
+                  <tr valign="top">
+                    <td align="left" width="100%" bgcolor="#FFFFFF">
+                      
+<map name="Map">
+  <area shape="circle" coords="31,26,24" href="https://www.nasa.gov" alt="NASA">
+  <area shape="rect" coords="68,10,260,27" href="https://www.jpl.nasa.gov" alt="JPL">
+  <area shape="rect" coords="68,30,240,40" href="http://www.caltech.edu/" alt="Caltech">
+</map>
+
+<table border="0" cellpadding="0" cellspacing="0" width="730">
+
+  <!-- JPL Required Heading -->
+  <tr valign="middle">
+    <td align="left" bgcolor="#CCCCCC" width="255">
+      <img src="images/nasa_logo.gif" alt="NASA Logo - Jet Propulsion Laboratory" border="0" width="255" height="55" usemap="#Map">
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="40"><img src="images/blank.gif" width="40" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="1"><img src="images/black_1x1.gif" height="40" width="1" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="left" bgcolor="#CCCCCC" width="200" nowrap>
+      <a class="portal_link" href="https://www.nasa.gov/">+ View the NASA Portal</a>
+      <br>
+      <a class="portal_link" href="https://cneos.jpl.nasa.gov/">+ Center for Near-Earth Object Studies</a>
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+
+    <!-- placeholder for future site-wide search form -->
+    <td align="center" bgcolor="#006699" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="center" bgcolor="#006699" nowrap width="140">
+      <img src="images/blank.gif" height="55" width="140" alt="">
+    </td>
+  </tr>
+
+  <!-- JPL Required Main Navigation Bar -->
+  <tr>
+    <td align="center" colspan="8">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#FFFFFF">
+          <td><a href="https://www.jpl.nasa.gov/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('home','','portal_images/topnav_01.gif',1)"><img name="home" border="0" alt="JPL Home" src="portal_images/topnavoff_01.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/earth/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('earth','','portal_images/topnav_02.gif',1)"><img name="earth" border="0" alt="Earth" src="portal_images/topnavoff_02.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/solar_system/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('solar_system','','portal_images/topnav_03.gif',1)"><img name="solar_system" alt="Solar System" border="0" src="portal_images/topnavoff_03.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/stars_galaxies/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('stars','','portal_images/topnav_04.gif',1)"><img name="stars" border="0" alt="Stars & Galaxies" src="portal_images/topnavoff_04.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/technology/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('technology','','portal_images/topnav_05.gif',1)"><img name="technology" border="0" alt="Technology" src="portal_images/topnavoff_05.gif"></a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+
+                      <?php include "include/jpl_std_head.html" ?>
+                      
+                    </td>
+                  </tr>
+
+<!-- END OF JPL REQUIRED HEADER -->
+
+                  <!-- SSD standard header -->
+                  <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+                  <tr><td align="left"><a href="/"><img src="images/ssd_banner.jpg" alt="JPL Solar System Dynamics" height="97" width="730" border="0"></a></td></tr>
+                  <!--<tr><td align="center"><img src="images/blank.gif" height="1" alt=""></td></tr>-->
+                  <!-- SSD standard navigation bar -->
+                  <tr>
+                    <td>
+                      <!-- Sample SSD standard top navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr>
+    <td><a href="/?bodies" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bodies','','images/nav/bodies_on.gif',1)"><img name="bodies" border="0" height="16" width="78" alt="BODIES" src="images/nav/bodies_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?orbits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('orbits','','images/nav/orbits_on.gif',1)"><img name="orbits" border="0" height="16" width="75" alt="ORBITS" src="images/nav/orbits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?ephemerides" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ephemerides','','images/nav/ephemerides_on.gif',1)"><img name="ephemerides" border="0" height="16" width="121" alt="EPHEMERIDES" src="images/nav/ephemerides_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?tools" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('tools','','images/nav/tools_on.gif',1)"><img name="tools" border="0" height="16" width="74" alt="TOOLS" src="images/nav/tools_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td width="126"><a href="/?phys_data" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('phys_data','','images/nav/phys_data_on.gif',1)"><img name="phys_data" border="0" height="16" width="126" alt="PHYSICAL DATA" src="images/nav/phys_data_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?discovery" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('discovery','','images/nav/discovery_on.gif',1)"><img name="discovery" border="0" height="16" width="102" alt="DISCOVERY" src="images/nav/discovery_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?faq" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('faq','','images/nav/faq_on.gif',1)"><img name="faq" border="0" height="16" width="57" alt="FAQ" src="images/nav/faq_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?site_map" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('site_map','','images/nav/site_map_on.gif',1)"><img name="site_map" border="0" height="16" width="90" alt="SITE&nbsp;MAP" src="images/nav/site_map_off.gif"></a></td>
+  </tr>
+</table>
+
+                      <?php include "include/ssd_top_nav_bar.html" ?>
+<!--
+                    <table border="0" cellspacing="0" cellpadding="0" width="730">
+                      <tr><td align="left" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER</div>
+                      </td></tr>
+                      <tr><td><img src="images/blank.gif" height="1" alt=""></td></tr>
+                      <tr><td align="left" width="730" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER (LINE 2)</div>
+                      </td></tr>
+                    </table>
+-->
+                    </td>
+                  </tr>
+
+                  <tr><td><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+<!-- START OF PAGE CONTENT -->
+
+<!--<tr width="100%">-->
+                  <tr>
+                    <td align="left"><a name="content"> </a>
+                      <!-- contents below will be displayed at the top of every page -->
+<!-- use something like <p class="notice">NOTICE: my message here</p> -->
+
+<!-- content below is for special SSD email list notification -->
+<div id="site_notice_email_list">
+  <div class="big-notice"><b>IMPORTANT:</b> 
+    The SSD Announcement email list is now available.
+    Major changes are coming in the near future,
+    including possible hostname and/or URL changes.
+    To be notified of such changes, subscribe to this email list.
+    <br><br>
+    Please visit <a href="/?email_list">this page</a> for more details.
+    <div id="site_notice_email_list_ack">
+      <br><br>
+      <button class="" onclick="ackEmailNotice()">Don't show this message again</button>
+    </div>
+  </div>
+</div>
+
+<script src="lib/site_notice.js"></script>
+<script>
+  var ls = canDoLocalStorage();
+  var key = "email_list_announcement";
+  //
+  // If localStorage is available...
+  if ( ls ) {
+    //
+    // If this message has already be acknowledged, don't show it again:
+    if ( localStorage.getItem(key) ) {
+      document.getElementById("site_notice_email_list").innerHTML = '';
+    }
+  //
+  // If localStorage is NOT available...
+  } else {
+    document.getElementById("site_notice_email_list_ack").innerHTML = '<br><br>'
+      + '<em>To not show this message again from this browser, enable "localStorage".</em>';
+  }
+  //
+  // Acknowledge message:
+  function ackEmailNotice() {
+    if ( ! ls ) return;
+    localStorage.setItem(key, true);
+    document.getElementById("site_notice_email_list").innerHTML = '';
+  }
+</script>
+
+                      <?php include "include/site_notice.html" ?>
+<a name="top"> </a>
+<form method="post" action="https://ssd.jpl.nasa.gov/sbdb.cgi#top" enctype="multipart/form-data"><table border=0 cellpadding=4 cellspacing=0 bgcolor="#FFFFEE" width="730">
+ <tr>
+  <td nowrap valign="middle" align="left"><font class="page_title">JPL Small-Body Database Browser</font></td>
+  <td nowrap valign="bottom" align="right"><table border="0" cellpadding="0" cellspacing="0"><tr valign="top"><td align="left"><font face="times, serif" size="-1"><b>Search:</b></font></td> <td align="right" nowrap><font face="helvetica, ariel, sans-serif" size="-2">[ <a href="https://ssd.jpl.nasa.gov/sbdb.cgi?help=1">help</a> ]&nbsp;&nbsp;</font></td></tr> <tr><td align="left" colspan="2"><input type="text" name="sstr" alt="search" size="35" maxlength="40"></td></tr></table></td>
+ </tr>
+</table>
+</form>
+<table cellpadding="0" cellspacing="0"0 border="0">
+<tr>
+<td align="left" bgcolor="#EEEEEE">
+<table bgcolor="#EEEEEE" border="0" cellpadding="0" cellspacing="0" width="730"><tr><td align="center" nowrap><font color="#000099" face="times,serif" size="+1"><b>90377 Sedna (2003 VB12)</b></font></td></tr>
+ <tr><td align="center" nowrap><font face="helvetica,ariel,sans-serif" size="-1"><b>Classification:</b> </font><font face="times,serif" size="-1"><a href="javascript: popUpHelp('sbdb_help.cgi?class=TNO')">TransNeptunian Object</a></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font face="helvetica,ariel,sans-serif" size="-1"><b>SPK-ID:</b> </font><font face="times,serif" size="-1">2090377</font></td></tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="730"><tr bgcolor="#CCCCCC"><td align="center" nowrap>[&nbsp;<a href="horizons.cgi?find_body=1&amp;body_group=sb&amp;sstr=90377"><font face="helvetica,ariel,sans-serif" size="-1">Ephemeris</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=1;cov=0;log=0;cad=0#orb"><font face="helvetica,ariel,sans-serif" size="-1">Orbit Diagram</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#elem"><font face="helvetica,ariel,sans-serif" size="-1">Orbital Elements</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#phys_par"><font face="helvetica,ariel,sans-serif" size="-1">Physical Parameters</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#discovery"><font face="helvetica,ariel,sans-serif" size="-1">Discovery Circumstances</font></a>&nbsp;]</td></tr>
+</table>
+<br>
+<a name="orb"></a><a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=1;cov=0;log=0;cad=0#orb">[ show orbit diagram ]</a>
+<br>
+<a name="elem"></a><table bgcolor="#0099FF" border="0" cellpadding="4" cellspacing="0"><tr valign="middle" width="100%"><td align="center"><font color="#000000" face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Orbital Elements at Epoch 2458600.5 (2019-Apr-27.0) TDB</b></font><br>
+<font color="#000000" face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Reference: </b><font color="#FFFF00" face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>JPL 29</b></font> <b>(heliocentric ecliptic J2000)</b></font><br>
+<table bgcolor="#000000" border="0" cellpadding="1" cellspacing="0" width="100%"><tr><td><table border=0 cellspacing=0 cellpadding=0 width="100%">
+<tr bgcolor="#999999"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>&nbsp;Element</b></font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Value</b></font></td> <td align="center" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Uncertainty (1-sigma)&nbsp;</b></font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>&nbsp;Units&nbsp;</b></font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=e')">e</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">.8412278085112536</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.00019236</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=a')">a</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">479.6497990696244</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.56281</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">au</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=q')">q</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">76.15504974542115</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.0063374</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">au</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=i')">i</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">11.9299236885317</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">8.8372e-06</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">deg</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=om')">node</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">144.3273060089564</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.0014532</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">deg</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=w')">peri</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">311.5315638343632</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.010567</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">deg</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=ma')">M</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">358.0396196834687</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">0.003343</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">deg</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=tp')">t</a><sub><a href="javascript: popUpHelp('sbdb_help.cgi?name=tp')">p</a></sub></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">2479494.551445041503<br>(2076-Jul-10.05144504)</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">3.3283</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">TDB</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=per')">period</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">3836938.402607665<br>10504.96</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">6753.3<br>18.49</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">d<br>yr</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=n')">n</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">9.38248056719744E-5</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">1.6514e-07</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">deg/d</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2"><a href="javascript: popUpHelp('sbdb_help.cgi?name=ad')">Q</a></font></td> <td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">883.1445483938274</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">1.0363</font></td> <td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">au</font></td></tr>
+</table>
+</td></tr></table>
+</td> <td>&nbsp;</td> <td align="center"><font color="#000000" face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Orbit Determination Parameters</b></font><table bgcolor="#000000" border="0" cellpadding="1" cellspacing="0"><tr><td><table border=0 cellspacing=0 cellpadding=0 width="100%">
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=n_obs_used')"># obs. used (total)</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;202&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=data_arc')">data-arc span</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;10300 days (28.20 yr)&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=first_obs')">first obs. used</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;1990-09-25&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=last_obs')">last obs. used</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;2018-12-07&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=pe_used')">planetary ephem.</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;DE431&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=sb_used')">SB-pert. ephem.</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;SB431-N16&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=condition_code')">condition code</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;2&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=rms')">norm. resid. RMS</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;.44669&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=source')">source</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;ORB&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=producer')">producer</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;Otto Matic&nbsp;&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="right" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp; <a href="javascript: popUpHelp('sbdb_help.cgi?name=soln_date')">solution date</a> &nbsp;&nbsp;</font></td> <td align="left" nowrap><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;&nbsp;2019-Jul-13 12:58:43&nbsp;&nbsp;</font></td></tr>
+</table>
+</td></tr></table>
+<br>
+<font color="#000000" face="Helvetica, Ariel, Verdana, sans-serif" size="2"><b>Additional Information</b></font><table bgcolor="#000000" border="0" cellpadding="1" cellspacing="0"><tr><td><table border=0 cellspacing=0 cellpadding=0 bgcolor="#FFFFFF" width="100%">
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;<a href="javascript: popUpHelp('sbdb_help.cgi?name=moid')">Earth MOID</a> = 75.1839 au&nbsp;</font></td></tr>
+<tr bgcolor="#CCCCCC" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;<a href="javascript: popUpHelp('sbdb_help.cgi?name=moid_jup')">Jupiter MOID</a> = 71.0472 au&nbsp;</font></td></tr>
+<tr bgcolor="#FFFFFF" valign="middle"><td align="center"><font face="Helvetica, Ariel, Verdana, sans-serif" size="2">&nbsp;<a href="javascript: popUpHelp('sbdb_help.cgi?name=t_jup')">T_jup</a> = 10.169&nbsp;</font></td></tr>
+</table>
+</td></tr></table>
+</td></tr>
+</table>
+<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=1;log=0;cad=0#elem">[ show covariance matrix ]</a><br>
+<br>
+<table border="0" cellpadding="0" cellspacing="0" width="730"><tr bgcolor="#CCCCCC"><td align="center" nowrap>[&nbsp;<a href="horizons.cgi?find_body=1&amp;body_group=sb&amp;sstr=90377"><font face="helvetica,ariel,sans-serif" size="-1">Ephemeris</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=1;cov=0;log=0;cad=0#orb"><font face="helvetica,ariel,sans-serif" size="-1">Orbit Diagram</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#elem"><font face="helvetica,ariel,sans-serif" size="-1">Orbital Elements</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#phys_par"><font face="helvetica,ariel,sans-serif" size="-1">Physical Parameters</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#discovery"><font face="helvetica,ariel,sans-serif" size="-1">Discovery Circumstances</font></a>&nbsp;]</td></tr>
+</table>
+<br>
+<a name="phys_par"></a><table bgcolor="#0099FF" border="0" cellpadding="3" cellspacing="0"><tr><td align="left"><font face="Ariel,Helvetica,sans-serif" size="2"><b>Physical Parameter Table</b></font><br>
+<table bgcolor="#FFFFFF" border="1" cellpadding="2" cellspacing="0"><tr bgcolor="#EEEEEE">
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Parameter</b></font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Symbol</b></font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Value</b></font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Units</b></font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Sigma</b></font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Reference</b></font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2"><b>Notes</b></font></td>
+</tr>
+ <tr>
+  <td align="left" nowrap><a href="javascript: popUpHelp('sbdb_help.cgi?name=H')"><font face="Ariel,Helvetica,sans-serif" size="2">absolute magnitude</font></a></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">H</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">1.5</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">&nbsp;</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">n/a</font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">MPO385374</font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">&nbsp;</font></td>
+</tr>
+ <tr>
+  <td align="left" nowrap><a href="javascript: popUpHelp('sbdb_help.cgi?name=rot_per')"><font face="Ariel,Helvetica,sans-serif" size="2">rotation period</font></a></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">rot_per</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">10.273</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">h</font></td>
+  <td align="center" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">n/a</font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">LCDB (Rev. 2019-January); Warner et al., 2009</font></td>
+  <td align="left" nowrap><font face="Ariel,Helvetica,sans-serif" size="2">Result based on less than full coverage, so that the period may be wrong by 30 percent or so.<br><b>Published Reference List:</b><br>[Gaudi, B.S.; Stanek, K.Z.; Hartman, J.D.; Holman, M.J.; McLeod,   B.A. (2005) Astrophys. J. Let. 629, L49-L52.]</font></td>
+</tr>
+</table>
+</td></tr></table>
+<a name="discovery"></a><br>
+<table bgcolor="#0099FF" border="0" cellpadding="4" cellspacing="0"><tr><td align="center"><table bgcolor="#FFFFFF" border="0" cellpadding="2" cellspacing="0"><tr valign="top"><td align="left" nowrap><b>90377 Sedna</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> <td align="left" width="100%"><font face="verdana,helvetica,ariel" size="-1">Discovered 2003 Nov. 14 by M. E. Brown, C. A. Trujillo and D. Rabinowitz at Palomar.</font></td></tr>
+ <tr><td align="left" colspan="2"><font face="verdana,helvetica,ariel" size="-1">Sedna is the Inuit goddess of the sea and the mother of all sea creatures. She rewards the people of the land with food from the sea. Without her blessing, hunts fail and the people starve. She is thus one of the most important figures in Inuit legend.</font></td></tr>
+ <tr bgcolor="#0099FF"><td align="left" colspan="2"><font face="helvetica,ariel" size="-2">NOTE: some special characters may not display properly (any characters within {} are an attempt to place the proper accent above a character)</font></td></tr>
+ <tr bgcolor="#0099FF"><td align="left" nowrap><font face="helvetica,ariel" size="-1"><b>Reference:</b> 20040928/MPCPages.arc</font></td><td align="right" nowrap width="100%"><font face="helvetica,ariel" size="-1"><b>Last Updated:</b> 2004-09-28</font></td></tr>
+</table></td></tr></table>
+<table border="0" cellpadding="0" cellspacing="0" width="730"><tr bgcolor="#CCCCCC"><td align="center" nowrap>[&nbsp;<a href="horizons.cgi?find_body=1&amp;body_group=sb&amp;sstr=90377"><font face="helvetica,ariel,sans-serif" size="-1">Ephemeris</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=1;cov=0;log=0;cad=0#orb"><font face="helvetica,ariel,sans-serif" size="-1">Orbit Diagram</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#elem"><font face="helvetica,ariel,sans-serif" size="-1">Orbital Elements</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#phys_par"><font face="helvetica,ariel,sans-serif" size="-1">Physical Parameters</font></a>&nbsp;|&nbsp;<a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=Sedna;old=0;orb=0;cov=0;log=0;cad=0#discovery"><font face="helvetica,ariel,sans-serif" size="-1">Discovery Circumstances</font></a>&nbsp;]</td></tr>
+</table>
+</td></tr>
+</table>
+
+<!-- END OF PAGE CONTENT -->
+    </td>
+    </tr>
+
+<!-- SSD standard page footer -->
+    <tr><td align="center"><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+    <tr><td>
+      <!-- Sample SSD standard bottom navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr align="center">
+    <td><a href="/?about" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('about','','images/nav/about_on.gif',1)"><img name="about" border="0" alt="ABOUT SSD" src="images/nav/about_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?credits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('credits','','images/nav/credits_on.gif',1)"><img name="credits" border="0" alt="CREDITS/AWARDS" src="images/nav/credits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="http://www.jpl.nasa.gov/copyrights.cfm" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copyright','','images/nav/copyright_on.gif',1)"><img name="copyright" border="0" alt="PRIVACY/COPYRIGHT" src="images/nav/copyright_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?glossary" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('glossary','','images/nav/glossary_on.gif',1)"><img name="glossary" border="0" alt="GLOSSARY" src="images/nav/glossary_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?links" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('links','','images/nav/links_on.gif',1)"><img name="links" border="0" alt="LINKS" src="images/nav/links_off.gif"></a></td>
+  </tr>
+</table>
+
+      <?php include "include/ssd_bottom_nav_bar.html" ?>
+<!--
+      <table border="0" cellpadding="0" cellspacing="0" width="730">
+        <tr>
+          <td align="center" width="100%" bgcolor="#666666">
+            <div class="navtext">SSD STANDARD NAVIGATION FOOTER</div>
+          </td>
+        </tr>
+      </table>
+-->
+    </td></tr>
+
+
+<!-- START OF JPL REQUIRED FOOTER -->
+
+    <!-- JPL standard page footer -->
+    <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+    <tr>
+      <td align="left" width="100%" bgcolor="#FFFFFF">
+        <!-- JPL Required Standard Footer -->
+
+<table border="0" cellpadding="5" cellspacing="0" bgcolor="#CCCCCC" width="730">
+  <tr>
+    <!-- FirstGov Link -->
+    <td align="left" width="100%"><a target="_blank" href="http://www.firstgov.gov/"><img src="portal_images/footer_image1.gif" alt="FirstGov" border="0" width="136" height="39"></a></td>
+
+    <!-- Current Date/Time stamp -->
+    <td align="right" nowrap>
+      <font class="date_time">
+        <?php echo " ", gmdate('Y-M-d H:i'), " UT&nbsp;"; ?>
+        
+        2019-Aug-07 18:48 UT
+        <br>(server date/time)&nbsp;&nbsp;
+      </font>
+    </td>
+
+    <!-- NASA Link -->
+    <td width="61"><a target="_blank" href="https://www.nasa.gov/"><img src="portal_images/footer_image2.gif" alt="NASA Home Page" border="0" width="61" height="40"></a></td>
+
+    <!-- Site Manager and Webmaster -->
+    <td align="right">
+      <table border="0" cellpadding="0" cellspacing="0" class="author">
+        <tr>
+          <td align="right" nowrap>Site Manager:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Ryan S. Park</td>
+        </tr>
+        <tr>
+          <td align="right" nowrap><a href="mailto:webmaster@ssd.jpl.nasa.gov">Webmaster</a>:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Alan B. Chamberlin</td>
+        </tr>
+        <?php include "include/last_modified.inc" ?>
+        <!--
+        <tr>
+          <td align="right" nowrap><font size="-2">&nbsp;</font></td>
+          <td align="left" nowrap><font size="-2">&nbsp;CL 97-0935</font></td>
+        </tr>
+        -->
+      </table>
+    </td>
+
+  </tr>
+
+</table>
+
+        <?php include "include/jpl_std_foot.html" ?>
+      </td>
+    </tr>
+
+  </table>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

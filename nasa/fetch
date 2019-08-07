@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+mkdir -p "data/"
+cd "data/"
+
+# tables
+wget "https://ssd.jpl.nasa.gov/?planet_phys_par" -O "planet_phys_par.html"
+wget "https://ssd.jpl.nasa.gov/txt/p_elem_t1.txt" -O "p_elem_t1.txt"
+wget "https://ssd.jpl.nasa.gov/txt/p_elem_t2.txt" -O "p_elem_t2.txt"
+wget "https://ssd.jpl.nasa.gov/?sat_phys_par" -O "sat_phys_par.html"
+wget "https://ssd.jpl.nasa.gov/?sat_elem" -O "sat_elem.html"
+
+# factsheets
+wget -km -np -nH --cut-dirs 1 "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+rm -f robots.txt
+
+# HORIZONS tables
+mkdir -p "sbdb/"
+cd "sbdb/"
+for p in "Ceres" "Pluto" "Sedna" "Haumea" "Makemake" "Eris"
+do
+    wget "https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=$p" -O "$p.html"
+done

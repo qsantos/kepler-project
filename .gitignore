@@ -8,3 +8,5 @@ gui
 tags
 TODO.md
 junk/
+*.pyc
+.mypy_cache/

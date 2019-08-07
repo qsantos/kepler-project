@@ -1,0 +1,1835 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Planetary Satellite Mean Orbital Parameters</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+
+<!-- Include standard site Javascript functions -->
+<script language="JavaScript" src="lib/jpl_std.js" type="text/javascript"></script>
+
+<!-- Safely import CSS file(s) -->
+<!-- common "safe" CSS file -->
+<link rel="StyleSheet" href="css/ssd.css" type="text/css" media="screen">
+
+<!-- Include "other" CSS file (prevents browsers with partial CSS support from loading) -->
+<style type="text/css">
+<!--
+@import "css/nav_menu.css";
+@import "css/ssd_extra.css";
+-->
+</style>
+
+
+<!-- Include site-global standard META tags -->
+  <meta name="Author" content="Alan Chamberlin">
+  <meta name="keywords" content="Solar System Dynamics,Solar System,Dynamics,Orbital Mechanics,Orbits">
+  <meta name="JPL-clearance" content="CL 97-0935">
+  <meta name="description" content="Table listing mean orbital parameters for planetary satellites.">
+
+  </head>
+ 
+  <body bgcolor="#000000">
+<!-- Skip navigation link -->
+<a href="#content"><img border="0" src="images/blank.gif" alt="Skip Page Navigation" width="0" height="0"></a>
+
+<!-- black HTML-page background with 10px margins (cellpadding=10, body margin 0px) -->
+    <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#000000" width="100%">
+      <tr valign="top">
+        <td>
+
+          <!-- white content-"page" background with 10px border -->
+          <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#FFFFFF" width="750">
+
+            <tr valign="top">
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF" width="730">
+
+                  <!-- JPL standard header -->
+                  <tr valign="top">
+                    <td align="left" width="100%" bgcolor="#FFFFFF">
+                      <!--#include file="include/jpl_std_head.html"-->
+                      
+<map name="Map">
+  <area shape="circle" coords="31,26,24" href="https://www.nasa.gov" alt="NASA">
+  <area shape="rect" coords="68,10,260,27" href="https://www.jpl.nasa.gov" alt="JPL">
+  <area shape="rect" coords="68,30,240,40" href="http://www.caltech.edu/" alt="Caltech">
+</map>
+
+<table border="0" cellpadding="0" cellspacing="0" width="730">
+
+  <!-- JPL Required Heading -->
+  <tr valign="middle">
+    <td align="left" bgcolor="#CCCCCC" width="255">
+      <img src="images/nasa_logo.gif" alt="NASA Logo - Jet Propulsion Laboratory" border="0" width="255" height="55" usemap="#Map">
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="40"><img src="images/blank.gif" width="40" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="1"><img src="images/black_1x1.gif" height="40" width="1" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="left" bgcolor="#CCCCCC" width="200" nowrap>
+      <a class="portal_link" href="https://www.nasa.gov/">+ View the NASA Portal</a>
+      <br>
+      <a class="portal_link" href="https://cneos.jpl.nasa.gov/">+ Center for Near-Earth Object Studies</a>
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+
+    <!-- placeholder for future site-wide search form -->
+    <td align="center" bgcolor="#006699" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="center" bgcolor="#006699" nowrap width="140">
+      <img src="images/blank.gif" height="55" width="140" alt="">
+    </td>
+  </tr>
+
+  <!-- JPL Required Main Navigation Bar -->
+  <tr>
+    <td align="center" colspan="8">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#FFFFFF">
+          <td><a href="https://www.jpl.nasa.gov/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('home','','portal_images/topnav_01.gif',1)"><img name="home" border="0" alt="JPL Home" src="portal_images/topnavoff_01.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/earth/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('earth','','portal_images/topnav_02.gif',1)"><img name="earth" border="0" alt="Earth" src="portal_images/topnavoff_02.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/solar_system/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('solar_system','','portal_images/topnav_03.gif',1)"><img name="solar_system" alt="Solar System" border="0" src="portal_images/topnavoff_03.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/stars_galaxies/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('stars','','portal_images/topnav_04.gif',1)"><img name="stars" border="0" alt="Stars & Galaxies" src="portal_images/topnavoff_04.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/technology/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('technology','','portal_images/topnav_05.gif',1)"><img name="technology" border="0" alt="Technology" src="portal_images/topnavoff_05.gif"></a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+                      
+                    </td>
+                  </tr>
+
+<!-- END OF JPL REQUIRED HEADER -->
+
+                  <!-- SSD standard header -->
+                  <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+                  <tr><td align="left"><a href="/"><img src="images/ssd_banner.jpg" alt="JPL Solar System Dynamics" height="97" width="730" border="0"></a></td></tr>
+                  <!--<tr><td align="center"><img src="images/blank.gif" height="1" alt=""></td></tr>-->
+                  <!-- SSD standard navigation bar -->
+                  <tr>
+                    <td>
+                      <!--#include file="include/ssd_top_nav_bar.html"-->
+                      <!-- Sample SSD standard top navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr>
+    <td><a href="/?bodies" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bodies','','images/nav/bodies_on.gif',1)"><img name="bodies" border="0" height="16" width="78" alt="BODIES" src="images/nav/bodies_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?orbits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('orbits','','images/nav/orbits_on.gif',1)"><img name="orbits" border="0" height="16" width="75" alt="ORBITS" src="images/nav/orbits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?ephemerides" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ephemerides','','images/nav/ephemerides_on.gif',1)"><img name="ephemerides" border="0" height="16" width="121" alt="EPHEMERIDES" src="images/nav/ephemerides_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?tools" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('tools','','images/nav/tools_on.gif',1)"><img name="tools" border="0" height="16" width="74" alt="TOOLS" src="images/nav/tools_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td width="126"><a href="/?phys_data" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('phys_data','','images/nav/phys_data_on.gif',1)"><img name="phys_data" border="0" height="16" width="126" alt="PHYSICAL DATA" src="images/nav/phys_data_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?discovery" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('discovery','','images/nav/discovery_on.gif',1)"><img name="discovery" border="0" height="16" width="102" alt="DISCOVERY" src="images/nav/discovery_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?faq" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('faq','','images/nav/faq_on.gif',1)"><img name="faq" border="0" height="16" width="57" alt="FAQ" src="images/nav/faq_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?site_map" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('site_map','','images/nav/site_map_on.gif',1)"><img name="site_map" border="0" height="16" width="90" alt="SITE&nbsp;MAP" src="images/nav/site_map_off.gif"></a></td>
+  </tr>
+</table>
+<!--
+                    <table border="0" cellspacing="0" cellpadding="0" width="730">
+                      <tr><td align="left" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER</div>
+                      </td></tr>
+                      <tr><td><img src="images/blank.gif" height="1" alt=""></td></tr>
+                      <tr><td align="left" width="730" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER (LINE 2)</div>
+                      </td></tr>
+                    </table>
+-->
+                    </td>
+                  </tr>
+
+                  <tr><td><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+<!-- START OF PAGE CONTENT -->
+
+<!--<tr width="100%">-->
+                  <tr>
+                    <td align="left"><a name="content"> </a>
+                      <!--#include file="include/site_notice.html"-->
+                      <!-- contents below will be displayed at the top of every page -->
+<!-- use something like <p class="notice">NOTICE: my message here</p> -->
+
+<!-- content below is for special SSD email list notification -->
+<div id="site_notice_email_list">
+  <div class="big-notice"><b>IMPORTANT:</b> 
+    The SSD Announcement email list is now available.
+    Major changes are coming in the near future,
+    including possible hostname and/or URL changes.
+    To be notified of such changes, subscribe to this email list.
+    <br><br>
+    Please visit <a href="/?email_list">this page</a> for more details.
+    <div id="site_notice_email_list_ack">
+      <br><br>
+      <button class="" onclick="ackEmailNotice()">Don't show this message again</button>
+    </div>
+  </div>
+</div>
+
+<script src="lib/site_notice.js"></script>
+<script>
+  var ls = canDoLocalStorage();
+  var key = "email_list_announcement";
+  //
+  // If localStorage is available...
+  if ( ls ) {
+    //
+    // If this message has already be acknowledged, don't show it again:
+    if ( localStorage.getItem(key) ) {
+      document.getElementById("site_notice_email_list").innerHTML = '';
+    }
+  //
+  // If localStorage is NOT available...
+  } else {
+    document.getElementById("site_notice_email_list_ack").innerHTML = '<br><br>'
+      + '<em>To not show this message again from this browser, enable "localStorage".</em>';
+  }
+  //
+  // Acknowledge message:
+  function ackEmailNotice() {
+    if ( ! ls ) return;
+    localStorage.setItem(key, true);
+    document.getElementById("site_notice_email_list").innerHTML = '';
+  }
+</script>
+<!-- start of standard page with no left-column navigation menu -->
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tr valign="top">
+
+<!-- right column containing the page content -->
+    <td align="left" width="100%">
+
+<div class="page_title">Planetary Satellite Mean Orbital Parameters</div>
+
+
+<!-- Page Content: begin -->
+
+Select from satellites of <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a><br><br>
+
+<table border=0 cellspacing=0 cellpadding=4 bgcolor="#FFFF00">
+  <tr valign="top">
+    <td><em><b>WARNING:</b></em>&nbsp;</td>
+    <td>These mean orbital parameters are <b>not intended for ephemeris computation</b>.
+        Accurate ephemerides should be obtained from our
+        <a href="?horizons">HORIZONS</a> system</a>.
+        Mean orbital parameters are primarily useful in describing the general shape and
+        orientation of a planetary satellite's orbit.</td>
+  </tr>
+</table>
+<br>
+
+
+<a name="earth"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Earth</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean <a href="?glossary&term=ecliptic">ecliptic</a> orbital elements</H3>
+Epoch 2000 Jan. 1.50 TT<BR>
+<B>Solution:</B>
+DE405/LE405
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Moon</TD>
+<TD>384400.</TD>
+<TD>0.0554</TD>
+<TD>318.15</TD>
+<TD>135.27</TD>
+<TD>5.16</TD>
+<TD>125.08</TD>
+<TD>13.176358</TD>
+<TD>27.322</TD>
+<TD>5.997</TD>
+<TD>18.600</TD>
+<TD ALIGN=right><A HREF="#ref1">1</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="mars"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Mars</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean orbital elements referred to the local <a href="?glossary&term=lp">Laplace planes</a></H3>
+Epoch 1950 Jan.  1.00 TT<BR>
+<B>Solution:</B>
+MAR080
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TD><var><b><a href="#laplace">R.A.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Dec.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Tilt</a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Phobos</TD><TD>9376.</TD><TD>0.0151</TD>
+<TD>150.057</TD><TD>91.059</TD><TD>1.075</TD><TD>207.784</TD>
+<TD>1128.8447569</TD><TD>0.3189</TD><TD>1.1316</TD><TD>2.2617</TD>
+<TD>317.671</TD><TD>52.893</TD><TD>0.009</TD>
+<TD ALIGN=right><A HREF="#ref5">5</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Deimos</TD><TD>23458.</TD><TD>0.0002</TD>
+<TD>260.729</TD><TD>325.329</TD><TD>1.788</TD><TD>24.525</TD>
+<TD>285.1618790</TD><TD>1.2624</TD><TD>27.3703</TD><TD>54.5367</TD>
+<TD>316.657</TD><TD>53.529</TD><TD>0.889</TD>
+<TD ALIGN=right><A HREF="#ref5">5</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="jupiter"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Jupiter</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean orbital elements referred to the local <a href="?glossary&term=lp">Laplace planes</a></H3>
+Epoch 1997 Jan. 16.00 TT<BR>
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TD><var><b><a href="#laplace">R.A.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Dec.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Tilt</a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Io</TD><TD>421800.</TD><TD>0.0041</TD>
+<TD>84.129</TD><TD>342.021</TD><TD>0.036</TD><TD>43.977</TD><TD>203.4889583</TD>
+<TD>1.769</TD><TD>1.625</TD><TD>7.420</TD><TD>268.057</TD><TD>64.495</TD>
+<TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Europa</TD><TD>671100.</TD><TD>0.0094</TD>
+<TD>88.970</TD><TD>171.016</TD><TD>0.466</TD><TD>219.106</TD>
+<TD>101.3747242</TD><TD>3.551</TD><TD>1.394</TD><TD>30.184</TD><TD>268.084</TD>
+<TD>64.506</TD><TD>0.016</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Ganymede</TD><TD>1070400.</TD><TD>0.0013</TD>
+<TD>192.417</TD><TD>317.540</TD><TD>0.177</TD><TD>63.552</TD><TD>50.3176072</TD>
+<TD>7.155</TD><TD>63.549</TD><TD>132.654</TD><TD>268.168</TD><TD>64.543</TD>
+<TD>0.068</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Callisto</TD><TD>1882700.</TD><TD>0.0074</TD>
+<TD>52.643</TD><TD>181.408</TD><TD>0.192</TD><TD>298.848</TD><TD>21.5710728</TD>
+<TD>16.69</TD><TD>205.75</TD><TD>338.82</TD><TD>268.639</TD><TD>64.749</TD>
+<TD>0.356</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Amalthea</TD><TD>181400.</TD><TD>0.0032</TD>
+<TD>155.873</TD><TD>185.194</TD><TD>0.380</TD><TD>108.946</TD>
+<TD>722.6317143</TD><TD>0.498</TD><TD>0.196</TD><TD>0.393</TD><TD>268.057</TD>
+<TD>64.495</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Thebe</TD><TD>221900.</TD><TD>0.0176</TD>
+<TD>234.269</TD><TD>135.956</TD><TD>1.080</TD><TD>235.694</TD>
+<TD>533.7002568</TD><TD>0.675</TD><TD>0.398</TD><TD>0.797</TD><TD>268.057</TD>
+<TD>64.495</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Adrastea</TD><TD>129000.</TD><TD>0.0018</TD>
+<TD>328.047</TD><TD>135.673</TD><TD>0.054</TD><TD>228.378</TD>
+<TD>1206.9988064</TD><TD>0.298</TD><TD>0.058</TD><TD>0.116</TD><TD>268.057</TD>
+<TD>64.496</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Metis</TD><TD>128000.</TD><TD>0.0012</TD>
+<TD>297.177</TD><TD>276.047</TD><TD>0.019</TD><TD>146.912</TD>
+<TD>1221.2545982</TD><TD>0.295</TD><TD>0.057</TD><TD>0.115</TD><TD>268.057</TD>
+<TD>64.496</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref11">11</A></TD></TR>
+</TABLE>
+<HR>
+<H3><a href="?glossary&term=ecliptic">Ecliptic</a> mean orbital elements</H3>
+Epoch 2000 Jan.  1.00 TT<BR>
+<B>Solution:</B>
+<a href="?glossary&term=ecliptic">Ecliptic</a> mean elements - JUP300
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Himalia</TD><TD>11460000.</TD><TD>0.1586</TD>
+<TD>331.234</TD><TD>66.874</TD><TD>28.612</TD><TD>64.798</TD><TD>1.4367562</TD>
+<TD>250.56</TD><TD>139.38</TD><TD>292.57</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Elara</TD><TD>11740000.</TD><TD>0.2108</TD>
+<TD>142.001</TD><TD>330.985</TD><TD>27.945</TD><TD>115.511</TD>
+<TD>1.3865315</TD><TD>259.64</TD><TD>128.07</TD><TD>265.30</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Pasiphae</TD><TD>23629000.</TD><TD>0.4062</TD>
+<TD>169.226</TD><TD>279.769</TD><TD>151.413</TD><TD>314.223</TD>
+<TD>0.4841223</TD><TD>743.61</TD><TD>81.20</TD><TD>81.17</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Sinope</TD><TD>23942000.</TD><TD>0.2552</TD>
+<TD>354.541</TD><TD>165.352</TD><TD>158.189</TD><TD>309.199</TD>
+<TD>0.4743772</TD><TD>758.89</TD><TD>88.72</TD><TD>87.40</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Lysithea</TD><TD>11717000.</TD><TD>0.1161</TD>
+<TD>49.670</TD><TD>330.475</TD><TD>27.663</TD><TD>5.326</TD><TD>1.3888891</TD>
+<TD>259.20</TD><TD>131.19</TD><TD>292.04</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Carme</TD><TD>23401000.</TD><TD>0.2546</TD>
+<TD>26.416</TD><TD>233.375</TD><TD>164.994</TD><TD>114.854</TD>
+<TD>0.4903501</TD><TD>734.17</TD><TD>80.98</TD><TD>88.32</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Ananke</TD><TD>21254000.</TD><TD>0.2332</TD>
+<TD>95.772</TD><TD>253.384</TD><TD>148.693</TD><TD>15.959</TD><TD>0.5716125</TD>
+<TD>629.80</TD><TD>144.92</TD><TD>110.12</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Leda</TD><TD>11164000.</TD><TD>0.1624</TD>
+<TD>269.393</TD><TD>230.352</TD><TD>27.882</TD><TD>219.181</TD>
+<TD>1.4942407</TD><TD>240.93</TD><TD>144.79</TD><TD>301.94</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Callirrhoe</TD><TD>24099000.</TD><TD>0.2796</TD>
+<TD>23.909</TD><TD>107.962</TD><TD>147.080</TD><TD>283.104</TD>
+<TD>0.4744232</TD><TD>758.82</TD><TD>120.06</TD><TD>89.03</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Themisto</TD><TD>7504000.</TD><TD>0.2435</TD>
+<TD>217.147</TD><TD>313.051</TD><TD>42.977</TD><TD>192.288</TD>
+<TD>2.7688033</TD><TD>130.02</TD><TD>686.41</TD><TD>528.39</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Megaclite</TD><TD>23814000.</TD><TD>0.4156</TD>
+<TD>288.882</TD><TD>135.272</TD><TD>152.781</TD><TD>280.575</TD>
+<TD>0.4781658</TD><TD>752.88</TD><TD>76.90</TD><TD>79.23</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Taygete</TD><TD>23363000.</TD><TD>0.2523</TD>
+<TD>231.540</TD><TD>94.756</TD><TD>165.253</TD><TD>305.114</TD>
+<TD>0.4915209</TD><TD>732.42</TD><TD>81.04</TD><TD>88.59</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Chaldene</TD><TD>23181000.</TD><TD>0.2503</TD>
+<TD>243.878</TD><TD>267.454</TD><TD>165.155</TD><TD>134.240</TD>
+<TD>0.4974208</TD><TD>723.73</TD><TD>81.66</TD><TD>89.52</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Harpalyke</TD><TD>21106000.</TD><TD>0.2296</TD>
+<TD>134.505</TD><TD>215.956</TD><TD>148.759</TD><TD>29.834</TD>
+<TD>0.5775515</TD><TD>623.32</TD><TD>147.17</TD><TD>111.64</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kalyke</TD><TD>23565000.</TD><TD>0.2466</TD>
+<TD>218.934</TD><TD>255.702</TD><TD>165.121</TD><TD>43.864</TD>
+<TD>0.4851490</TD><TD>742.04</TD><TD>80.76</TD><TD>87.67</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Iocaste</TD><TD>21272000.</TD><TD>0.2152</TD>
+<TD>64.727</TD><TD>213.675</TD><TD>149.411</TD><TD>269.613</TD>
+<TD>0.5699784</TD><TD>631.60</TD><TD>145.78</TD><TD>111.18</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Erinome</TD><TD>23286000.</TD><TD>0.2655</TD>
+<TD>10.274</TD><TD>267.136</TD><TD>164.914</TD><TD>317.497</TD>
+<TD>0.4941719</TD><TD>728.49</TD><TD>80.51</TD><TD>88.33</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Isonoe</TD><TD>23231000.</TD><TD>0.2471</TD>
+<TD>116.879</TD><TD>124.941</TD><TD>165.250</TD><TD>130.961</TD>
+<TD>0.4956884</TD><TD>726.26</TD><TD>81.80</TD><TD>89.52</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Praxidike</TD><TD>21148000.</TD><TD>0.2274</TD>
+<TD>190.862</TD><TD>117.480</TD><TD>148.885</TD><TD>280.956</TD>
+<TD>0.5756381</TD><TD>625.39</TD><TD>144.77</TD><TD>111.16</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Autonoe</TD><TD>24037000.</TD><TD>0.3152</TD>
+<TD>54.793</TD><TD>142.035</TD><TD>152.364</TD><TD>272.817</TD>
+<TD>0.4730563</TD><TD>761.01</TD><TD>92.33</TD><TD>85.00</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Thyone</TD><TD>21197000.</TD><TD>0.2307</TD>
+<TD>97.023</TD><TD>238.786</TD><TD>148.595</TD><TD>233.022</TD>
+<TD>0.5739872</TD><TD>627.19</TD><TD>147.58</TD><TD>110.93</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hermippe</TD><TD>21297000.</TD><TD>0.2095</TD>
+<TD>300.836</TD><TD>131.854</TD><TD>150.740</TD><TD>330.393</TD>
+<TD>0.5679040</TD><TD>633.91</TD><TD>136.92</TD><TD>110.64</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Aitne</TD><TD>23317000.</TD><TD>0.2627</TD>
+<TD>99.401</TD><TD>105.000</TD><TD>165.048</TD><TD>8.679</TD><TD>0.4930702</TD>
+<TD>730.12</TD><TD>80.36</TD><TD>88.19</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Eurydome</TD><TD>23146000.</TD><TD>0.2755</TD>
+<TD>223.631</TD><TD>287.689</TD><TD>150.271</TD><TD>302.470</TD>
+<TD>0.5018735</TD><TD>717.31</TD><TD>111.58</TD><TD>93.30</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Euanthe</TD><TD>21039000.</TD><TD>0.2320</TD>
+<TD>320.635</TD><TD>333.101</TD><TD>148.915</TD><TD>254.297</TD>
+<TD>0.5802269</TD><TD>620.45</TD><TD>144.52</TD><TD>111.71</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Euporie</TD><TD>19336000.</TD><TD>0.1438</TD>
+<TD>89.904</TD><TD>70.243</TD><TD>145.740</TD><TD>60.143</TD><TD>0.6537221</TD>
+<TD>550.69</TD><TD>337063.88</TD><TD>139.45</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Orthosie</TD><TD>21158000.</TD><TD>0.2807</TD>
+<TD>216.805</TD><TD>204.517</TD><TD>146.004</TD><TD>221.949</TD>
+<TD>0.5782402</TD><TD>622.58</TD><TD>142.35</TD><TD>107.53</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Sponde</TD><TD>23790000.</TD><TD>0.3112</TD>
+<TD>61.885</TD><TD>174.044</TD><TD>150.997</TD><TD>116.363</TD>
+<TD>0.4810760</TD><TD>748.32</TD><TD>98.08</TD><TD>87.01</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kale</TD><TD>23306000.</TD><TD>0.2597</TD>
+<TD>44.233</TD><TD>212.853</TD><TD>164.944</TD><TD>60.170</TD><TD>0.4934152</TD>
+<TD>729.61</TD><TD>80.91</TD><TD>88.57</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Pasithee</TD><TD>23091000.</TD><TD>0.2682</TD>
+<TD>231.920</TD><TD>215.443</TD><TD>165.117</TD><TD>327.729</TD>
+<TD>0.5003695</TD><TD>719.47</TD><TD>80.82</TD><TD>89.25</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hegemone</TD><TD>23575000.</TD><TD>0.3445</TD>
+<TD>197.144</TD><TD>236.950</TD><TD>154.164</TD><TD>318.902</TD>
+<TD>0.4866038</TD><TD>739.82</TD><TD>85.66</TD><TD>84.87</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Mneme</TD><TD>21033000.</TD><TD>0.2258</TD>
+<TD>40.542</TD><TD>256.860</TD><TD>148.585</TD><TD>13.467</TD><TD>0.5806001</TD>
+<TD>620.05</TD><TD>148.06</TD><TD>112.26</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Aoede</TD><TD>23974000.</TD><TD>0.4325</TD>
+<TD>59.739</TD><TD>197.676</TD><TD>158.272</TD><TD>173.392</TD>
+<TD>0.4728089</TD><TD>761.41</TD><TD>69.17</TD><TD>76.83</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Thelxinoe</TD><TD>21160000.</TD><TD>0.2201</TD>
+<TD>313.183</TD><TD>268.013</TD><TD>151.390</TD><TD>169.962</TD>
+<TD>0.5732248</TD><TD>628.03</TD><TD>130.58</TD><TD>110.42</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Arche</TD><TD>23352000.</TD><TD>0.2495</TD>
+<TD>171.632</TD><TD>39.713</TD><TD>165.015</TD><TD>339.210</TD>
+<TD>0.4918707</TD><TD>731.90</TD><TD>81.40</TD><TD>88.73</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kallichore</TD><TD>23276000.</TD><TD>0.2509</TD>
+<TD>9.836</TD><TD>55.937</TD><TD>165.102</TD><TD>30.339</TD><TD>0.4943462</TD>
+<TD>728.23</TD><TD>81.56</TD><TD>89.16</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Helike</TD><TD>21065000.</TD><TD>0.1498</TD>
+<TD>299.482</TD><TD>43.659</TD><TD>154.842</TD><TD>89.749</TD><TD>0.5747808</TD>
+<TD>626.33</TD><TD>127.40</TD><TD>114.52</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Carpo</TD><TD>17056000.</TD><TD>0.4317</TD>
+<TD>90.372</TD><TD>337.062</TD><TD>51.624</TD><TD>50.597</TD><TD>0.7889862</TD>
+<TD>456.28</TD><TD>711550.25</TD><TD>112.82</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Eukelade</TD><TD>23323000.</TD><TD>0.2619</TD>
+<TD>309.685</TD><TD>204.846</TD><TD>165.265</TD><TD>193.558</TD>
+<TD>0.4929260</TD><TD>730.33</TD><TD>80.24</TD><TD>88.16</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Cyllene</TD><TD>23800000.</TD><TD>0.4155</TD>
+<TD>187.429</TD><TD>128.345</TD><TD>150.336</TD><TD>252.611</TD>
+<TD>0.4787365</TD><TD>751.98</TD><TD>80.19</TD><TD>79.71</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kore</TD><TD>24482000.</TD><TD>0.3313</TD>
+<TD>138.071</TD><TD>33.416</TD><TD>145.173</TD><TD>313.355</TD>
+<TD>0.4634134</TD><TD>776.84</TD><TD>108.39</TD><TD>84.47</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Herse</TD><TD>23408000.</TD><TD>0.2541</TD>
+<TD>330.295</TD><TD>141.667</TD><TD>164.964</TD><TD>295.702</TD>
+<TD>0.4901154</TD><TD>734.52</TD><TD>80.98</TD><TD>88.27</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2000 J 11</TD><TD>12297000.</TD><TD>0.2320</TD>
+<TD>173.544</TD><TD>309.734</TD><TD>28.631</TD><TD>294.497</TD>
+<TD>1.2939791</TD><TD>278.21</TD><TD>117.58</TD><TD>241.93</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 2</TD><TD>28347000.</TD><TD>0.4100</TD>
+<TD>165.201</TD><TD>237.932</TD><TD>157.291</TD><TD>344.782</TD>
+<TD>0.3671484</TD><TD>980.53</TD><TD>60.25</TD><TD>62.87</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 3</TD><TD>20221000.</TD><TD>0.1969</TD>
+<TD>66.338</TD><TD>311.780</TD><TD>147.547</TD><TD>231.489</TD>
+<TD>0.6165779</TD><TD>583.87</TD><TD>181.96</TD><TD>122.74</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 4</TD><TD>23929000.</TD><TD>0.3624</TD>
+<TD>197.401</TD><TD>260.480</TD><TD>149.589</TD><TD>179.131</TD>
+<TD>0.4766663</TD><TD>755.25</TD><TD>90.17</TD><TD>82.96</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 5</TD><TD>23495000.</TD><TD>0.2476</TD>
+<TD>90.066</TD><TD>336.636</TD><TD>165.248</TD><TD>176.683</TD>
+<TD>0.4873118</TD><TD>738.75</TD><TD>80.95</TD><TD>88.10</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 9</TD><TD>23385000.</TD><TD>0.2632</TD>
+<TD>292.662</TD><TD>348.415</TD><TD>165.047</TD><TD>44.321</TD>
+<TD>0.4909185</TD><TD>733.32</TD><TD>80.27</TD><TD>87.93</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 10</TD><TD>23042000.</TD><TD>0.4299</TD>
+<TD>170.833</TD><TD>258.937</TD><TD>165.073</TD><TD>151.911</TD>
+<TD>0.5026172</TD><TD>716.25</TD><TD>68.06</TD><TD>80.34</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 12</TD><TD>17830000.</TD><TD>0.4904</TD>
+<TD>13.288</TD><TD>38.543</TD><TD>151.003</TD><TD>65.530</TD><TD>0.7351860</TD>
+<TD>489.67</TD><TD>97.93</TD><TD>109.42</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 15</TD><TD>22627000.</TD><TD>0.1899</TD>
+<TD>18.405</TD><TD>58.865</TD><TD>146.492</TD><TD>236.674</TD><TD>0.5219082</TD>
+<TD>689.78</TD><TD>187.83</TD><TD>105.37</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 16</TD><TD>21097000.</TD><TD>0.2281</TD>
+<TD>57.681</TD><TD>307.563</TD><TD>148.683</TD><TD>16.883</TD><TD>0.5779589</TD>
+<TD>622.88</TD><TD>146.70</TD><TD>111.64</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 18</TD><TD>20508000.</TD><TD>0.0895</TD>
+<TD>130.894</TD><TD>202.160</TD><TD>146.077</TD><TD>158.247</TD>
+<TD>0.6018719</TD><TD>598.13</TD><TD>506.86</TD><TD>131.88</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 19</TD><TD>23533000.</TD><TD>0.2552</TD>
+<TD>176.668</TD><TD>223.035</TD><TD>165.116</TD><TD>27.442</TD>
+<TD>0.4862156</TD><TD>740.41</TD><TD>80.17</TD><TD>87.39</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J 23</TD><TD>23567000.</TD><TD>0.2746</TD>
+<TD>255.114</TD><TD>144.222</TD><TD>146.424</TD><TD>41.706</TD>
+<TD>0.4914942</TD><TD>732.46</TD><TD>130.10</TD><TD>92.90</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2010 J 1</TD><TD>23449000.</TD><TD>0.2491</TD>
+<TD>189.230</TD><TD>160.525</TD><TD>165.100</TD><TD>282.871</TD>
+<TD>0.4887995</TD><TD>736.50</TD><TD>81.18</TD><TD>88.33</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2010 J 2</TD><TD>21004000.</TD><TD>0.2267</TD>
+<TD>18.252</TD><TD>312.074</TD><TD>148.673</TD><TD>5.802</TD><TD>0.5817371</TD>
+<TD>618.84</TD><TD>147.06</TD><TD>112.35</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2011 J 1</TD><TD>23446000.</TD><TD>0.2534</TD>
+<TD>31.514</TD><TD>256.027</TD><TD>165.318</TD><TD>250.728</TD>
+<TD>0.4888998</TD><TD>736.35</TD><TD>80.45</TD><TD>87.91</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2011 J 2</TD><TD>23124000.</TD><TD>0.3493</TD>
+<TD>270.154</TD><TD>285.597</TD><TD>153.597</TD><TD>24.866</TD>
+<TD>0.5011321</TD><TD>718.37</TD><TD>87.78</TD><TD>87.00</TD>
+<TD ALIGN=right><A HREF="#ref18">18</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="saturn"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Saturn</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean orbital elements referred to the local <a href="?glossary&term=lp">Laplace planes</a></H3>
+Epoch 2000 Jan.  1.50 TT<BR>
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TD><var><b><a href="#laplace">R.A.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Dec.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Tilt</a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Mimas</TD><TD>185539.</TD><TD>0.0196</TD>
+<TD>332.499</TD><TD>14.848</TD><TD>1.574</TD><TD>173.027</TD>
+<TD>381.9944948</TD><TD>0.942</TD><TD>0.493</TD><TD>0.986</TD><TD>40.589</TD>
+<TD>83.536</TD><TD>0.002</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Enceladus</TD><TD>238042.</TD><TD>0.0000</TD>
+<TD>0.076</TD><TD>199.686</TD><TD>0.003</TD><TD>342.507</TD><TD>262.7318978</TD>
+<TD>1.370</TD><TD>1.184</TD><TD>2.360</TD><TD>40.586</TD><TD>83.536</TD>
+<TD>0.002</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Tethys</TD><TD>294672.</TD><TD>0.0001</TD>
+<TD>45.202</TD><TD>243.367</TD><TD>1.091</TD><TD>259.842</TD>
+<TD>190.6979109</TD><TD>1.888</TD><TD>2.490</TD><TD>4.982</TD><TD>40.578</TD>
+<TD>83.537</TD><TD>0.001</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Dione</TD><TD>377415.</TD><TD>0.0022</TD>
+<TD>284.315</TD><TD>322.232</TD><TD>0.028</TD><TD>290.415</TD>
+<TD>131.5349307</TD><TD>2.737</TD><TD>5.852</TD><TD>11.709</TD><TD>40.544</TD>
+<TD>83.540</TD><TD>0.005</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Rhea</TD><TD>527068.</TD><TD>0.0002</TD>
+<TD>241.619</TD><TD>179.781</TD><TD>0.333</TD><TD>351.042</TD>
+<TD>79.6900459</TD><TD>4.518</TD><TD>17.939</TD><TD>35.832</TD><TD>40.328</TD>
+<TD>83.559</TD><TD>0.036</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Titan</TD><TD>1221865.</TD><TD>0.0288</TD>
+<TD>180.532</TD><TD>163.310</TD><TD>0.306</TD><TD>28.060</TD><TD>22.5769756</TD>
+<TD>15.95</TD><TD>352.12</TD><TD>704.60</TD><TD>36.214</TD><TD>83.949</TD>
+<TD>0.629</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hyperion</TD><TD>1500933.</TD><TD>0.0232</TD>
+<TD>303.178</TD><TD>86.342</TD><TD>0.615</TD><TD>263.847</TD><TD>16.9199503</TD>
+<TD>21.28</TD><TD>127.99</TD><TD>154.66</TD><TD>36.372</TD><TD>83.862</TD>
+<TD>0.564</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Iapetus</TD><TD>3560854.</TD><TD>0.0293</TD>
+<TD>271.606</TD><TD>201.789</TD><TD>8.298</TD><TD>81.105</TD><TD>4.5379416</TD>
+<TD>79.33</TD><TD>1676.69</TD><TD>3438.73</TD><TD>284.715</TD><TD>78.749</TD>
+<TD>15.210</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Phoebe</TD><TD>12947918.</TD><TD>0.1634</TD>
+<TD>342.500</TD><TD>53.038</TD><TD>175.243</TD><TD>241.086</TD>
+<TD>0.6569114</TD><TD>548.02</TD><TD>460.92</TD><TD>723.17</TD><TD>275.954</TD>
+<TD>67.455</TD><TD>26.723</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Janus</TD><TD>151450.</TD><TD>0.0098</TD>
+<TD>16.012</TD><TD>17.342</TD><TD>0.165</TD><TD>154.175</TD><TD>518.3431513</TD>
+<TD>0.695</TD><TD>0.240</TD><TD>0.482</TD><TD>40.585</TD><TD>83.538</TD>
+<TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Epimetheus</TD><TD>151450.</TD><TD>0.0161</TD>
+<TD>88.975</TD><TD>80.377</TD><TD>0.353</TD><TD>192.762</TD><TD>518.0979676</TD>
+<TD>0.695</TD><TD>0.240</TD><TD>0.482</TD><TD>40.585</TD><TD>83.538</TD>
+<TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Helene</TD><TD>377444.</TD><TD>0.0000</TD>
+<TD>33.134</TD><TD>43.186</TD><TD>0.213</TD><TD>163.112</TD><TD>131.5349306</TD>
+<TD>2.737</TD><TD>2.562</TD><TD>11.706</TD><TD>40.544</TD><TD>83.540</TD>
+<TD>0.005</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Telesto</TD><TD>294720.</TD><TD>0.0002</TD>
+<TD>119.135</TD><TD>260.157</TD><TD>1.180</TD><TD>229.182</TD>
+<TD>190.6979089</TD><TD>1.888</TD><TD>2.489</TD><TD>4.982</TD><TD>40.578</TD>
+<TD>83.537</TD><TD>0.001</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Calypso</TD><TD>294721.</TD><TD>0.0005</TD>
+<TD>17.470</TD><TD>156.660</TD><TD>1.500</TD><TD>314.226</TD>
+<TD>190.6979089</TD><TD>1.888</TD><TD>2.487</TD><TD>4.983</TD><TD>40.578</TD>
+<TD>83.537</TD><TD>0.001</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Atlas</TD><TD>137774.</TD><TD>0.0011</TD>
+<TD>210.851</TD><TD>283.282</TD><TD>0.003</TD><TD>236.422</TD>
+<TD>598.3147505</TD><TD>0.602</TD><TD>0.171</TD><TD>0.344</TD><TD>40.585</TD>
+<TD>83.538</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Prometheus</TD><TD>139429.</TD><TD>0.0022</TD>
+<TD>37.514</TD><TD>96.886</TD><TD>0.007</TD><TD>319.176</TD><TD>587.2860142</TD>
+<TD>0.613</TD><TD>0.179</TD><TD>0.359</TD><TD>40.585</TD><TD>83.538</TD>
+<TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Pandora</TD><TD>141810.</TD><TD>0.0042</TD>
+<TD>66.248</TD><TD>125.112</TD><TD>0.050</TD><TD>147.272</TD>
+<TD>572.7878754</TD><TD>0.629</TD><TD>0.190</TD><TD>0.381</TD><TD>40.585</TD>
+<TD>83.538</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Pan</TD><TD>133585.</TD><TD>0.0000</TD>
+<TD>103.331</TD><TD>351.187</TD><TD>0.000</TD><TD>52.076</TD>
+<TD>626.0317341</TD><TD>0.575</TD><TD>0.154</TD><TD>0.309</TD><TD>40.583</TD>
+<TD>83.538</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Methone</TD><TD>194402.</TD><TD>0.0000</TD>
+<TD>134.636</TD><TD>71.189</TD><TD>0.013</TD><TD>313.562</TD>
+<TD>356.5949252</TD><TD>1.010</TD><TD>0.250</TD><TD>1.158</TD><TD>40.589</TD>
+<TD>83.536</TD><TD>0.002</TD>
+<TD ALIGN=right><A HREF="#ref32">32</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Pallene</TD><TD>212282.</TD><TD>0.0040</TD>
+<TD>16.074</TD><TD>356.229</TD><TD>0.001</TD><TD>123.180</TD>
+<TD>312.0270737</TD><TD>1.154</TD><TD>0.862</TD><TD>1.899</TD><TD>40.579</TD>
+<TD>83.537</TD><TD>0.001</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Polydeuces</TD><TD>377222.</TD><TD>0.0191</TD>
+<TD>311.847</TD><TD>89.307</TD><TD>0.175</TD><TD>67.936</TD><TD>131.5349306</TD>
+<TD>2.737</TD><TD>5.811</TD><TD>11.695</TD><TD>40.543</TD><TD>83.540</TD>
+<TD>0.005</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Daphnis</TD><TD>136504.</TD><TD>0.0000</TD>
+<TD>266.931</TD><TD>113.790</TD><TD>0.003</TD><TD>132.867</TD>
+<TD>605.9791512</TD><TD>0.594</TD><TD>0.166</TD><TD>0.334</TD><TD>40.583</TD>
+<TD>83.538</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Anthe</TD><TD>196888.</TD><TD>0.0011</TD>
+<TD>138.902</TD><TD>190.473</TD><TD>0.015</TD><TD>287.852</TD>
+<TD>347.3587167</TD><TD>1.036</TD><TD>0.617</TD><TD>1.232</TD><TD>40.583</TD>
+<TD>83.537</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Aegaeon</TD><TD>167425.</TD><TD>0.0002</TD>
+<TD>152.905</TD><TD>322.771</TD><TD>0.001</TD><TD>317.202</TD>
+<TD>445.4934177</TD><TD>0.808</TD><TD>0.343</TD><TD>0.688</TD><TD>40.584</TD>
+<TD>83.537</TD><TD>0.001</TD>
+<TD ALIGN=right><A HREF="#ref33">33</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean <a href="?glossary&term=ecliptic">ecliptic</a> orbital elements</H3>
+Epoch 2000 Jan.  1.00 TT<BR>
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Ymir</TD><TD>23128000.</TD><TD>0.3338</TD>
+<TD>21.352</TD><TD>228.673</TD><TD>173.497</TD><TD>192.937</TD>
+<TD>0.2737369</TD><TD>1315.13</TD><TD>217.61</TD><TD>277.53</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Paaliaq</TD><TD>15204000.</TD><TD>0.3325</TD>
+<TD>237.522</TD><TD>321.654</TD><TD>46.228</TD><TD>330.022</TD>
+<TD>0.5240567</TD><TD>686.95</TD><TD>576.14</TD><TD>535.71</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Tarvos</TD><TD>18243000.</TD><TD>0.5382</TD>
+<TD>274.104</TD><TD>265.783</TD><TD>33.725</TD><TD>102.504</TD>
+<TD>0.3886226</TD><TD>926.35</TD><TD>194.18</TD><TD>272.97</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Ijiraq</TD><TD>11408000.</TD><TD>0.2717</TD>
+<TD>92.899</TD><TD>17.328</TD><TD>47.485</TD><TD>130.779</TD><TD>0.7974868</TD>
+<TD>451.42</TD><TD>13807.37</TD><TD>935.12</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Suttungr</TD><TD>19468000.</TD><TD>0.1139</TD>
+<TD>34.281</TD><TD>321.133</TD><TD>175.815</TD><TD>227.259</TD>
+<TD>0.3540952</TD><TD>1016.68</TD><TD>292.79</TD><TD>402.20</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kiviuq</TD><TD>11384000.</TD><TD>0.3325</TD>
+<TD>90.205</TD><TD>172.018</TD><TD>46.764</TD><TD>353.584</TD><TD>0.8013951</TD>
+<TD>449.22</TD><TD>19973.94</TD><TD>840.86</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Mundilfari</TD><TD>18653000.</TD><TD>0.2097</TD>
+<TD>309.694</TD><TD>92.821</TD><TD>167.439</TD><TD>82.856</TD><TD>0.3778328</TD>
+<TD>952.80</TD><TD>312.23</TD><TD>417.31</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Albiorix</TD><TD>16393000.</TD><TD>0.4797</TD>
+<TD>55.932</TD><TD>32.828</TD><TD>34.060</TD><TD>102.512</TD><TD>0.4595027</TD>
+<TD>783.46</TD><TD>249.88</TD><TD>358.14</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Skathi</TD><TD>15635000.</TD><TD>0.2718</TD>
+<TD>203.517</TD><TD>114.689</TD><TD>152.633</TD><TD>286.599</TD>
+<TD>0.4944382</TD><TD>728.10</TD><TD>474.36</TD><TD>546.69</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Erriapus</TD><TD>17602000.</TD><TD>0.4722</TD>
+<TD>282.522</TD><TD>294.829</TD><TD>34.481</TD><TD>150.985</TD>
+<TD>0.4132539</TD><TD>871.14</TD><TD>219.90</TD><TD>323.49</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Siarnaq</TD><TD>18182000.</TD><TD>0.2802</TD>
+<TD>65.929</TD><TD>201.288</TD><TD>45.809</TD><TD>47.826</TD><TD>0.4020067</TD>
+<TD>895.51</TD><TD>457.40</TD><TD>454.20</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Thrymr</TD><TD>20418000.</TD><TD>0.4659</TD>
+<TD>125.404</TD><TD>30.075</TD><TD>177.659</TD><TD>285.762</TD>
+<TD>0.3296678</TD><TD>1092.01</TD><TD>875.11</TD><TD>139002.09</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Narvi</TD><TD>19349000.</TD><TD>0.4296</TD>
+<TD>169.959</TD><TD>114.172</TD><TD>145.731</TD><TD>174.435</TD>
+<TD>0.3585873</TD><TD>1003.94</TD><TD>341.38</TD><TD>347.42</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Aegir</TD><TD>20751000.</TD><TD>0.2524</TD>
+<TD>242.651</TD><TD>26.017</TD><TD>166.668</TD><TD>179.064</TD>
+<TD>0.3220526</TD><TD>1117.83</TD><TD>273.91</TD><TD>350.18</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Bebhionn</TD><TD>17116000.</TD><TD>0.4682</TD>
+<TD>358.141</TD><TD>168.045</TD><TD>35.101</TD><TD>199.128</TD>
+<TD>0.4312114</TD><TD>834.86</TD><TD>236.57</TD><TD>342.06</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Bergelmir</TD><TD>19336000.</TD><TD>0.1420</TD>
+<TD>133.400</TD><TD>306.494</TD><TD>158.557</TD><TD>202.164</TD>
+<TD>0.3579396</TD><TD>1005.76</TD><TD>359.70</TD><TD>424.95</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Bestla</TD><TD>20209000.</TD><TD>0.5145</TD>
+<TD>81.185</TD><TD>239.156</TD><TD>145.136</TD><TD>288.308</TD>
+<TD>0.3308757</TD><TD>1088.02</TD><TD>284.99</TD><TD>299.08</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Farbauti</TD><TD>20390000.</TD><TD>0.2414</TD>
+<TD>342.995</TD><TD>282.813</TD><TD>156.520</TD><TD>135.109</TD>
+<TD>0.3312924</TD><TD>1086.65</TD><TD>330.77</TD><TD>374.34</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Fenrir</TD><TD>22454000.</TD><TD>0.1347</TD>
+<TD>120.982</TD><TD>131.678</TD><TD>164.963</TD><TD>226.595</TD>
+<TD>0.2856343</TD><TD>1260.35</TD><TD>276.77</TD><TD>332.99</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Fornjot</TD><TD>25146000.</TD><TD>0.2077</TD>
+<TD>324.787</TD><TD>214.499</TD><TD>170.372</TD><TD>259.946</TD>
+<TD>0.2409497</TD><TD>1494.09</TD><TD>223.68</TD><TD>267.44</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hati</TD><TD>19868000.</TD><TD>0.3710</TD>
+<TD>21.286</TD><TD>163.640</TD><TD>165.808</TD><TD>324.380</TD>
+<TD>0.3460954</TD><TD>1040.18</TD><TD>262.48</TD><TD>339.97</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hyrrokkin</TD><TD>18440000.</TD><TD>0.3359</TD>
+<TD>273.076</TD><TD>291.841</TD><TD>151.536</TD><TD>45.402</TD>
+<TD>0.3863203</TD><TD>931.87</TD><TD>375.76</TD><TD>406.45</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kari</TD><TD>22093000.</TD><TD>0.4756</TD>
+<TD>163.935</TD><TD>286.021</TD><TD>156.067</TD><TD>281.211</TD>
+<TD>0.2924012</TD><TD>1231.18</TD><TD>228.81</TD><TD>270.06</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Loge</TD><TD>23059000.</TD><TD>0.1862</TD>
+<TD>32.821</TD><TD>337.237</TD><TD>167.689</TD><TD>343.811</TD>
+<TD>0.2745228</TD><TD>1311.37</TD><TD>251.72</TD><TD>307.35</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Skoll</TD><TD>17668000.</TD><TD>0.4636</TD>
+<TD>193.115</TD><TD>44.965</TD><TD>161.010</TD><TD>296.623</TD>
+<TD>0.4099120</TD><TD>878.24</TD><TD>286.68</TD><TD>369.06</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Surtur</TD><TD>22941000.</TD><TD>0.4459</TD>
+<TD>303.662</TD><TD>136.191</TD><TD>169.688</TD><TD>236.537</TD>
+<TD>0.2775384</TD><TD>1297.12</TD><TD>202.95</TD><TD>259.66</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Jarnsaxa</TD><TD>19354000.</TD><TD>0.2178</TD>
+<TD>237.422</TD><TD>198.750</TD><TD>163.649</TD><TD>22.519</TD>
+<TD>0.3575194</TD><TD>1006.94</TD><TD>312.48</TD><TD>396.92</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Greip</TD><TD>18457000.</TD><TD>0.3146</TD>
+<TD>152.160</TD><TD>314.541</TD><TD>174.800</TD><TD>349.350</TD>
+<TD>0.3841491</TD><TD>937.14</TD><TD>280.23</TD><TD>385.90</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Tarqeq</TD><TD>17962000.</TD><TD>0.1675</TD>
+<TD>34.767</TD><TD>161.020</TD><TD>46.291</TD><TD>83.291</TD><TD>0.4067094</TD>
+<TD>885.15</TD><TD>896.54</TD><TD>593.15</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S 7</TD><TD>21000000.</TD><TD>0.5290</TD>
+<TD>84.036</TD><TD>79.762</TD><TD>165.693</TD><TD>341.236</TD><TD>0.3157314</TD>
+<TD>1140.21</TD><TD>211.18</TD><TD>273.22</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S 12</TD><TD>19886000.</TD><TD>0.3268</TD>
+<TD>87.128</TD><TD>1.599</TD><TD>165.261</TD><TD>307.942</TD><TD>0.3441326</TD>
+<TD>1046.11</TD><TD>273.22</TD><TD>351.49</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S 13</TD><TD>18406000.</TD><TD>0.2591</TD>
+<TD>346.186</TD><TD>41.077</TD><TD>168.798</TD><TD>205.701</TD>
+<TD>0.3856043</TD><TD>933.60</TD><TD>302.01</TD><TD>409.39</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S 17</TD><TD>19448000.</TD><TD>0.1795</TD>
+<TD>180.792</TD><TD>228.545</TD><TD>168.239</TD><TD>26.664</TD>
+<TD>0.3548169</TD><TD>1014.61</TD><TD>300.99</TD><TD>397.14</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2006 S 1</TD><TD>18780000.</TD><TD>0.1412</TD>
+<TD>154.950</TD><TD>96.596</TD><TD>156.180</TD><TD>336.641</TD>
+<TD>0.3741294</TD><TD>962.23</TD><TD>405.14</TD><TD>453.57</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2006 S 3</TD><TD>22428000.</TD><TD>0.3792</TD>
+<TD>188.728</TD><TD>167.147</TD><TD>158.631</TD><TD>206.993</TD>
+<TD>0.2868177</TD><TD>1255.15</TD><TD>245.54</TD><TD>287.39</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2007 S 2</TD><TD>16718000.</TD><TD>0.1791</TD>
+<TD>57.720</TD><TD>84.066</TD><TD>174.057</TD><TD>111.277</TD><TD>0.4454603</TD>
+<TD>808.15</TD><TD>342.95</TD><TD>496.45</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2007 S 3</TD><TD>18938000.</TD><TD>0.1853</TD>
+<TD>111.854</TD><TD>292.691</TD><TD>177.595</TD><TD>276.824</TD>
+<TD>0.3681825</TD><TD>977.78</TD><TD>1079.63</TD><TD>161352.07</TD>
+<TD ALIGN=right><A HREF="#ref34">34</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="uranus"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Uranus</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean equatorial orbital elements</H3>
+Epoch 1980 Jan. 1.0 TT<BR>
+<B>Solution:</B>
+GUST86 - Laskar and Jacobson (1987) A&A 188, pp. 212-224 (converted to ICRF)
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Ariel</TD><TD>190900.</TD><TD>0.0012</TD>
+<TD>115.349</TD><TD>39.481</TD><TD>0.041</TD><TD>22.394</TD><TD>142.8356579</TD>
+<TD>2.520</TD><TD>28.788</TD><TD>57.248</TD>
+<TD ALIGN=right><A HREF="#ref10">10</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Umbriel</TD><TD>266000.</TD><TD>0.0039</TD>
+<TD>84.709</TD><TD>12.469</TD><TD>0.128</TD><TD>33.485</TD><TD>86.8688879</TD>
+<TD>4.144</TD><TD>63.146</TD><TD>126.951</TD>
+<TD ALIGN=right><A HREF="#ref10">10</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Titania</TD><TD>436300.</TD><TD>0.0011</TD>
+<TD>284.400</TD><TD>24.614</TD><TD>0.079</TD><TD>99.771</TD><TD>41.3514246</TD>
+<TD>8.706</TD><TD>161.525</TD><TD>195.369</TD>
+<TD ALIGN=right><A HREF="#ref10">10</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Oberon</TD><TD>583500.</TD><TD>0.0014</TD>
+<TD>104.400</TD><TD>283.088</TD><TD>0.068</TD><TD>279.771</TD>
+<TD>26.7394888</TD><TD>13.46</TD><TD>161.52</TD><TD>195.37</TD>
+<TD ALIGN=right><A HREF="#ref10">10</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Miranda</TD><TD>129900.</TD><TD>0.0013</TD>
+<TD>68.312</TD><TD>311.330</TD><TD>4.338</TD><TD>326.438</TD>
+<TD>254.6906576</TD><TD>1.413</TD><TD>8.913</TD><TD>17.727</TD>
+<TD ALIGN=right><A HREF="#ref10">10</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean equatorial orbital elements</H3>
+Epoch 1986 Jan. 19.50 TT<BR>
+<B>Solution:</B>
+URA039 - Jacobson (1998) AJ 115, pp. 1195-1199
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Cordelia</TD><TD>49800.</TD><TD>0.0003</TD>
+<TD>136.827</TD><TD>254.805</TD><TD>0.085</TD><TD>38.374</TD>
+<TD>1074.5183162</TD><TD>0.335</TD><TD>0.328</TD><TD>0.657</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Ophelia</TD><TD>53800.</TD><TD>0.0099</TD>
+<TD>17.761</TD><TD>116.259</TD><TD>0.104</TD><TD>164.048</TD>
+<TD>956.4283330</TD><TD>0.376</TD><TD>0.431</TD><TD>0.862</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Bianca</TD><TD>59200.</TD><TD>0.0009</TD>
+<TD>8.293</TD><TD>138.486</TD><TD>0.193</TD><TD>93.220</TD><TD>828.3879607</TD>
+<TD>0.435</TD><TD>0.603</TD><TD>1.206</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Cressida</TD><TD>61800.</TD><TD>0.0004</TD>
+<TD>44.236</TD><TD>233.795</TD><TD>0.006</TD><TD>99.403</TD><TD>776.5824144</TD>
+<TD>0.464</TD><TD>0.701</TD><TD>1.402</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Desdemona</TD><TD>62700.</TD><TD>0.0001</TD>
+<TD>183.285</TD><TD>184.627</TD><TD>0.113</TD><TD>306.089</TD>
+<TD>760.0555393</TD><TD>0.474</TD><TD>0.737</TD><TD>1.474</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Juliet</TD><TD>64400.</TD><TD>0.0007</TD>
+<TD>223.819</TD><TD>244.696</TD><TD>0.065</TD><TD>200.155</TD>
+<TD>730.1261349</TD><TD>0.493</TD><TD>0.809</TD><TD>1.619</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Portia</TD><TD>66100.</TD><TD>0.0001</TD>
+<TD>222.433</TD><TD>218.312</TD><TD>0.059</TD><TD>260.067</TD>
+<TD>701.4864814</TD><TD>0.513</TD><TD>0.888</TD><TD>1.777</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Rosalind</TD><TD>69900.</TD><TD>0.0001</TD>
+<TD>140.477</TD><TD>136.181</TD><TD>0.279</TD><TD>12.847</TD>
+<TD>644.6304183</TD><TD>0.558</TD><TD>1.081</TD><TD>2.163</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Belinda</TD><TD>75300.</TD><TD>0.0001</TD>
+<TD>42.406</TD><TD>357.224</TD><TD>0.031</TD><TD>279.337</TD>
+<TD>577.3602885</TD><TD>0.624</TD><TD>1.397</TD><TD>2.796</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Puck</TD><TD>86000.</TD><TD>0.0001</TD>
+<TD>177.094</TD><TD>245.796</TD><TD>0.319</TD><TD>268.734</TD>
+<TD>472.5445878</TD><TD>0.762</TD><TD>2.224</TD><TD>4.448</TD>
+<TD ALIGN=right><A HREF="#ref9">9</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean equatorial orbital elements</H3>
+Epoch 2004 Aug. 25.50 TT<BR>
+<B>Solution:</B>
+Showalter (2006) Science, 311, 973
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Perdita</TD><TD>76417.</TD><TD>0.0116</TD>
+<TD>253.925</TD><TD>192.405</TD><TD>0.470</TD><TD>309.376</TD>
+<TD>564.2469590</TD><TD>0.638</TD><TD>1.479</TD><TD>2.958</TD>
+<TD ALIGN=right><A HREF="#ref51">51</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Mab</TD><TD>97736.</TD><TD>0.0025</TD>
+<TD>249.565</TD><TD>273.769</TD><TD>0.134</TD><TD>350.737</TD>
+<TD>390.0501070</TD><TD>0.923</TD><TD>3.502</TD><TD>7.004</TD>
+<TD ALIGN=right><A HREF="#ref51">51</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Cupid</TD><TD>74392.</TD><TD>0.0013</TD>
+<TD>247.608</TD><TD>163.830</TD><TD>0.099</TD><TD>182.793</TD>
+<TD>587.4436490</TD><TD>0.613</TD><TD>1.346</TD><TD>2.693</TD>
+<TD ALIGN=right><A HREF="#ref51">51</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean orbital elements referred to the <a href="?glossary&term=ecliptic">Ecliptic</a></H3>
+Epoch 2000 Jan.  1.50 TT<BR>
+<B>Solution:</B>
+URA090
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Caliban</TD><TD>7231100.</TD><TD>0.1812</TD>
+<TD>354.339</TD><TD>7.271</TD><TD>141.529</TD><TD>171.189</TD><TD>0.6209758</TD>
+<TD>579.73</TD><TD>8936.31</TD><TD>6445.52</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Sycorax</TD><TD>12179400.</TD><TD>0.5219</TD>
+<TD>20.103</TD><TD>266.583</TD><TD>159.420</TD><TD>263.034</TD>
+<TD>0.2794217</TD><TD>1288.38</TD><TD>1393.43</TD><TD>1863.29</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Prospero</TD><TD>16276800.</TD><TD>0.4445</TD>
+<TD>174.152</TD><TD>233.586</TD><TD>151.830</TD><TD>319.003</TD>
+<TD>0.1819679</TD><TD>1978.37</TD><TD>1155.47</TD><TD>1370.39</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Setebos</TD><TD>17420400.</TD><TD>0.5908</TD>
+<TD>359.953</TD><TD>179.449</TD><TD>158.235</TD><TD>250.235</TD>
+<TD>0.1617921</TD><TD>2225.08</TD><TD>823.91</TD><TD>1044.20</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Stephano</TD><TD>8007400.</TD><TD>0.2248</TD>
+<TD>14.956</TD><TD>270.163</TD><TD>143.819</TD><TD>191.411</TD>
+<TD>0.5313866</TD><TD>677.47</TD><TD>5484.23</TD><TD>5182.20</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Trinculo</TD><TD>8505200.</TD><TD>0.2194</TD>
+<TD>158.688</TD><TD>180.374</TD><TD>166.971</TD><TD>193.755</TD>
+<TD>0.4803847</TD><TD>749.40</TD><TD>2592.77</TD><TD>4273.04</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Francisco</TD><TD>4282900.</TD><TD>0.1324</TD>
+<TD>140.644</TD><TD>3.202</TD><TD>147.250</TD><TD>100.738</TD><TD>1.3478663</TD>
+<TD>267.09</TD><TD>12574.36</TD><TD>14080.40</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Margaret</TD><TD>14146700.</TD><TD>0.6772</TD>
+<TD>90.017</TD><TD>322.187</TD><TD>57.367</TD><TD>7.067</TD><TD>0.2167366</TD>
+<TD>1661.00</TD><TD>12057739.22</TD><TD>987.08</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Ferdinand</TD><TD>20430000.</TD><TD>0.3993</TD>
+<TD>156.298</TD><TD>26.163</TD><TD>169.793</TD><TD>217.350</TD>
+<TD>0.1290311</TD><TD>2790.03</TD><TD>747.30</TD><TD>1001.70</TD>
+<TD ALIGN=right><A HREF="#ref16">16</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="neptune"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Neptune</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean orbital elements referred to the local <a href="?glossary&term=lp">Laplace planes</a></H3>
+Epoch 2000 Jan.  1.50 TT<BR>
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TD><var><b><a href="#laplace">R.A.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Dec.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Tilt</a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Triton</TD><TD>354759.</TD><TD>0.0000</TD>
+<TD>66.142</TD><TD>352.257</TD><TD>156.865</TD><TD>177.608</TD>
+<TD>61.2572638</TD><TD>5.877</TD><TD>386.371</TD><TD>687.446</TD>
+<TD>299.456</TD><TD>43.414</TD><TD>0.010</TD>
+<TD ALIGN=right><A HREF="#ref54">54</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Nereid</TD><TD>5513818.</TD><TD>0.7507</TD>
+<TD>281.117</TD><TD>216.692</TD><TD>7.090</TD><TD>335.570</TD><TD>0.9996276</TD>
+<TD>360.13</TD><TD>8091.45</TD><TD>9455.73</TD><TD>269.302</TD><TD>69.117</TD>
+<TD>30.011</TD>
+<TD ALIGN=right><A HREF="#ref54">54</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean orbital elements referred to the local <a href="?glossary&term=lp">Laplace planes</a></H3>
+Epoch 2000 Jan.  1.50 TDT<BR>
+<B>Solution:</B>
+Voyager, HST, and Astrometric data solution
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TD><var><b><a href="#laplace">R.A.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Dec.</a></b></var></TD>
+<TD><var><b><a href="#laplace">Tilt</a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Naiad</TD><TD>48227.</TD><TD>0.0003</TD>
+<TD>2.045</TD><TD>30.035</TD><TD>4.691</TD><TD>42.279</TD><TD>1222.8435847</TD>
+<TD>0.294</TD><TD>0.289</TD><TD>0.575</TD><TD>299.431</TD><TD>42.940</TD>
+<TD>0.448</TD>
+<TD ALIGN=right><A HREF="#ref55">55</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Thalassa</TD><TD>50074.</TD><TD>0.0002</TD>
+<TD>237.065</TD><TD>262.923</TD><TD>0.135</TD><TD>145.980</TD>
+<TD>1155.7559749</TD><TD>0.311</TD><TD>0.327</TD><TD>0.654</TD><TD>299.431</TD>
+<TD>42.939</TD><TD>0.449</TD>
+<TD ALIGN=right><A HREF="#ref55">55</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Despina</TD><TD>52526.</TD><TD>0.0002</TD>
+<TD>176.857</TD><TD>230.812</TD><TD>0.068</TD><TD>77.060</TD>
+<TD>1075.7330674</TD><TD>0.335</TD><TD>0.387</TD><TD>0.774</TD><TD>299.431</TD>
+<TD>42.937</TD><TD>0.451</TD>
+<TD ALIGN=right><A HREF="#ref55">55</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Galatea</TD><TD>61953.</TD><TD>0.0001</TD>
+<TD>343.011</TD><TD>65.999</TD><TD>0.034</TD><TD>37.247</TD><TD>839.6613030</TD>
+<TD>0.429</TD><TD>0.690</TD><TD>1.380</TD><TD>299.430</TD><TD>42.925</TD>
+<TD>0.462</TD>
+<TD ALIGN=right><A HREF="#ref55">55</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Larissa</TD><TD>73548.</TD><TD>0.0014</TD>
+<TD>249.891</TD><TD>166.246</TD><TD>0.205</TD><TD>308.127</TD>
+<TD>649.0540770</TD><TD>0.555</TD><TD>1.257</TD><TD>2.516</TD><TD>299.429</TD>
+<TD>42.897</TD><TD>0.490</TD>
+<TD ALIGN=right><A HREF="#ref55">55</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Proteus</TD><TD>117646.</TD><TD>0.0005</TD>
+<TD>67.968</TD><TD>250.938</TD><TD>0.075</TD><TD>315.131</TD>
+<TD>320.7656245</TD><TD>1.122</TD><TD>6.380</TD><TD>12.727</TD><TD>299.406</TD>
+<TD>42.432</TD><TD>0.974</TD>
+<TD ALIGN=right><A HREF="#ref54">54</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>S/2004 N 1</TD><TD>105284.</TD><TD>0.0000</TD>
+<TD>0.000</TD><TD>302.652</TD><TD>0.000</TD><TD>0.000</TD><TD>378.9061402</TD>
+<TD>0.950</TD><TD>0.000</TD><TD>0.000</TD><TD>299.373</TD><TD>42.944</TD>
+<TD>0.448</TD>
+<TD ALIGN=right><A HREF="#ref57">57</A></TD></TR>
+</TABLE>
+<HR>
+<H3>Mean <a href="?glossary&term=ecliptic">ecliptic</a> orbital elements</H3>
+Epoch 2003 Jun. 10.00 TT<BR>
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Halimede</TD><TD>16681000.</TD><TD>0.2909</TD>
+<TD>162.119</TD><TD>105.258</TD><TD>112.898</TD><TD>217.288</TD>
+<TD>0.1915578</TD><TD>1879.33</TD><TD>5673.19</TD><TD>18501.48</TD>
+<TD ALIGN=right><A HREF="#ref56">56</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Psamathe</TD><TD>46705000.</TD><TD>0.4617</TD>
+<TD>144.158</TD><TD>190.027</TD><TD>137.679</TD><TD>298.074</TD>
+<TD>0.0394359</TD><TD>9128.74</TD><TD>1477.62</TD><TD>1304.72</TD>
+<TD ALIGN=right><A HREF="#ref56">56</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Sao</TD><TD>22619000.</TD><TD>0.2827</TD>
+<TD>65.047</TD><TD>168.139</TD><TD>49.907</TD><TD>60.354</TD><TD>0.1233230</TD>
+<TD>2919.16</TD><TD>436880.78</TD><TD>5382.39</TD>
+<TD ALIGN=right><A HREF="#ref56">56</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Laomedeia</TD><TD>23613000.</TD><TD>0.4339</TD>
+<TD>140.107</TD><TD>285.863</TD><TD>34.049</TD><TD>59.124</TD><TD>0.1133637</TD>
+<TD>3175.62</TD><TD>2245.08</TD><TD>3325.44</TD>
+<TD ALIGN=right><A HREF="#ref56">56</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Neso</TD><TD>50258000.</TD><TD>0.4243</TD>
+<TD>86.441</TD><TD>260.648</TD><TD>131.265</TD><TD>49.151</TD><TD>0.0364349</TD>
+<TD>9880.63</TD><TD>23936.86</TD><TD>1094.07</TD>
+<TD ALIGN=right><A HREF="#ref56">56</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+<a name="pluto"> </a>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+  <tr bgcolor="#CCCCCC">
+    <td align="left" nowrap><b>Satellites of Pluto</b></td>
+    <td align="right" nowrap><b>jump to:</b> <a href="#earth">Earth</a>, <a href="#mars">Mars</a>, <a href="#jupiter">Jupiter</a>, <a href="#saturn">Saturn</a>, <a href="#uranus">Uranus</a>, <a href="#neptune">Neptune</a>, <a href="#pluto">Pluto</a> or [<a href="">top of page</a>]&nbsp;&nbsp;</td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="2">
+<H3>Mean equatorial (IAU equator) orbital elements, planetocentric for Charon,
+barycentric for the others</H3>
+<B>Solution:</B>
+PLU042
+<HR>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TH ALIGN=left>Sat.</TH>
+<TD><var><b><a href="#legend">a</a></b></var></TD>
+<TD><var><b><a href="#legend">e</a></b></var></TD>
+<TD><var><b><a href="#legend">w</a></b></var></TD>
+<TD><var><b><a href="#legend">M</a></b></var></TD>
+<TD><var><b><a href="#legend">i</a></b></var></TD>
+<TD><var><b><a href="#legend">node</a></b></var></TD>
+<TD><var><b><a href="#legend">n</a></b></var></TD>
+<TD><var><b><a href="#legend">P</a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>w</sub></a></b></var></TD>
+<TD><var><b><a href="#legend">P<sub>node</sub></a></b></var></TD>
+<TH ALIGN=right>Ref.</TH></TR>
+<TR ALIGN=center><TH ALIGN=left></TH>
+<TD><var>(km)</var></TD>
+<TD><var></var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg)</var></TD>
+<TD><var>(deg/day)</var></TD>
+<TD><var>(days)</var></TD>
+<TD><var>(yr)</var></TD>
+<TD><var>(yr)</var></TD>
+<TH ALIGN=right></TH></TR>
+<TR ALIGN=right><TD ALIGN=left>Charon</TD><TD>19591.</TD><TD>0.0002</TD>
+<TD>146.106</TD><TD>131.070</TD><TD>0.080</TD><TD>26.928</TD><TD>56.3625210</TD>
+<TD>6.387</TD><TD>10178.040</TD><TD>9020.398</TD>
+<TD ALIGN=right><A HREF="#ref58">58</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Nix</TD><TD>48671.</TD><TD>0.0000</TD>
+<TD>324.463</TD><TD>284.405</TD><TD>0.000</TD><TD>203.400</TD>
+<TD>14.4841304</TD><TD>24.85</TD><TD>0.000</TD><TD>0.000</TD>
+<TD ALIGN=right><A HREF="#ref58">58</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Hydra</TD><TD>64698.</TD><TD>0.0056</TD>
+<TD>153.307</TD><TD>326.678</TD><TD>0.304</TD><TD>113.173</TD><TD>9.4235386</TD>
+<TD>38.20</TD><TD>7.19</TD><TD>14.35</TD>
+<TD ALIGN=right><A HREF="#ref58">58</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Kerberos</TD><TD>57729.</TD><TD>0.0000</TD>
+<TD>160.629</TD><TD>161.061</TD><TD>0.426</TD><TD>305.871</TD>
+<TD>11.1913026</TD><TD>32.17</TD><TD>0.000</TD><TD>9.27</TD>
+<TD ALIGN=right><A HREF="#ref58">58</A></TD></TR>
+<TR ALIGN=right><TD ALIGN=left>Styx</TD><TD>42393.</TD><TD>0.0006</TD>
+<TD>330.244</TD><TD>194.546</TD><TD>0.080</TD><TD>26.956</TD><TD>17.8551357</TD>
+<TD>20.16</TD><TD>3710.58</TD><TD>5162.64</TD>
+<TD ALIGN=right><A HREF="#ref58">58</A></TD></TR>
+</TABLE>
+<HR>
+    </td>
+  </tr>
+</table>
+<br>
+
+<A NAME="legend"><B>Common Table Column Headings:</B></A>
+<P><TABLE BORDER=0>
+<TR valign="top"><TD WIDTH=20>&nbsp;</TD><TH align="left"><VAR>a</VAR></TH><TD>Semi-major Axis (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>e</VAR></TH><TD>Eccentricity (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>w</VAR></TH><TD>Argument of periapsis (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>M</VAR></TH><TD>Mean anomaly (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>i</VAR></TH><TD>Inclination with respect to the reference plane: <a href="?glossary&term=ecliptic">ecliptic</a>, ICRF, or <a href="?glossary&term=lp">local Laplace</a> (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>node</VAR></TH><TD>Longitude of the ascending node (mean value) measured from the node of the reference plane on the ICRF equator</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>n</VAR></TH><TD>Longitude rate (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>P</VAR></TH><TD>Sidereal period (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>P<SUB>w</SUB></VAR></TH><TD>Argument of periapsis precession period (mean value)</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>P<SUB>node</SUB></VAR></TH><TD>Longitude of the ascending node precession period (mean value)</TD></TR>
+</TABLE>
+<P>
+<A NAME="laplace"><B>Headings only for elements with respect to the local <a href="?glossary&term=lp">Laplace plane</a>:</B></A>
+<P><TABLE BORDER=0>
+<TR valign="top"><TD WIDTH=20>&nbsp;</TD><TH align="left"><VAR>R.A.<BR>Dec.</VAR></TH><TD>Right ascension and ...<BR>Declination of the <a href="?glossary&term=lp">Laplace plane</a> pole with respect to the ICRF.</TD></TR>
+<TR valign="top"><TD> </TD><TH align="left"><VAR>Tilt</VAR></TH><TD>The angle between the planet equator and the <a href="?glossary&term=lp">Laplace plane</a>.</TD></TR>
+</TABLE>
+<br><hr>
+<H3>REFERENCES</H3>
+<A NAME="ref1">1. </A> Standish, E.M. (2001) ``Approximate Mean Ecliptic
+   Elements of the Lunar Orbit'', JPL IOM 312.F-01-004
+<P>
+<A NAME="ref2">2. </A> Jacobson, R.A. (2003) ``Reconstruction of the Voyager
+   Saturn Encounter Orbits in the ICRF System'', Paper No. AAS 03-198,
+   13th AAS/AIAA Space Flight Mechanics Meeting, Ponce, Puerto Rico.
+<P>
+<A NAME="ref3">3. </A> Jacobson, R.A. (2000) ``The orbits of the outer Jovian
+   satellites'', <I>Astronomical Journal</I>&nbsp;<B>120</B>, 2679-2686.
+   Note: the mean motions and periods appearing in the reference are
+   incorrect for the retrograde satellites.  The correct values appear here.
+<P>
+<A NAME="ref4">4. </A> Jacobson, R.A., Riedel, J.E. and Taylor, A.H. (1991)
+   ``The orbits of Triton and Nereid from spacecraft and Earthbased
+   observations'',  <I>Astronomy & Astrophysics</I>&nbsp;<B>247</B>, 565.
+<P>
+<A NAME="ref5">5. </A> Jacobson, R.A. (2008) ``Ephemerides of the
+   Martian Satellites - MAR080'', JPL IOM 343R-08-006
+<P>
+<A NAME="ref6">6. </A> Jacobson, R.A. (1996) ``Orbits of the Saturnian
+   Satellites from Earthbased and Voyager Observations'', <I>Bull. American
+   Astronomical Society</I>&nbsp;<B>28</B>(3), 1185.
+<P>
+<A NAME="ref7">7. </A> Jacobson, R.A. (1997) JUP120 - JPL satellite ephemeris.
+<P>
+<A NAME="ref8">8. </A> Jacobson, R.A. (1998) ``The orbit of Phoebe from
+   Earthbased and Voyager observations'', <I>Astronomy & Astrophysics Supp.
+   </I>&nbsp;<B>128</B>, 7.
+<P>
+<A NAME="ref9">9. </A> Jacobson, R.A. (1998) ``The orbits of the inner Uranian
+   satellites from Hubble Space Telescope and Voyager 2 observations'',
+   <I>Astronomical Journal</I>&nbsp;<B>115</B>, 1195.
+<P>
+<A NAME="ref10">10.</A> Laskar, J. and Jacobson, R.A. (1987) ``GUST86. An
+   analytical ephemeris of the Uranian satellites'', <I>Astronomy &
+   Astrophysics</I>&nbsp;<B>188</B>, 212.
+<P>
+<A NAME="ref11">11.</A> Jacobson, R.A. (2003) JUP230 - JPL satellite ephemeris.
+<P>
+<A NAME="ref12">12.</A> Jacobson, R.A. (2007) SAT270, SAT271 - JPL
+   satellite ephemerides.
+<P>
+<A NAME="ref13">13.</A> Tholen, D .J. and Buie, M. W. (1990) ``Further Analysis
+   of Pluto-Charon Mutual Event Observations'',<I>Bull. American Astronomical
+   Society</I>&nbsp;<B>22</B>(3), 1129.
+<P>
+<A NAME="ref14">14.</A> Owen, W.M., Vaughan, R.M, and Synnott, S.P. (1991)
+   ``Orbits of the Six New Satellites of Neptune'', <I>Astronomical Journal</I>
+   &nbsp;<B>101</B>, 1511.
+<P>
+<A NAME="ref15">15.</A> Showalter, M.R. (1991) ``Visual detection of 1981S13,
+   Saturn's eighteenth satellite, and its role in the Encke gap'',
+   <I>Nature</I>&nbsp;<B>351</B>, 709.
+<P>
+<A NAME="ref16">16.</A> Brozovic, M. and Jacobson, R. A. (2009)
+   ``The Orbits of the Outer Uranian Satellites'', <I>Astronomical Journal</I>
+   &nbsp;<B>137</B>, 3834.
+<P>
+<A NAME="ref17">17.</A> Jacobson, R.A. (2000) URA047 - JPL satellite ephemeris.
+<P>
+<A NAME="ref18">18.</A> Jacobson, R.A. (2013) JUP300 - JPL satellite ephemeris
+    for the irregular Jovian satellites.
+<P>
+<A NAME="ref19">19.</A> Jacobson, R.A. (2004) ``The orbits of the major
+   Saturnian satellites and the gravity field of Saturn from spacecraft and
+   Earthbased observations'',<I>Astronomical Journal</I>&nbsp;<B>128</B>, 492.
+<P>
+<A NAME="ref20">20.</A> Jacobson, R.A. (2001c) ``The Orbits of Jupiter and its
+   Galilean Satellites and the Gravity Field of the Jovian System'', Jupiter:
+   The Planet, Satellites, and Magnetosphere, Boulder, Colorado.
+<P>
+<A NAME="ref21">21.</A> Jacobson, R.A. (2001d) ``The Gravity Field of the
+   Jovian System and the Orbits of the Regular Jovian Satellites'', 33rd
+   Annual Meeting of the Division for Planetary Sciences, New Orleans,
+   Louisiana.
+<P>
+<A NAME="ref22">22.</A> Jacobson, R.A. (2009) JUP269 - JPL satellite ephemeris.
+<P>
+<A NAME="ref23">23.</A> Lieske, J.H. (1998) ``Galilean satellite ephemerides
+   E5'', <I>Astronomy & Astrophysics Supp.</I>&nbsp;<B>129</B>, 205.
+<P>
+<A NAME="ref24">24.</A> Jacobson, R.A. (2003) URA066 - JPL satellite ephemeris.
+<P>
+<A NAME="ref25">25.</A> Jacobson, R.A. (2002) JUP242 - JPL satellite ephemeris.
+<P>
+<A NAME="ref26">26.</A> Jacobson, R.A. (2003) JUP219 - JPL satellite ephemeris.
+<P>
+<A NAME="ref27">27.</A> Jacobson, R.A. (2003) NEP029 - JPL satellite ephemeris.
+<P>
+<A NAME="ref28">28.</A> Jacobson, R.A. (2003) JUP222 - JPL satellite ephemeris.
+<P>
+<A NAME="ref29">29.</A> Jacobson, R.A. (2003) JUP224 - JPL satellite ephemeris.
+<P>
+<A NAME="ref30">30.</A> Jacobson, R.A. (2003) JUP226 - JPL satellite ephemeris.
+<P>
+<A NAME="ref31">31.</A> Jacobson, R.A. (2003) JUP227 - JPL satellite ephemeris.
+<P>
+<A NAME="ref32">32.</A> Jacobson, R.A. (2010) SAT339 - JPL satellite ephemeris.
+<P>
+<A NAME="ref33">33.</A> Jacobson, R.A. (2010) SAT342 - JPL satellite ephemeris.
+<P>
+<A NAME="ref34">34.</A> Jacobson, R.A. (2013) SAT361 - JPL satellite ephemeris.
+<P>
+<A NAME="ref35">35.</A> Jacobson, R.A. (2004) JUP252 - JPL satellite ephemeris
+<P>
+<A NAME="ref36">36.</A> Jacobson, R.A. (2003) NEP041 - JPL satellite ephemeris
+<P>
+<A NAME="ref37">37.</A> Jacobson, R.A. (2003) URA067 - JPL satellite ephemeris
+<P>
+<A NAME="ref38">38.</A> Jacobson, R.A. (2007) NEP057 - JPL satellite ephemeris
+<P>
+<A NAME="ref39">39.</A> Jacobson, R.A. (2003) URA068 - JPL satellite ephemeris
+<P>
+<A NAME="ref40">40.</A> Jacobson, R.A. (2003) URA072 - JPL satellite ephemeris
+<P>
+<A NAME="ref41">41.</A> Jacobson, R.A. (2009) SAT317 - JPL satellite ephemeris.
+<P>
+<A NAME="ref42">42.</A> Jacobson, R.A. (2006) JUP261 - JPL satellite ephemeris.
+<P>
+<A NAME="ref43">43.</A> Jacobson, R.A. (2009) JUP268 - JPL satellite ephemeris.
+<P>
+<A NAME="ref44">44.</A> Jacobson, R.A. (2009) JUP270 - JPL satellite ephemeris.
+<P>
+<A NAME="ref45">45.</A> Jacobson, R. A. and Owen, Jr., W. M. (2004) ``The
+   orbits of the inner Neptunian satellites from Voyager, Earthbased, and
+   Hubble Space Telescope observations'',
+   <I>Astronomical Journal</I>&nbsp;<B>128</B>, 1412.
+<P>
+<A NAME="ref46">46.</A> Jacobson, R. A. and French, R. G. (2004) ``Orbits and
+   Masses of Saturn's Coorbital and F-ring Shepherding Satellites'',
+   <I>Icarus</I>&nbsp;<B>172</B>, 382.
+<P>
+<A NAME="ref47">47.</A> Spitale, J. N., Jacobson, R. A., Porco, C. C., and
+   Owen, Jr., W. M. (2006) ``The Orbits of Saturn's Small Satellites
+   Derived from Combined Historic and Cassini Imaging Observations'',
+   <I>Astronomical Journal</I>&nbsp;<B>132</B>, 692.
+<P>
+<A NAME="ref48">48.</A> Jacobson, R.A. (2007) PLU017 - JPL satellite ephemeris.
+<P>
+<A NAME="ref49">49.</A> Jacobson, R.A. (2008) SAT295 - JPL satellite ephemeris.
+<P>
+<A NAME="ref50">50.</A> Jacobson, R.A. (2008) SAT296 - JPL satellite ephemeris.
+<P>
+<A NAME="ref51">51.</A> Showalter, M. R. and Lissauer, J. J. (2006) ``The
+   Second Ring-Moon System of Uranus: Discovery and Dynamics'',
+   <I>Science</I>&nbsp;<B>311</B>, 973.
+<P>
+<A NAME="ref52">52.</A> Jacobson, R.A. (2008) SAT297 - JPL satellite ephemeris.
+<P>
+<A NAME="ref53">53.</A> Jacobson, R.A. (2008) SAT298 - JPL satellite ephemeris.
+<P>
+<A NAME="ref54">54.</A> Jacobson, R. A. (2009) ``The Orbits of the Neptunian
+   Satellites and the Orientation of the Pole of Neptune'',
+   <I>Astronomical Journal</I>&nbsp;<B>137</B>, 4322.
+<P>
+<A NAME="ref55">55.</A> Jacobson, R.A. (2008) NEP077 - JPL satellite ephemeris.
+<P>
+<A NAME="ref56">56.</A>Brozovic, M., Jacobson, R. A., and Sheppard, S. S.
+   (2011) ``The Orbits of the Outer Neptunian Satellites'',
+   <I>Astronomical Journal</I>&nbsp;<B>141</B>, 135.
+<P>
+<A NAME="ref57">57.</A> Jacobson, R.A. (2013) NEP087 - JPL satellite ephemeris.
+<P>
+<A NAME="ref58">58.</A> Brozovic, M. and Jacobson, R. A. (2013) ``The Orbits,
+   Masses of Pluto's Satellites'', Presented at The Pluto System on the Eve of
+   Exploration by New Horizons: Perspectives, Predictions held at APL, Laurel,
+   MD - PLU042 - JPL satellite ephemeris.
+<P> 
+
+<!-- Page Content: end -->
+
+    </td>
+  </tr>
+</table>
+
+<!-- END OF PAGE CONTENT -->
+    </td>
+    </tr>
+
+<!-- SSD standard page footer -->
+    <tr><td align="center"><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+    <tr><td>
+      <!--#include file="include/ssd_bottom_nav_bar.html"-->
+      <!-- Sample SSD standard bottom navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr align="center">
+    <td><a href="/?about" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('about','','images/nav/about_on.gif',1)"><img name="about" border="0" alt="ABOUT SSD" src="images/nav/about_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?credits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('credits','','images/nav/credits_on.gif',1)"><img name="credits" border="0" alt="CREDITS/AWARDS" src="images/nav/credits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="http://www.jpl.nasa.gov/copyrights.cfm" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copyright','','images/nav/copyright_on.gif',1)"><img name="copyright" border="0" alt="PRIVACY/COPYRIGHT" src="images/nav/copyright_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?glossary" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('glossary','','images/nav/glossary_on.gif',1)"><img name="glossary" border="0" alt="GLOSSARY" src="images/nav/glossary_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?links" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('links','','images/nav/links_on.gif',1)"><img name="links" border="0" alt="LINKS" src="images/nav/links_off.gif"></a></td>
+  </tr>
+</table>
+<!--
+      <table border="0" cellpadding="0" cellspacing="0" width="730">
+        <tr>
+          <td align="center" width="100%" bgcolor="#666666">
+            <div class="navtext">SSD STANDARD NAVIGATION FOOTER</div>
+          </td>
+        </tr>
+      </table>
+-->
+    </td></tr>
+
+
+<!-- START OF JPL REQUIRED FOOTER -->
+
+    <!-- JPL standard page footer -->
+    <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+    <tr>
+      <td align="left" width="100%" bgcolor="#FFFFFF">
+        <!--#include file="include/jpl_std_foot.html"-->
+        <!-- JPL Required Standard Footer -->
+
+<table border="0" cellpadding="5" cellspacing="0" bgcolor="#CCCCCC" width="730">
+  <tr>
+    <!-- FirstGov Link -->
+    <td align="left" width="100%"><a target="_blank" href="http://www.firstgov.gov/"><img src="portal_images/footer_image1.gif" alt="FirstGov" border="0" width="136" height="39"></a></td>
+
+    <!-- Current Date/Time stamp -->
+    <td align="right" nowrap>
+      <font class="date_time">
+         2019-Aug-06 17:52 UT&nbsp;        <!--#config timefmt="%Y-%b-%d %H:%M UT"-->
+        <!--#echo var="DATE_GMT"-->
+        <br>(server date/time)&nbsp;&nbsp;
+      </font>
+    </td>
+
+    <!-- NASA Link -->
+    <td width="61"><a target="_blank" href="https://www.nasa.gov/"><img src="portal_images/footer_image2.gif" alt="NASA Home Page" border="0" width="61" height="40"></a></td>
+
+    <!-- Site Manager and Webmaster -->
+    <td align="right">
+      <table border="0" cellpadding="0" cellspacing="0" class="author">
+        <tr>
+          <td align="right" nowrap>Site Manager:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Ryan S. Park</td>
+        </tr>
+        <tr>
+          <td align="right" nowrap><a href="mailto:webmaster@ssd.jpl.nasa.gov">Webmaster</a>:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Alan B. Chamberlin</td>
+        </tr>
+                  <tr>
+            <td align="right" nowrap>Last Updated:&nbsp;</td>
+            <td align="left" nowrap>&nbsp;2013-Aug-23</td>
+          </tr>        <!--
+        <tr>
+          <td align="right" nowrap><font size="-2">&nbsp;</font></td>
+          <td align="left" nowrap><font size="-2">&nbsp;CL 97-0935</font></td>
+        </tr>
+        -->
+      </table>
+    </td>
+
+  </tr>
+
+</table>
+      </td>
+    </tr>
+
+  </table>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

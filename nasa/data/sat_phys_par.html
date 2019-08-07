@@ -1,0 +1,1762 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Planetary Satellite Physical Parameters</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+
+<!-- Include standard site Javascript functions -->
+<script language="JavaScript" src="lib/jpl_std.js" type="text/javascript"></script>
+
+<!-- Safely import CSS file(s) -->
+<!-- common "safe" CSS file -->
+<link rel="StyleSheet" href="css/ssd.css" type="text/css" media="screen">
+
+<!-- Include "other" CSS file (prevents browsers with partial CSS support from loading) -->
+<style type="text/css">
+<!--
+@import "css/nav_menu.css";
+@import "css/ssd_extra.css";
+-->
+</style>
+
+
+<!-- Include site-global standard META tags -->
+  <meta name="Author" content="Alan Chamberlin">
+  <meta name="keywords" content="Solar System Dynamics,Solar System,Dynamics,Orbital Mechanics,Orbits">
+  <meta name="JPL-clearance" content="CL 97-0935">
+  <meta name="description" content="Table listing selected physical parameters for planetary satellites.">
+
+  </head>
+ 
+  <body bgcolor="#000000">
+<!-- Skip navigation link -->
+<a href="#content"><img border="0" src="images/blank.gif" alt="Skip Page Navigation" width="0" height="0"></a>
+
+<!-- black HTML-page background with 10px margins (cellpadding=10, body margin 0px) -->
+    <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#000000" width="100%">
+      <tr valign="top">
+        <td>
+
+          <!-- white content-"page" background with 10px border -->
+          <table border="0" cellspacing="0" cellpadding="10" align="center" bgcolor="#FFFFFF" width="750">
+
+            <tr valign="top">
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#FFFFFF" width="730">
+
+                  <!-- JPL standard header -->
+                  <tr valign="top">
+                    <td align="left" width="100%" bgcolor="#FFFFFF">
+                      <!--#include file="include/jpl_std_head.html"-->
+                      
+<map name="Map">
+  <area shape="circle" coords="31,26,24" href="https://www.nasa.gov" alt="NASA">
+  <area shape="rect" coords="68,10,260,27" href="https://www.jpl.nasa.gov" alt="JPL">
+  <area shape="rect" coords="68,30,240,40" href="http://www.caltech.edu/" alt="Caltech">
+</map>
+
+<table border="0" cellpadding="0" cellspacing="0" width="730">
+
+  <!-- JPL Required Heading -->
+  <tr valign="middle">
+    <td align="left" bgcolor="#CCCCCC" width="255">
+      <img src="images/nasa_logo.gif" alt="NASA Logo - Jet Propulsion Laboratory" border="0" width="255" height="55" usemap="#Map">
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="40"><img src="images/blank.gif" width="40" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="1"><img src="images/black_1x1.gif" height="40" width="1" alt=""></td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="left" bgcolor="#CCCCCC" width="200" nowrap>
+      <a class="portal_link" href="https://www.nasa.gov/">+ View the NASA Portal</a>
+      <br>
+      <a class="portal_link" href="https://cneos.jpl.nasa.gov/">+ Center for Near-Earth Object Studies</a>
+    </td>
+    <td align="center" bgcolor="#CCCCCC" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+
+    <!-- placeholder for future site-wide search form -->
+    <td align="center" bgcolor="#006699" width="10"><img src="images/blank.gif" width="10" alt=""></td>
+    <td align="center" bgcolor="#006699" nowrap width="140">
+      <img src="images/blank.gif" height="55" width="140" alt="">
+    </td>
+  </tr>
+
+  <!-- JPL Required Main Navigation Bar -->
+  <tr>
+    <td align="center" colspan="8">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#FFFFFF">
+          <td><a href="https://www.jpl.nasa.gov/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('home','','portal_images/topnav_01.gif',1)"><img name="home" border="0" alt="JPL Home" src="portal_images/topnavoff_01.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/earth/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('earth','','portal_images/topnav_02.gif',1)"><img name="earth" border="0" alt="Earth" src="portal_images/topnavoff_02.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/solar_system/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('solar_system','','portal_images/topnav_03.gif',1)"><img name="solar_system" alt="Solar System" border="0" src="portal_images/topnavoff_03.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/stars_galaxies/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('stars','','portal_images/topnav_04.gif',1)"><img name="stars" border="0" alt="Stars & Galaxies" src="portal_images/topnavoff_04.gif"></a></td>
+          <td><a href="https://www.jpl.nasa.gov/technology/" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('technology','','portal_images/topnav_05.gif',1)"><img name="technology" border="0" alt="Technology" src="portal_images/topnavoff_05.gif"></a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+                      
+                    </td>
+                  </tr>
+
+<!-- END OF JPL REQUIRED HEADER -->
+
+                  <!-- SSD standard header -->
+                  <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+                  <tr><td align="left"><a href="/"><img src="images/ssd_banner.jpg" alt="JPL Solar System Dynamics" height="97" width="730" border="0"></a></td></tr>
+                  <!--<tr><td align="center"><img src="images/blank.gif" height="1" alt=""></td></tr>-->
+                  <!-- SSD standard navigation bar -->
+                  <tr>
+                    <td>
+                      <!--#include file="include/ssd_top_nav_bar.html"-->
+                      <!-- Sample SSD standard top navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr>
+    <td><a href="/?bodies" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bodies','','images/nav/bodies_on.gif',1)"><img name="bodies" border="0" height="16" width="78" alt="BODIES" src="images/nav/bodies_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?orbits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('orbits','','images/nav/orbits_on.gif',1)"><img name="orbits" border="0" height="16" width="75" alt="ORBITS" src="images/nav/orbits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?ephemerides" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ephemerides','','images/nav/ephemerides_on.gif',1)"><img name="ephemerides" border="0" height="16" width="121" alt="EPHEMERIDES" src="images/nav/ephemerides_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?tools" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('tools','','images/nav/tools_on.gif',1)"><img name="tools" border="0" height="16" width="74" alt="TOOLS" src="images/nav/tools_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td width="126"><a href="/?phys_data" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('phys_data','','images/nav/phys_data_on.gif',1)"><img name="phys_data" border="0" height="16" width="126" alt="PHYSICAL DATA" src="images/nav/phys_data_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?discovery" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('discovery','','images/nav/discovery_on.gif',1)"><img name="discovery" border="0" height="16" width="102" alt="DISCOVERY" src="images/nav/discovery_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?faq" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('faq','','images/nav/faq_on.gif',1)"><img name="faq" border="0" height="16" width="57" alt="FAQ" src="images/nav/faq_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" height="16" alt=""></td>
+    <td><a href="/?site_map" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('site_map','','images/nav/site_map_on.gif',1)"><img name="site_map" border="0" height="16" width="90" alt="SITE&nbsp;MAP" src="images/nav/site_map_off.gif"></a></td>
+  </tr>
+</table>
+<!--
+                    <table border="0" cellspacing="0" cellpadding="0" width="730">
+                      <tr><td align="left" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER</div>
+                      </td></tr>
+                      <tr><td><img src="images/blank.gif" height="1" alt=""></td></tr>
+                      <tr><td align="left" width="730" bgcolor="#666666">
+                        <div class="navtext">SSD STANDARD NAVIGATION HEADER (LINE 2)</div>
+                      </td></tr>
+                    </table>
+-->
+                    </td>
+                  </tr>
+
+                  <tr><td><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+<!-- START OF PAGE CONTENT -->
+
+<!--<tr width="100%">-->
+                  <tr>
+                    <td align="left"><a name="content"> </a>
+                      <!--#include file="include/site_notice.html"-->
+                      <!-- contents below will be displayed at the top of every page -->
+<!-- use something like <p class="notice">NOTICE: my message here</p> -->
+
+<!-- content below is for special SSD email list notification -->
+<div id="site_notice_email_list">
+  <div class="big-notice"><b>IMPORTANT:</b> 
+    The SSD Announcement email list is now available.
+    Major changes are coming in the near future,
+    including possible hostname and/or URL changes.
+    To be notified of such changes, subscribe to this email list.
+    <br><br>
+    Please visit <a href="/?email_list">this page</a> for more details.
+    <div id="site_notice_email_list_ack">
+      <br><br>
+      <button class="" onclick="ackEmailNotice()">Don't show this message again</button>
+    </div>
+  </div>
+</div>
+
+<script src="lib/site_notice.js"></script>
+<script>
+  var ls = canDoLocalStorage();
+  var key = "email_list_announcement";
+  //
+  // If localStorage is available...
+  if ( ls ) {
+    //
+    // If this message has already be acknowledged, don't show it again:
+    if ( localStorage.getItem(key) ) {
+      document.getElementById("site_notice_email_list").innerHTML = '';
+    }
+  //
+  // If localStorage is NOT available...
+  } else {
+    document.getElementById("site_notice_email_list_ack").innerHTML = '<br><br>'
+      + '<em>To not show this message again from this browser, enable "localStorage".</em>';
+  }
+  //
+  // Acknowledge message:
+  function ackEmailNotice() {
+    if ( ! ls ) return;
+    localStorage.setItem(key, true);
+    document.getElementById("site_notice_email_list").innerHTML = '';
+  }
+</script>
+<!-- start of standard page with no left-column navigation menu -->
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+  <tr valign="top">
+
+<!-- right column containing the page content -->
+    <td align="left" width="100%">
+
+<div class="page_title">Planetary Satellite Physical Parameters</div>
+
+
+<!-- Page Content: begin -->
+
+<p>
+The following tables provide known physical parameters for
+<a href="?satellites">planetary satellites</a>.
+<a href="#refs">References</a>, where known, are shown in square brackets (e.g. [1])
+following the particular value.
+The
+<a href="?lunar_doc">JPL lunar constants and models technical document</a>
+is also available.
+</p>
+
+<P><font size=+1><b>Earth's Moon</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Moon        </TD>
+<TD>4902.801&#177;0.001</TD><TD><A HREF="#ref1">[1]</A></TD>
+<TD>1737.5&#177;0.1</TD><TD><A HREF="#ref2">[2]</A></TD>
+<TD>3.344&#177;0.005</TD>
+<TD ALIGN=center>-12.74</TD><TD><A HREF="#ref3">[3]</A></TD>
+<TD ALIGN=center>0.12</TD><TD><A HREF="#ref3">[3]</A></TD>
+</TABLE>
+<P><font size=+1><b>Martian System</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Phobos      </TD>
+<TD>0.0007112&#177;0.0000010</TD><TD><A HREF="#ref4">[4]</A></TD>
+<TD>11.1&#177;0.15</TD><TD><A HREF="#ref5">[5]</A></TD>
+<TD>1.872&#177;0.076</TD>
+<TD>11.4&#177;0.2</TD><TD><A HREF="#ref6">[6]</A></TD>
+<TD>0.071&#177;0.012</TD><TD><A HREF="#ref6">[6]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Deimos      </TD>
+<TD>0.0000985&#177;0.0000024</TD><TD><A HREF="#ref4">[4]</A></TD>
+<TD>6.2&#177;0.18</TD><TD><A HREF="#ref5">[5]</A></TD>
+<TD>1.471&#177;0.166</TD>
+<TD>12.45&#177;0.05</TD><TD><A HREF="#ref6">[6]</A></TD>
+<TD>0.068&#177;0.007</TD><TD><A HREF="#ref7">[7]</A></TD>
+</TABLE>
+<P><font size=+1><b>Jovian System</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Io          </TD>
+<TD>5959.916&#177;0.012</TD><TD><A HREF="#ref8">[8]</A></TD>
+<TD>1821.6&#177;0.5</TD><TD><A HREF="#ref9">[9]</A></TD>
+<TD>3.528&#177;0.006</TD>
+<TD>5.02&#177;0.03</TD><TD><A HREF="#ref14">[14]</A></TD>
+<TD>0.63&#177;0.02</TD><TD><A HREF="#ref16">[16]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Europa      </TD>
+<TD>3202.739&#177;0.009</TD><TD><A HREF="#ref8">[8]</A></TD>
+<TD>1560.8&#177;0.5</TD><TD><A HREF="#ref10">[10]</A></TD>
+<TD>3.013&#177;0.005</TD>
+<TD>5.29&#177;0.02</TD><TD><A HREF="#ref14">[14]</A></TD>
+<TD>0.67&#177;0.03</TD><TD><A HREF="#ref17">[17]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Ganymede    </TD>
+<TD>9887.834&#177;0.017</TD><TD><A HREF="#ref8">[8]</A></TD>
+<TD>2631.2&#177;1.7</TD><TD><A HREF="#ref11">[11]</A></TD>
+<TD>1.942&#177;0.005</TD>
+<TD>4.61&#177;0.03</TD><TD><A HREF="#ref14">[14]</A></TD>
+<TD>0.43&#177;0.02</TD><TD><A HREF="#ref18">[18]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Callisto    </TD>
+<TD>7179.289&#177;0.013</TD><TD><A HREF="#ref8">[8]</A></TD>
+<TD>2410.3&#177;1.5</TD><TD><A HREF="#ref12">[12]</A></TD>
+<TD>1.834&#177;0.004</TD>
+<TD>5.65&#177;0.10</TD><TD><A HREF="#ref14">[14]</A></TD>
+<TD>0.17&#177;0.02</TD><TD><A HREF="#ref18">[18]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Amalthea    </TD>
+<TD>0.138&#177;0.030</TD><TD><A HREF="#ref8">[8]</A></TD>
+<TD>83.45&#177;2.4</TD><TD><A HREF="#ref13">[13]</A></TD>
+<TD>0.849&#177;0.199</TD>
+<TD>14.1&#177;0.2</TD><TD><A HREF="#ref15">[15]</A></TD>
+<TD>0.090&#177;0.005</TD><TD><A HREF="#ref19">[19]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Himalia     </TD>
+<TD ALIGN=center>0.45</TD><TD>&nbsp</TD>
+<TD ALIGN=center>85</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>14.2R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Elara       </TD>
+<TD ALIGN=center>0.058</TD><TD>&nbsp</TD>
+<TD ALIGN=center>43</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>16.0R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Pasiphae    </TD>
+<TD ALIGN=center>0.020</TD><TD>&nbsp</TD>
+<TD ALIGN=center>30</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>16.8R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Sinope      </TD>
+<TD ALIGN=center>0.0050</TD><TD>&nbsp</TD>
+<TD ALIGN=center>19</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>18.2R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Lysithea    </TD>
+<TD ALIGN=center>0.0042</TD><TD>&nbsp</TD>
+<TD ALIGN=center>18</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>18.1R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Carme       </TD>
+<TD ALIGN=center>0.0088</TD><TD>&nbsp</TD>
+<TD ALIGN=center>23</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>18.1R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Ananke      </TD>
+<TD ALIGN=center>0.0020</TD><TD>&nbsp</TD>
+<TD ALIGN=center>14</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>19.1R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Leda        </TD>
+<TD ALIGN=center>0.00073</TD><TD>&nbsp</TD>
+<TD ALIGN=center>10</TD><TD><A HREF="#ref20">[20]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>19.2R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Thebe       </TD>
+<TD ALIGN=center>0.10</TD><TD>&nbsp</TD>
+<TD>49.3&#177;2.0</TD><TD><A HREF="#ref21">[21]</A></TD>
+<TD ALIGN=center>3.0</TD>
+<TD ALIGN=center>16.0</TD><TD><A HREF="#ref22">[22]</A></TD>
+<TD>0.047&#177;0.003</TD><TD><A HREF="#ref19">[19]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Adrastea    </TD>
+<TD ALIGN=center>0.0005</TD><TD>&nbsp</TD>
+<TD>8.2&#177;2.0</TD><TD><A HREF="#ref21">[21]</A></TD>
+<TD ALIGN=center>3.0</TD>
+<TD ALIGN=center>18.7</TD><TD><A HREF="#ref22">[22]</A></TD>
+<TD>0.1&#177;0.045</TD><TD><A HREF="#ref21">[21]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Metis       </TD>
+<TD ALIGN=center>0.008</TD><TD>&nbsp</TD>
+<TD>21.5&#177;2.0</TD><TD><A HREF="#ref21">[21]</A></TD>
+<TD ALIGN=center>3.0</TD>
+<TD ALIGN=center>17.5</TD><TD><A HREF="#ref22">[22]</A></TD>
+<TD>0.061&#177;0.003</TD><TD><A HREF="#ref19">[19]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Callirrhoe  </TD>
+<TD ALIGN=center>0.000058</TD><TD>&nbsp</TD>
+<TD ALIGN=center>4.3</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>20.8R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Themisto    </TD>
+<TD ALIGN=center>0.000046</TD><TD>&nbsp</TD>
+<TD ALIGN=center>4.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.0R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Megaclite   </TD>
+<TD ALIGN=center>0.000014</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.7</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.7R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Taygete     </TD>
+<TD ALIGN=center>0.000011</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.9R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Chaldene    </TD>
+<TD ALIGN=center>0.000005</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.9</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.5R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Harpalyke   </TD>
+<TD ALIGN=center>0.000008</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.2</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.2R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kalyke      </TD>
+<TD ALIGN=center>0.000013</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.6</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.8R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Iocaste     </TD>
+<TD ALIGN=center>0.000013</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.6</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.8R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Erinome     </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.6</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.8R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Isonoe      </TD>
+<TD ALIGN=center>0.000005</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.9</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.5R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Praxidike   </TD>
+<TD ALIGN=center>0.000029</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.4</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>21.2R</TD><TD><A HREF="#ref26">[26]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Autonoe     </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.0R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Thyone      </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.3R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hermippe    </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.1R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Aitne       </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.7R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Eurydome    </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.7R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Euanthe     </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.8R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Euporie     </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.1R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Orthosie    </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.1R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Sponde      </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.0R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kale        </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.0R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Pasithee    </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.2R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hegemone    </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.8R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Mneme       </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.3R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Aoede       </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.5R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Thelxinoe   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.5R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Arche       </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.8R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kallichore  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.7R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Helike      </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.6R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Carpo       </TD>
+<TD ALIGN=center>0.000003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.0R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Eukelade    </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.6R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Cyllene     </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.2R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kore        </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.6R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Herse       </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.4R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2000 J11  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.4R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J2   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.2R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J3   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.4R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J4   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.0R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J5   </TD>
+<TD ALIGN=center>0.000006</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>22.4R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J9   </TD>
+<TD ALIGN=center>0.0000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>0.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.7R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J10  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.6R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J12  </TD>
+<TD ALIGN=center>0.0000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>0.5</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.9R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J15  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.5R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J16  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.3R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J18  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.4R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J19  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.7R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2003 J23  </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.6R</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref25">[25]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2010 J1   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.2r</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2010 J2   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>24.0r</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref60">[60]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2011 J1   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref61">[61]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.7R</TD><TD><A HREF="#ref61">[61]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref61">[61]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2011 J2   </TD>
+<TD ALIGN=center>0.000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref61">[61]</A></TD>
+<TD ALIGN=center>2.6</TD>
+<TD ALIGN=center>23.5R</TD><TD><A HREF="#ref61">[61]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref61">[61]</A></TD>
+</TABLE>
+<P><font size=+1><b>Saturnian System</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Mimas       </TD>
+<TD>2.5026&#177;0.0006</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>198.20&#177;0.25</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>1.150&#177;0.004</TD>
+<TD ALIGN=center>12.8</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>0.962&#177;0.004</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Enceladus   </TD>
+<TD>7.2027&#177;0.0125</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>252.10&#177;0.10</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>1.608&#177;0.003</TD>
+<TD ALIGN=center>11.8</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>1.375&#177;0.008</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Tethys      </TD>
+<TD>41.2067&#177;0.0038</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>533.00&#177;0.70</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>0.973&#177;0.004</TD>
+<TD ALIGN=center>10.2</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>1.229&#177;0.005</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Dione       </TD>
+<TD>73.1146&#177;0.0015</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>561.70&#177;0.45</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>1.476&#177;0.004</TD>
+<TD ALIGN=center>10.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>0.998&#177;0.004</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Rhea        </TD>
+<TD>153.9426&#177;0.0037</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>764.30&#177;1.10</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>1.233&#177;0.005</TD>
+<TD ALIGN=center>9.6</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>0.949&#177;0.003</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Titan       </TD>
+<TD>8978.1382&#177;0.0020</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>2574.73&#177;0.09</TD><TD><A HREF="#ref55">[55]</A></TD>
+<TD>1.882&#177;0.001</TD>
+<TD ALIGN=center>8.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.2</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hyperion    </TD>
+<TD>0.3727&#177;0.0012</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>135.00&#177;4.00</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.544&#177;0.050</TD>
+<TD ALIGN=center>14.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.3</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Iapetus     </TD>
+<TD>120.5038&#177;0.0080</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>735.60&#177;1.50</TD><TD><A HREF="#ref28">[28]</A></TD>
+<TD>1.083&#177;0.007</TD>
+<TD ALIGN=center>11</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.6</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Phoebe      </TD>
+<TD>0.5532&#177;0.0006</TD><TD><A HREF="#ref27">[27]</A></TD>
+<TD>106.50&#177;0.70</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>1.638&#177;0.033</TD>
+<TD ALIGN=center>16.4</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD>0.081&#177;0.002</TD><TD><A HREF="#ref30">[30]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Janus       </TD>
+<TD>0.1263&#177;0.0087</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>89.5&#177;1.5</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.630&#177;0.030</TD>
+<TD ALIGN=center>14.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>0.71&#177;0.02</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Epimetheus  </TD>
+<TD>0.0351&#177;0.0047</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>58.1&#177;1.8</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.640&#177;0.062</TD>
+<TD ALIGN=center>15.6</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>0.73&#177;0.03</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Helene      </TD>
+<TD ALIGN=center>0.00076</TD><TD>&nbsp</TD>
+<TD>17.6&#177;0.4</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>18.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>1.67&#177;0.20</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Telesto     </TD>
+<TD ALIGN=center>0.00027</TD><TD>&nbsp</TD>
+<TD>12.4&#177;0.4</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>18.5</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>1.0</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Calypso     </TD>
+<TD ALIGN=center>0.00017</TD><TD>&nbsp</TD>
+<TD>10.7&#177;0.7</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>18.7</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD>1.34&#177;0.10</TD><TD><A HREF="#ref59">[59]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Atlas       </TD>
+<TD>0.00044&#177;0.00015</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>15.1&#177;1.2</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.460&#177;0.110</TD>
+<TD ALIGN=center>19.0</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Prometheus  </TD>
+<TD>0.01074&#177;0.00285</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>43.1&#177;2.7</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.480&#177;0.090</TD>
+<TD ALIGN=center>15.8</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.6</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Pandora     </TD>
+<TD>0.00924&#177;0.00152</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>40.7&#177;1.5</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.490&#177;0.060</TD>
+<TD ALIGN=center>16.4</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TD ALIGN=center>0.5</TD><TD><A HREF="#ref29">[29]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Pan         </TD>
+<TD>0.00033&#177;0.00015</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>14.1&#177;1.3</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.420&#177;0.150</TD>
+<TD ALIGN=center>19.4</TD><TD><A HREF="#ref32">[32]</A></TD>
+<TD ALIGN=center>0.5</TD><TD><A HREF="#ref32">[32]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Methone     </TD>
+<TD ALIGN=center>0.0000006</TD><TD>&nbsp</TD>
+<TD>1.6&#177;0.6</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Pallene     </TD>
+<TD ALIGN=center>0.0000022</TD><TD>&nbsp</TD>
+<TD>2.5&#177;0.6</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Polydeuces  </TD>
+<TD ALIGN=center>0.0000003</TD><TD>&nbsp</TD>
+<TD>1.3&#177;0.4</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Daphnis     </TD>
+<TD>0.0000052&#177;0.0000052</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>3.8&#177;0.8</TD><TD><A HREF="#ref54">[54]</A></TD>
+<TD>0.340&#177;0.260</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Anthe       </TD>
+<TD ALIGN=center>0.0000001</TD><TD>&nbsp</TD>
+<TD ALIGN=center>0.9</TD><TD><A HREF="#ref57">[57]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Aegaeon     </TD>
+<TD ALIGN=center>0.000000004</TD><TD>&nbsp</TD>
+<TD ALIGN=center>0.3</TD><TD><A HREF="#ref56">[56]</A></TD>
+<TD ALIGN=center>0.5</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TD ALIGN=center>?</TD><TD>&nbsp</TD>
+<TR ALIGN=right><TD ALIGN=left>Ymir        </TD>
+<TD ALIGN=center>0.00033</TD><TD>&nbsp</TD>
+<TD ALIGN=center>9</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>21.9R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Paaliaq     </TD>
+<TD ALIGN=center>0.00055</TD><TD>&nbsp</TD>
+<TD ALIGN=center>11.0</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>21.1R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Tarvos      </TD>
+<TD ALIGN=center>0.00018</TD><TD>&nbsp</TD>
+<TD ALIGN=center>7.5</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>22.7R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Ijiraq      </TD>
+<TD ALIGN=center>0.000080</TD><TD>&nbsp</TD>
+<TD ALIGN=center>6</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>22.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Suttungr    </TD>
+<TD ALIGN=center>0.000014</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.5</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.9R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kiviuq      </TD>
+<TD ALIGN=center>0.00022</TD><TD>&nbsp</TD>
+<TD ALIGN=center>8</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>22.1R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Mundilfari  </TD>
+<TD ALIGN=center>0.000014</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.5</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.8R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Albiorix    </TD>
+<TD ALIGN=center>0.0014</TD><TD>&nbsp</TD>
+<TD ALIGN=center>16</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>20.5R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Skathi      </TD>
+<TD ALIGN=center>0.000021</TD><TD>&nbsp</TD>
+<TD ALIGN=center>4</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Erriapus    </TD>
+<TD ALIGN=center>0.000051</TD><TD>&nbsp</TD>
+<TD ALIGN=center>5</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.4R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Siarnaq     </TD>
+<TD ALIGN=center>0.0026</TD><TD>&nbsp</TD>
+<TD ALIGN=center>20</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>19.9R</TD><TD><A HREF="#ref34">[34]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Thrymr      </TD>
+<TD ALIGN=center>0.000014</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.5</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.9R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.06</TD><TD><A HREF="#ref33">[33]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Narvi       </TD>
+<TD ALIGN=center>0.000023</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.5</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.8R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Aegir       </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.4R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Bebhionn    </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.1R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Bergelmir   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.2R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Bestla      </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.5</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.8R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Farbauti    </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.5</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.7R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Fenrir      </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>25.0R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Fornjot     </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hati        </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.4R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hyrrokkin   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.5R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kari        </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.9R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Loge        </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Skoll       </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.5R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Surtur      </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.8R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Jarnsaxa    </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.7R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Greip       </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.4R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Tarqeq      </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>23.9R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S7   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.5R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S12  </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.5</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.8R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S13  </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.5R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2004 S17  </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>25.2R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2006 S1   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2006 S3   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.5</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.6R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2007 S2   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>3.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.4R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2007 S3   </TD>
+<TD ALIGN=center>0.000000</TD><TD>&nbsp</TD>
+<TD ALIGN=center>2.0</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>2.3</TD>
+<TD ALIGN=center>24.9R</TD><TD><A HREF="#ref35">[35]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref35">[35]</A></TD>
+</TABLE>
+<P><font size=+1><b>Uranian Satellites</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Ariel       </TD>
+<TD>86.4&#177;5.0</TD><TD><A HREF="#ref36">[36]</A></TD>
+<TD>578.9&#177;0.6</TD><TD><A HREF="#ref37">[37]</A></TD>
+<TD>1.592&#177;0.092</TD>
+<TD>13.70&#177;0.04</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.39&#177;0.04</TD><TD><A HREF="#ref39">[39]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Umbriel     </TD>
+<TD>81.5&#177;5.0</TD><TD><A HREF="#ref36">[36]</A></TD>
+<TD>584.7&#177;2.8</TD><TD><A HREF="#ref37">[37]</A></TD>
+<TD>1.459&#177;0.092</TD>
+<TD>14.47&#177;0.04</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.21&#177;0.02</TD><TD><A HREF="#ref39">[39]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Titania     </TD>
+<TD>228.2&#177;5.0</TD><TD><A HREF="#ref36">[36]</A></TD>
+<TD>788.9&#177;1.8</TD><TD><A HREF="#ref37">[37]</A></TD>
+<TD>1.662&#177;0.038</TD>
+<TD>13.49&#177;0.04</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.27&#177;0.03</TD><TD><A HREF="#ref39">[39]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Oberon      </TD>
+<TD>192.4&#177;7.0</TD><TD><A HREF="#ref36">[36]</A></TD>
+<TD>761.4&#177;2.6</TD><TD><A HREF="#ref37">[37]</A></TD>
+<TD>1.559&#177;0.059</TD>
+<TD>13.70&#177;0.04</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.23&#177;0.03</TD><TD><A HREF="#ref39">[39]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Miranda     </TD>
+<TD>4.4&#177;0.4</TD><TD><A HREF="#ref36">[36]</A></TD>
+<TD>235.8&#177;0.7</TD><TD><A HREF="#ref37">[37]</A></TD>
+<TD>1.214&#177;0.109</TD>
+<TD>15.79&#177;0.04</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.32&#177;0.03</TD><TD><A HREF="#ref39">[39]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Cordelia    </TD>
+<TD ALIGN=center>0.0030</TD><TD>&nbsp</TD>
+<TD>20.1&#177;3.</TD><TD><A HREF="#ref40">[40]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>23.62&#177;0.35</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD ALIGN=center>0.07</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Ophelia     </TD>
+<TD ALIGN=center>0.0036</TD><TD>&nbsp</TD>
+<TD>21.4&#177;4.</TD><TD><A HREF="#ref40">[40]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>23.26&#177;0.25</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD ALIGN=center>0.07</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Bianca      </TD>
+<TD ALIGN=center>0.0062</TD><TD>&nbsp</TD>
+<TD>27&#177;2</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>22.52&#177;0.24</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.065&#177;0.010</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Cressida    </TD>
+<TD ALIGN=center>0.0229</TD><TD>&nbsp</TD>
+<TD>41&#177;2</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>21.58&#177;0.11</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.069&#177;0.007</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Desdemona   </TD>
+<TD ALIGN=center>0.0119</TD><TD>&nbsp</TD>
+<TD>35&#177;4</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>21.99&#177;0.16</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.084&#177;0.019</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Juliet      </TD>
+<TD ALIGN=center>0.0372</TD><TD>&nbsp</TD>
+<TD>53&#177;4</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>21.12&#177;0.05</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.075&#177;0.011</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Portia      </TD>
+<TD ALIGN=center>0.1122</TD><TD>&nbsp</TD>
+<TD>70&#177;4</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>20.42&#177;0.05</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.069&#177;0.008</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Rosalind    </TD>
+<TD ALIGN=center>0.0170</TD><TD>&nbsp</TD>
+<TD>36&#177;6</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>21.79&#177;0.13</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.072&#177;0.024</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Belinda     </TD>
+<TD ALIGN=center>0.0238</TD><TD>&nbsp</TD>
+<TD>45&#177;8</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>21.47&#177;0.09</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.067&#177;0.024</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Puck        </TD>
+<TD ALIGN=center>0.1931</TD><TD>&nbsp</TD>
+<TD>81&#177;2</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD>19.75&#177;0.05</TD><TD><A HREF="#ref38">[38]</A></TD>
+<TD>0.104&#177;0.006</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Caliban     </TD>
+<TD ALIGN=center>0.020</TD><TD>&nbsp</TD>
+<TD ALIGN=center>36</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>22.4R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Sycorax     </TD>
+<TD ALIGN=center>0.18</TD><TD>&nbsp</TD>
+<TD ALIGN=center>75</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>20.8R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Prospero    </TD>
+<TD ALIGN=center>0.0066</TD><TD>&nbsp</TD>
+<TD ALIGN=center>25</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>23.2R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Setebos     </TD>
+<TD ALIGN=center>0.0058</TD><TD>&nbsp</TD>
+<TD ALIGN=center>24</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>23.3R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Stephano    </TD>
+<TD ALIGN=center>0.0017</TD><TD>&nbsp</TD>
+<TD ALIGN=center>16</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>24.1R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Trinculo    </TD>
+<TD ALIGN=center>0.00031</TD><TD>&nbsp</TD>
+<TD ALIGN=center>9</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.4R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Francisco   </TD>
+<TD ALIGN=center>0.00056</TD><TD>&nbsp</TD>
+<TD ALIGN=center>11</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.0R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Margaret    </TD>
+<TD ALIGN=center>0.00042</TD><TD>&nbsp</TD>
+<TD ALIGN=center>10</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.2R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Ferdinand   </TD>
+<TD ALIGN=center>0.00042</TD><TD>&nbsp</TD>
+<TD ALIGN=center>10</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.1R</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref42">[42]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Perdita     </TD>
+<TD ALIGN=center>0.0012</TD><TD>&nbsp</TD>
+<TD>13&#177;1</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>23.6V</TD><TD><A HREF="#ref40">[40]</A></TD>
+<TD>0.070&#177;0.006</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Mab         </TD>
+<TD ALIGN=center>0.0006</TD><TD>&nbsp</TD>
+<TD>12&#177;1</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>24.6V</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD>0.103&#177;0.006</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Cupid       </TD>
+<TD ALIGN=center>0.0002</TD><TD>&nbsp</TD>
+<TD>9&#177;1</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>25.8V</TD><TD><A HREF="#ref67">[67]</A></TD>
+<TD>0.070&#177;0.006</TD><TD><A HREF="#ref67">[67]</A></TD>
+</TABLE>
+<P><font size=+1><b>Neptunian Satellites</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Triton      </TD>
+<TD>1427.6&#177;1.9</TD><TD><A HREF="#ref43">[43]</A></TD>
+<TD>1353.4&#177;0.9</TD><TD><A HREF="#ref44">[44]</A></TD>
+<TD>2.059&#177;0.005</TD>
+<TD ALIGN=center>13.54</TD><TD><A HREF="#ref46">[46]</A></TD>
+<TD ALIGN=center>0.719</TD><TD><A HREF="#ref46">[46]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Nereid      </TD>
+<TD ALIGN=center>2.06</TD><TD>&nbsp</TD>
+<TD>170.&#177;25.</TD><TD><A HREF="#ref47">[47]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>19.2R</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.155</TD><TD><A HREF="#ref47">[47]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Naiad       </TD>
+<TD ALIGN=center>0.013</TD><TD>&nbsp</TD>
+<TD>33.&#177;3.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>23.91</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.072</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Thalassa    </TD>
+<TD ALIGN=center>0.025</TD><TD>&nbsp</TD>
+<TD>41.&#177;3.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>23.32</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.091</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Despina     </TD>
+<TD ALIGN=center>0.14</TD><TD>&nbsp</TD>
+<TD>75.&#177;3.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>22.00</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.090</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Galatea     </TD>
+<TD ALIGN=center>0.25</TD><TD>&nbsp</TD>
+<TD>88.&#177;4.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>21.85</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.079</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Larissa     </TD>
+<TD ALIGN=center>0.33</TD><TD>&nbsp</TD>
+<TD>97.&#177;3.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>21.49</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.091</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Proteus     </TD>
+<TD ALIGN=center>3.36</TD><TD>&nbsp</TD>
+<TD>210.&#177;7.</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>19.75</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TD ALIGN=center>0.096</TD><TD><A HREF="#ref48">[48]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Halimede    </TD>
+<TD ALIGN=center>0.012</TD><TD>&nbsp</TD>
+<TD ALIGN=center>31.0</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>24.5R</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Psamathe    </TD>
+<TD ALIGN=center>0.0033</TD><TD>&nbsp</TD>
+<TD ALIGN=center>20.0</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.5R</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Sao         </TD>
+<TD ALIGN=center>0.0045</TD><TD>&nbsp</TD>
+<TD ALIGN=center>22.0</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.5R</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Laomedeia   </TD>
+<TD ALIGN=center>0.0039</TD><TD>&nbsp</TD>
+<TD ALIGN=center>21.0</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>25.5R</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Neso        </TD>
+<TD ALIGN=center>0.011</TD><TD>&nbsp</TD>
+<TD ALIGN=center>30.0</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>1.5</TD>
+<TD ALIGN=center>24.6R</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TD ALIGN=center>0.04</TD><TD><A HREF="#ref49">[49]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>S/2004 N1   </TD>
+<TD ALIGN=center>0.0003</TD><TD>&nbsp</TD>
+<TD ALIGN=center>9.0</TD><TD><A HREF="#ref62">[62]</A></TD>
+<TD ALIGN=center>1.3</TD>
+<TD ALIGN=center>26.5V</TD><TD><A HREF="#ref62">[62]</A></TD>
+<TD ALIGN=center>0.10</TD><TD><A HREF="#ref62">[62]</A></TD>
+</TABLE>
+<P><font size=+1><b>Pluto's Satellites</b></font>
+<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=5>
+<TR ALIGN=center VALIGN=top><TH ALIGN=left>Sat.</TH>
+<TD COLSPAN=2><var><b><a href="#legend">GM</a></b></var>
+<BR>(km<sup>3</sup>/sec<sup>2</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Mean radius</a></b></var><BR>(km)</TD>
+<TD><var><b><a href="#legend">Mean density</a></b></var>
+<BR>(g/cm<sup>3</sup>)</TD>
+<TD COLSPAN=2><var><b><a href="#legend">Magnitude</a></b></var>
+<BR><var>V</var><sub>0</sub> or <var>R</var></TD>
+<TD COLSPAN=2><var><b><a href="#legend">Geometric<BR>Albedo</a></b></var></TD>
+<TR ALIGN=right><TD ALIGN=left>Charon      </TD>
+<TD>102.3&#177;0.2</TD><TD><A HREF="#ref66">[66]</A></TD>
+<TD>603.6&#177;1.4</TD><TD><A HREF="#ref51">[51]</A></TD>
+<TD>1.664&#177;0.012</TD>
+<TD>17.26&#177;0.01</TD><TD><A HREF="#ref52">[52]</A></TD>
+<TD>0.372&#177;0.012</TD><TD><A HREF="#ref52">[52]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Nix         </TD>
+<TD>0.0013&#177;0.0023</TD><TD><A HREF="#ref66">[66]</A></TD>
+<TD>23.0&#177;2.</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TD ALIGN=center>2.1</TD>
+<TD>23.4V&#177;0.2</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TD ALIGN=center>0.35</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Hydra       </TD>
+<TD>0.0065&#177;0.0022</TD><TD><A HREF="#ref66">[66]</A></TD>
+<TD>30.5&#177;4.</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TD ALIGN=center>0.8</TD>
+<TD>22.9V&#177;0.1</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TD ALIGN=center>0.35</TD><TD><A HREF="#ref63">[63]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Kerberos    </TD>
+<TD>0.0011&#177;0.0005</TD><TD><A HREF="#ref66">[66]</A></TD>
+<TD ALIGN=center>14.0</TD><TD><A HREF="#ref64">[64]</A></TD>
+<TD ALIGN=center>1.4</TD>
+<TD>26.1V&#177;0.3</TD><TD><A HREF="#ref64">[64]</A></TD>
+<TD ALIGN=center>0.35</TD><TD><A HREF="#ref64">[64]</A></TD>
+<TR ALIGN=right><TD ALIGN=left>Styx        </TD>
+<TD>0.0000&#177;0.0008</TD><TD><A HREF="#ref66">[66]</A></TD>
+<TD ALIGN=center>10.0</TD><TD><A HREF="#ref65">[65]</A></TD>
+<TD ALIGN=center>?</TD>
+<TD>27.0V&#177;0.3</TD><TD><A HREF="#ref65">[65]</A></TD>
+<TD ALIGN=center>0.35</TD><TD><A HREF="#ref65">[65]</A></TD>
+</TABLE>
+<H3><A NAME="legend">Table Column Headings</A></H3>
+<TABLE BORDER=0 CELLSPACING=5>
+<TR ALIGN=center><TD ALIGN=left><var><b>GM</var></b></TD>
+<TD ALIGN=Left>GM: G = 6.67259x10<sup>-20</sup>(kg<sup>-1</sup> km<sup>3</sup>  sec<sup>-2</sup>), M = mass (kg),
+ if the density is assumed  (i. e. has no</TD></TR>
+<TR ALIGN=center><TD ALIGN=left><var><b>                </var></b></TD>
+<TD ALIGN=Left>uncertainty) the value is computed from the density and mean radius</TD></TR>
+<TR ALIGN=center><TD ALIGN=left><var><b>Mean radius</var></b></TD>
+<TD ALIGN=Left>Mean radius: if no uncertainty is given, the value is
+computed from the magnitude and albedo</TD></TR>
+<TR ALIGN=center><TD ALIGN=left><var><b>Mean density</var></b></TD>
+<TD ALIGN=Left>Mean density: derived from the GM and mean radius when an
+uncertainty is given, otherwise assumed</TD></TR>
+<TR ALIGN=center><TD ALIGN=left><var><b>Magnitude</var></b></TD>
+<TD ALIGN=Left>Mean opposition magnitude: <var>V</var><sub>0</sub>, or
+red magnitude, R</TD></TR>
+<TR ALIGN=center><TD ALIGN=left><var><b><a href="?glossary&term=albedo">Geometric Albedo</a></var></b></TD>
+<TD ALIGN=Left><a href="?glossary&term=albedo">Geometric albedo</a></TD></TR>
+</TABLE>
+<hr>
+<a name="refs"> </a>
+<H3>References</H3>
+<TABLE BORDER=0>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref1">1.</A></TD>
+   <TD>Standish, E. M. 1998. JPL Planetary and Lunar Ephemerides, DE405/LE405.
+   </TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref2">2.</A></TD>
+   <TD> Bills, B.G. and Ferrari, A.J. 1977. ``A Harmonic Analysis of Lunar
+   Topography'', <I>Icarus</I> <B>31</B>, 244-259.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref3">3.</A></TD>
+   <TD>Explanatory Supplement to the Astronomical Almanac 1992. (P. K.
+   Seidelmann Ed.)  University Science Books, Mill Valley, CA. </TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref4">4.</A></TD>
+   <TD>Jacobson, R. A. 2010. ``The Orbits and Masses of the Martian Satellites
+   and the Libration of Phobos'',
+   <I>AJ</I> <B>139</B>, 668-679.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref5">5.</A></TD>
+   <TD> Thomas, P.C. 1989b. ``Shapes of Small Satellites'',
+   <I>Icarus</I> <B>77</B>, 248-274.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref6">6.</A></TD>
+   <TD>Zellner, B., and Capen, R. C. 1974. ``Photometric
+   Properties of the Martian Satellites'', <I>Icarus</I> <B>23</B>,
+   437-444.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref7">7.</A></TD>
+   <TD>Thomas, P. C., Adinolfi, D., Helfenstein, P., Simonelli, D. and
+   Veverka, J. 1996. ``The Surface of Deimos: Contribution of Materials and
+   Processes to Its Unique Appearance'', <I>Icarus</I> <B>123</B>,
+   536-556.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref8">8.</A></TD>
+   <TD>Jacobson, R. A. 2003b. private communication of constants used in
+    the JUP230 ephemeris</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref9">9.</A></TD>
+ <TD> Thomas, P. C., Davies, M. E., Colvin, T. R., Oberst,
+   J., Schuster, P., Neukum, G., Carr, M. H., McEwen, A., Schubert, G.,
+   Belton, M. J. S., and the Galileo Imaging Team 1998, ``The Shape of
+   Io from Galileo Limb Measurements'', <I>Icarus</I> <B>135</B>,
+   175-180.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref10">10.</A></TD>
+   <TD> Thomas, P.C. 2002.  private communication of limb fit results</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref11">11.</A></TD>
+   <TD> Anderson, J. D., Jacobson, R. A., Lau, E. L., Moore, W. B.,
+   Olsen, O.,  Schubert, G., and Thomas, P. C. 2000. ``Shape, Mean Radius,
+   Gravity Field and Interior Structure of Ganymede'',
+   <I>Bulletin of the American Astronomical Society</I> <B>33</B>(3),
+   1101.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref12">12.</A></TD>
+   <TD>Anderson, J.D., Jacobson, R.A., McElrath, T. P.,
+   Schubert,G., Moore, W.B., and Thomas,  P. C. 2000a. ``Shape, Mean Radius,
+   Gravity Field and Interior Structure of Callisto'',
+   <I>Icarus</I> <B>153</B>, 157-161.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref13">13.</A></TD>
+   <TD> Thomas, P.C. 2002.  private communication of Amalthea volume based
+    on its shape model</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref14">14.</A></TD>
+   <TD> Morrison, D., N. D. Morrison, and Lazarewicz, A. R.
+   1974. ``Four color photometry of the Galilean satellites'',
+   <I>Icarus</I> <B>23</B>, 399-416.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref15">15.</A></TD>
+   <TD> Thomas, P. and Veverka, J. 1982. ``Amalthea'', In
+   Satellites of Jupiter (D. Morrison Eds.) pp. 147-173. Univ. of Arizona
+   Press, Tucson.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref16">16.</A></TD>
+   <TD>Simonelli, D. P. and Veverka, J. 1984. ``Voyager Disk-Integrated
+    Photometry of Io'', <I>Icarus</I> <B>59</B>, 406-425.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref17">17.</A></TD>
+   <TD>Buratti, B. and Veverka, J. 1983. ``Voyager Photometry of Europa'',
+   <I>Icarus</I> <B>55</B>, 93-110. (average of leading and trailing
+    hemisphere values)</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref18">18.</A></TD>
+   <TD> Morrison, D. and Morrison, N. D. 1977. ``Photometry of the Galilean
+    Satellites'', In Planetary Satellites (J. A. Burns, Ed.) pp. 363-378.
+    Univ. of Arizona Press, Tucson.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref19">19.</A></TD>
+   <TD>Simonelli, D. P., Rossier, L., Thomas, P. C.,  Veverka, J.,
+   Burns, J. A., and Belton, M. J. S. 2000. ``Leading/Trailing Albedo
+   Asymmetries of Thebe, Amalthea, and Metis'', <I>Icarus</I> <B>147</B>,
+   353-365.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref20">20.</A></TD>
+   <TD> Rettig, T. W. and Walsh, K. W. 2001. ``Implied
+   Evolutionary Differences of the Jovian Irregular Satellites from a BVR Color
+   Survey'', presented at Jupiter: Planet, Satellites, and Magnetosphere,
+   Boulder Colorado</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref21">21.</A></TD>
+   <TD>Thomas, P. C., Burns, J. A., Rossier, L., Simonelli, D., Veverka, J.,
+   Chapman, C. R., Klaasen, K., Johnson, T. V., and Belton, M. J. S. 1998.
+   ``The Small Inner Satellites of Jupiter'', <I>Icarus</I> <B>135</B>,
+   360-371.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref22">22.</A></TD>
+   <TD> Veverka, J., Thomas, P., and Synnott, S. 1982. ``The
+   Inner Satellites of Jupiter'', <I>Vistas in Astronomy</I> <B>25</B>,
+   245-262.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref23">23.</A></TD>
+   <TD> Gladman, B. J. 2000. <I>IAU Circular</I> 7472</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref24">24.</A></TD>
+   <TD> Jewitt, D. C. 2001. personal communication</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref25">25.</A></TD>
+   <TD> Sheppard, S. S. 2010.
+    http://www.dtm.ciw.edu/users/sheppard/satellites/jupsatdata.html</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref26">26.</A></TD>
+   <TD>Rettig, T. W., Walsh, K., and Consolmagno, G. 2001.
+   ``Implied Evolutionary Differences of the Jovian Irregular Satellites
+    from a BVR Color Survey'', <I>Icarus</I> <B>154</B>, 313-320.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref27">27.</A></TD>
+   <TD>Jacobson, R. A., Antreasian, P. G., Ardalan, S., Criddle, K. E.,
+   Ionasescu, R., Jones, J. B., Parcher, D., Pelletier, F. J., Roth, D. C.,
+   Thompson, P., Vaughan, A. 2008. ``The Gravity Gield of the Saturnian System
+   and the Orbits of the Major Saturnian satellites'', Presented at the Saturn
+   After Cassini-Huygens Symposium held at Imperial College London, UK</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref28">28.</A></TD>
+   <TD>Thomas, P. C., Burns, J. A., Helfenstein, P., Squyres, S.,
+   Veverka, J., Porco, C.,  Turtle, E. P., McEwen, A., Denk, T., Giese, B.,
+   Roatsch, T., Johnson, T. V., Jacobson, R. A. 2007. ``Shapes of the 
+   Saturnian icy satellites and their significance'', <I>Icarus</I>
+   <B>190</B>, 573-584.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref29">29.</A></TD>
+   <TD> Morrison, D., Johnson, T. V., Shoemaker, E. M.,
+   Soderbloom, L. A., Thomas, P., Veverka, J., and Smith, B. A. 1984. 
+   ``Satellites of Saturn: Geological Perspective'', In Saturn (T. Gehrels
+   and M. S. Matthews Eds.) pp. 609-639. Univ. of Arizona Press,
+   Tucson.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref30">30.</A></TD>
+   <TD>Simonelli, D. P., Kay, J., Adinolfi, D., Veverka, J., Thomas, P. C.,
+   and Helfenstein, P. 1999. ``Phoebe: Albedo Map and Photometric Properties'',
+   <I>Icarus</I> <B>138</B>, 249-258.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref31">31.</A></TD>
+   <TD>Jacobson, R. A., Spitale, J., Porco, C. C., Beurle, K., Cooper, N. J.,
+    Evans, M. W., Murray, C. D. 2008. ``Revised Orbits of Saturn's Small Inner
+    Satellites'', <I>AJ</I> <B>135</B>, 261-263.</TD></TR> 
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref32">32.</A></TD>
+   <TD>Porco, C. C., Weiss, J. W. , Thomas, P. C., Richardson, D. C.,
+    Jacobson, R. A., Spitale, J. 2006. ``Physical Characteristics and Possible
+    Accretionary Origins for Saturn's Small Satellites'', Presented at the
+    37th Lunar and Planetary Science Conference, League City, TX</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref33">33.</A></TD>
+   <TD> Nicholson, P. D. 2001. private communication</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref34">34.</A></TD>
+   <TD>Grav, T., Holman, M. J., Gladman, B. J., and Aksnes, K. 2003.
+    ``Photometric survey of the irregular satellites'', <I>Icarus</I>
+    <B>166</B>, 33-45.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref35">35.</A></TD>
+   <TD> Sheppard, S. S. 2010.
+    http://www.dtm.ciw.edu/users/sheppard/satellites/satsatdata.html</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref36">36.</A></TD>
+   <TD>Jacobson, R. A. 2007. ``The Gravity Field of the Uranian System and the
+    Orbits of the Uranian Satellites and Rings'', <I>BAAS</I> <B>39</B>,
+   453.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref37">37.</A></TD>
+   <TD> Thomas, P.C. 1988. ``Radii, shapes, and topography of
+   the satellites of Uranus from limb coordinates'', <I>Icarus</I> 
+   <B>73</B>, 427-441.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref38">38.</A></TD>
+   <TD> Karkoschka, E. 2001a. ``Comprehensive Phometry of the
+   Rings and 16 Satellites of Uranus with the Hubble Space Telescope'',
+   <I>Icarus</I> <B>151</B>, 51-68.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref39">39.</A></TD>
+   <TD>Veverka, J., Brown, R. H., and Bell, J. F. 1991.
+   ``Uranus Satellites: Surface Properties'', In Uranus (J. T. Bergstralh,
+   E. D. Miner, and M. S. Matthews Eds.) pp. 528-560. Univ. of Arizona Press,
+   Tucson.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref40">40.</A></TD>
+   <TD> Karkoschka, E. 2001b. ``Voyager's Eleventh Discovery
+   of a Satellite of Uranus and Phometry and the First Size Measurements
+   of Nine Satellites'', <I>Icarus</I> <B>151</B>, 69-77</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref41">41.</A></TD>
+   <TD> Thomas, P.C., Weitz, C., and Veverka, J. 1989a. ``Small
+   satellites of Uranus Disk-integrated photometry and estimated radii'',
+   <I>Icarus</I> <B>81</B>, 92-101.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref42">42.</A></TD>
+   <TD> Sheppard, S. S., Jewitt, D., Kleyna, J. 2005.
+   ``An Ultradeep Survey for Irregular Satellites of Uranus: Limits to
+   Completeness'', <I>Astronomical Journal</I> <B>129</B>, 518-525.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref43">43.</A></TD>
+   <TD>Jacobson, R. A. 2009. ``The Orbits of the Neptunian
+   Satellites and the Orientation of the Pole of Neptune'',
+   <I>AJ</I><B>137</B>, 4322.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref44">44.</A></TD>
+   <TD> Thomas, P. C. 2000. ``The Shape of Triton from Limb Profiles'',
+   <I>Icarus</I> <B>148</B>, 587-588.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref45">45.</A></TD>
+   <TD>Jacobson, R. A. 2008. ``Reconstruction of the Voyager~2 Neptune Encounter
+   in the ICRF System'', AIAA Paper~2008-7372 presented at the AIAA/AAS
+   Astrodynamics Specialist Conference, Honolulu, HI</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref46">46.</A></TD>
+   <TD> Hicks, M. D, and Buratti, B. J. 2004.
+   ''The spectral variability of Triton from 1997--2000', <I>Icarus</I> 
+   <B>171</B>, 210-218.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref47">47.</A></TD>
+   <TD> Thomas, P., Veverka, J., and Helfenstein, P. 1991b.
+   ``Voyager Observations of Nereid'', <I>Journal of Geophysical Research</I>
+    <B>96</B>(19), 253-19, 259.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref48">48.</A></TD>
+   <TD> Karkoschka, E. 2003. ``Sizes, shapes, and albedos of the inner
+   satellites of Neptune'', <I>Icarus</I> <B>162</B>, 400-407</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref49">49.</A></TD>
+   <TD> Sheppard, S. S., Jewitt, D., and Kleyna, J. 2006.
+   ``A Survey for Normal Irregular Satellites around Neptune: Limits to
+   Completeness'', <I>Astronomical Journal</I> <B>132</B>, 171-176.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref50">50.</A></TD>
+   <TD>Jacobson, R. A. 2007. private communication of constants used in
+    the PLU017 ephemeris</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref51">51.</A></TD>
+   <TD>Sicardy, B., et al. 2006. ``Charon's size and an upper limit on its
+    atmosphere from a stellar occultation'', <I>Nature</I> <B>439</B>,
+   52-54.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref52">52.</A></TD>
+   <TD> Reinsch, K., Burwitz, V., and Festou, M. C. 1994.
+   ``Albedo Maps of Pluto and Improved Physical Parameters of the Pluto-Charon
+   System'', <I>Icarus</I> <B>108</B>, 209-218.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref53">53.</A></TD>
+   <TD>Tholen, D.~J., Buie, M.~W., Grundy, W.~M., Elliott, G.~T. 2008. ``Masses
+   of Nix and Hydra'', <I>AJ</I> <B>135</B>, 777-784.</TD></TR> 
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref54">54.</A></TD>
+   <TD> Thomas, P. C. 2010. ``Sizes, shapes, and derived properties of the
+   saturnian satellites after the Cassini nominal mission'',
+   <I>Icarus</I> <B>208</B>, 395-401.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref55">55.</A></TD>
+   <TD> Zebker, H. A. and Stiles, B. and Hensley, S. Lorenz, R. and Kirk, R. L.
+    and Lunine, J. 2009. ``Size and Shape of Saturn's Moon Titan'',
+   <I>Science</I> <B>324</B>, 921-923.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref56">56.</A></TD>
+   <TD>Hedman, M. M., Cooper, N. J., Murray, C. D., Beurle, K., Evans, M. W.,
+   Tiscareno, M. S., and Burns, J. A. 2010. ``Aegaeon (Saturn LIII), a G-ring 
+   object'', <I>Icarus</I> <B>207</B>, 433-447.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref57">57.</A></TD>
+   <TD>Cooper, N. J., Murray, C. D., Evans, M. W., Beurle, K., Jacobson, R. A.,
+   and Porco, C. C. 2008. ``Astrometry and dynamics of Anthe (S/2007 S4), a new
+   satellite of Saturn'', <I>Icarus</I> <B>195</B>, 765-777.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref58">58.</A></TD>
+   <TD> Weaver, H. A., et al. 2005. <I>IAU Circular</I> 8625</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref59">59.</A></TD>
+   <TD> Verbiscer, A., French, R., Showalter, M., and Helfenstein, P.
+   2007. ``Enceladus: Cosmic Graffiti Artist Caught in the Act'',
+   <I>Science</I> <B>315</B>, 815.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref60">60.</A></TD>
+   <TD> Alexandersen, M., Gladman, B., Veillet, C., Jacobson, R., Brozovic, M.,
+   and Rousselot, P. 2012. ``Discovery of two additional Jovian irregulars'',
+   <I>Astronomical Journal</I>  <B>144</B>, 21.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref61">61.</A></TD>
+   <TD> Sheppard, S. S. 2012. ``New Satellites of Jupiter: S/2011 J 1 and
+    S/2011 J 2'', <I>Central Bureau Electronic Telegrams</I>
+    <B>3002</B></TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref62">62.</A></TD>
+   <TD> Showalter, M. R., de Pater, I., Lissauer, J. J., French, R. S. 2013.
+   ``New Satellite of Neptune: S/2004 N 1'',
+   <I>Central Bureau Electronic Telegrams</I> <B>3586</B></TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref63">63.</A></TD>
+  <TD> Weaver, H. A., Stern, S. A., Mutchler, M. J., Steffl, A. J.,
+  Buie, M. W., Merline, W. J., Spencer, J. R., Young, E. F., and Young, L. A.
+  2006. ``Discovery of two new satellites of Pluto'', <I>Nature</I>
+  <B>439</B>, 943.</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref64">64.</A></TD>
+  <TD> Showalter, M. R., Hamilton, D. P., Stern, S. A.,  Weaver, H. A.,
+  Steffl, A. J., and Young, L. A. 2011. ``New Satellite of (134340) Pluto: S/2011
+  (134340) 1'', <I>IAU Circular</I> <B>9221</B></TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref65">65.</A></TD>
+  <TD> Showalter, M. R., Weaver, H. A., Stern, S. A., Steffl, A. J.,
+  Buie, M. W., Merline, W. J., Mutchler,  M. J., Soummer, R., and Throop, H. B.
+  2012. ``New Satellite of (134340) Pluto: S/2012 (134340) 1'',
+  <I>IAU Circular</I> <B>9253</B></TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref66">66.</A></TD>
+  <TD> Brozovic, M. and Jacobson, R. A. 2013. ``The Orbits, Masses of Pluto's
+  Satellites'', Presented at The Pluto System on the Eve of Exploration
+  by New Horizons: Perspectives, Predictions held at APL, Laurel, MD</TD></TR>
+<TR VALIGN=TOP><TD ALIGN=RIGHT><A NAME="ref67">67.</A></TD>
+ <TD> Showalter, M. R. and Lissauer, J. J. 2006. ``The Second Ring-Moon System
+  of Uranus: Discovery and Dynamics'', <I>Science</I> <B>311</B>, 973.</TD></TR>
+</TABLE>
+<!-- Page Content: end -->
+
+    </td>
+  </tr>
+</table>
+
+<!-- END OF PAGE CONTENT -->
+    </td>
+    </tr>
+
+<!-- SSD standard page footer -->
+    <tr><td align="center"><img src="images/blank.gif" height="10" alt=""></td></tr>
+
+    <tr><td>
+      <!--#include file="include/ssd_bottom_nav_bar.html"-->
+      <!-- Sample SSD standard bottom navigation bar -->
+<table border="0" cellspacing="0" cellpadding="0" width="730" bgcolor="#666666">
+  <tr align="center">
+    <td><a href="/?about" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('about','','images/nav/about_on.gif',1)"><img name="about" border="0" alt="ABOUT SSD" src="images/nav/about_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?credits" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('credits','','images/nav/credits_on.gif',1)"><img name="credits" border="0" alt="CREDITS/AWARDS" src="images/nav/credits_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="http://www.jpl.nasa.gov/copyrights.cfm" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('copyright','','images/nav/copyright_on.gif',1)"><img name="copyright" border="0" alt="PRIVACY/COPYRIGHT" src="images/nav/copyright_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?glossary" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('glossary','','images/nav/glossary_on.gif',1)"><img name="glossary" border="0" alt="GLOSSARY" src="images/nav/glossary_off.gif"></a></td>
+    <td width="1" bgcolor="#CCCCCC"><img src="images/blank.gif" width="1" alt=""></td>
+    <td><a href="/?links" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('links','','images/nav/links_on.gif',1)"><img name="links" border="0" alt="LINKS" src="images/nav/links_off.gif"></a></td>
+  </tr>
+</table>
+<!--
+      <table border="0" cellpadding="0" cellspacing="0" width="730">
+        <tr>
+          <td align="center" width="100%" bgcolor="#666666">
+            <div class="navtext">SSD STANDARD NAVIGATION FOOTER</div>
+          </td>
+        </tr>
+      </table>
+-->
+    </td></tr>
+
+
+<!-- START OF JPL REQUIRED FOOTER -->
+
+    <!-- JPL standard page footer -->
+    <tr><td><img src="images/blank.gif" height="2" alt=""></td></tr>
+    <tr>
+      <td align="left" width="100%" bgcolor="#FFFFFF">
+        <!--#include file="include/jpl_std_foot.html"-->
+        <!-- JPL Required Standard Footer -->
+
+<table border="0" cellpadding="5" cellspacing="0" bgcolor="#CCCCCC" width="730">
+  <tr>
+    <!-- FirstGov Link -->
+    <td align="left" width="100%"><a target="_blank" href="http://www.firstgov.gov/"><img src="portal_images/footer_image1.gif" alt="FirstGov" border="0" width="136" height="39"></a></td>
+
+    <!-- Current Date/Time stamp -->
+    <td align="right" nowrap>
+      <font class="date_time">
+         2019-Aug-06 17:52 UT&nbsp;        <!--#config timefmt="%Y-%b-%d %H:%M UT"-->
+        <!--#echo var="DATE_GMT"-->
+        <br>(server date/time)&nbsp;&nbsp;
+      </font>
+    </td>
+
+    <!-- NASA Link -->
+    <td width="61"><a target="_blank" href="https://www.nasa.gov/"><img src="portal_images/footer_image2.gif" alt="NASA Home Page" border="0" width="61" height="40"></a></td>
+
+    <!-- Site Manager and Webmaster -->
+    <td align="right">
+      <table border="0" cellpadding="0" cellspacing="0" class="author">
+        <tr>
+          <td align="right" nowrap>Site Manager:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Ryan S. Park</td>
+        </tr>
+        <tr>
+          <td align="right" nowrap><a href="mailto:webmaster@ssd.jpl.nasa.gov">Webmaster</a>:&nbsp;</td>
+          <td align="left" nowrap>&nbsp;Alan B. Chamberlin</td>
+        </tr>
+                  <tr>
+            <td align="right" nowrap>Last Updated:&nbsp;</td>
+            <td align="left" nowrap>&nbsp;2015-Feb-19</td>
+          </tr>        <!--
+        <tr>
+          <td align="right" nowrap><font size="-2">&nbsp;</font></td>
+          <td align="left" nowrap><font size="-2">&nbsp;CL 97-0935</font></td>
+        </tr>
+        -->
+      </table>
+    </td>
+
+  </tr>
+
+</table>
+      </td>
+    </tr>
+
+  </table>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
