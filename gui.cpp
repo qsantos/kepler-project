@@ -492,13 +492,6 @@ int main() {
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    // call framebuffer_size_callback() to initialize viewport
-    {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        framebuffer_size_callback(window, width, height);
-    }
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
@@ -528,6 +521,8 @@ int main() {
     glGenVertexArrays(1, &state.vao);
     glBindVertexArray(state.vao);
 
+    // initialize viewport
+    glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
     setup_matrices(&state);
 
     // fill default texture with white for convenience
