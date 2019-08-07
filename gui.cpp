@@ -129,6 +129,75 @@ void toggle_fullscreen(GLFWwindow* window) {
     }
 }
 
+// inspired from https://learnopengl.com/In-Practice/Debugging
+GLenum glCheckError_(const char* file, int line) {
+    GLenum errorCode;
+    while ((errorCode = glGetError()) != GL_NO_ERROR) {
+        const char* errormsg;
+        switch (errorCode) {
+            case GL_INVALID_ENUM:                  errormsg = "INVALID_ENUM"; break;
+            case GL_INVALID_VALUE:                 errormsg = "INVALID_VALUE"; break;
+            case GL_INVALID_OPERATION:             errormsg = "INVALID_OPERATION"; break;
+            case GL_STACK_OVERFLOW:                errormsg = "STACK_OVERFLOW"; break;
+            case GL_STACK_UNDERFLOW:               errormsg = "STACK_UNDERFLOW"; break;
+            case GL_OUT_OF_MEMORY:                 errormsg = "OUT_OF_MEMORY"; break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION: errormsg = "INVALID_FRAMEBUFFER_OPERATION"; break;
+            default:                               errormsg = "unknown OpenGL error"; break;
+        }
+        fprintf(stderr, "%s:%i: %s\n", file, line, errormsg);
+    }
+    return errorCode;
+}
+
+#define glCheckError() glCheckError_(__FILE__, __LINE__)
+
+void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+    (void) length;
+    (void) userParam;
+
+    const char* source_str;
+    switch (source) {
+        case GL_DEBUG_SOURCE_API:             source_str = "API"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   source_str = "window System"; break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: source_str = "shader Compiler"; break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:     source_str = "third Party"; break;
+        case GL_DEBUG_SOURCE_APPLICATION:     source_str = "application"; break;
+        case GL_DEBUG_SOURCE_OTHER:           source_str = "other"; break;
+        default:                              source_str = "unknown"; break;
+    }
+
+    const char* severity_str;
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:         severity_str = "error"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       severity_str = "warning"; break;
+        case GL_DEBUG_SEVERITY_LOW:          severity_str = "info"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: severity_str = "debug"; break;
+        default:                             severity_str = "unknown"; break;
+    }
+    const char* type_str;
+    switch (type) {
+        case GL_DEBUG_TYPE_ERROR:               type_str = "error"; break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: type_str = "deprecated behaviour"; break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  type_str = "undefined behaviour"; break;
+        case GL_DEBUG_TYPE_PORTABILITY:         type_str = "portability"; break;
+        case GL_DEBUG_TYPE_PERFORMANCE:         type_str = "performance"; break;
+        case GL_DEBUG_TYPE_MARKER:              type_str = "marker"; break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:          type_str = "push group"; break;
+        case GL_DEBUG_TYPE_POP_GROUP:           type_str = "pop group"; break;
+        case GL_DEBUG_TYPE_OTHER:               type_str = "other"; break;
+        default:                                type_str = "unknown"; break;
+    }
+
+    fprintf(stderr, "[%s] %ss (%s) [%#x]: %s", source_str, severity_str, type_str, id, message);
+    if (message[strlen(message) - 1] != '\n') {
+        fprintf(stderr, "\n");
+    }
+}
+
+void error_callback(int error, const char* description) {
+    fprintf(stderr, "[GLFW] [%#x] %s\n", error, description);
+}
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     (void) scancode;
     (void) mods;
@@ -461,8 +530,8 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 4);
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     GLFWwindow* window = glfwCreateWindow(1024, 768, "Orbit", NULL, NULL);
     if (window == NULL) {
         cout << "Failed to create GLFW window" << endl;
@@ -486,6 +555,18 @@ int main() {
     RenderState state;
     glfwSetWindowUserPointer(window, &state);
 
+    // enable OpenGL debugging
+    GLint flags;
+    glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(glDebugOutput, nullptr);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    }
+
+    // GLFW callbacks
+    glfwSetErrorCallback(error_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
