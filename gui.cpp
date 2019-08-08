@@ -167,7 +167,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
         default:                                type_str = "unknown"; break;
     }
 
-    fprintf(stderr, "[%s] %ss (%s) [%#x]: %s", source_str, severity_str, type_str, id, message);
+    fprintf(stderr, "[%s] %s (%s) [%#x]: %s", source_str, severity_str, type_str, id, message);
     if (message[strlen(message) - 1] != '\n') {
         fprintf(stderr, "\n");
     }
