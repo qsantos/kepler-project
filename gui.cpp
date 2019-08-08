@@ -449,7 +449,7 @@ void render_hud(RenderState* state) {
     }
 
     state->hud.clear();
-    state->hud.print("Hello World!");
+    state->hud.print("Hello World! %i", 3);
 
     glUseProgram(state->base_shader);
     setup_matrices(state);

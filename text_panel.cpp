@@ -3,7 +3,8 @@
 extern "C" {
 #include "texture.h"
 }
-#include <cstdio> // TODO
+#include <cstdio>
+#include <cstdarg>
 
 static const int character_width = 10;
 static const int character_height = 19;
@@ -31,10 +32,17 @@ void append_vertex(TextPanel* self, int font_row, int font_col, int drow, int dc
     self->data.push_back((6.f - float(font_row + drow)) / 6.f);
 }
 
-void TextPanel::print(const char* string) {
+void TextPanel::print(const char* format, ...) {
+    char buffer[1024];
+
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
     int initial_col = this->current_col;
 
-    for (char c = *string; c; c = *(++string)) {
+    for (char *p = buffer, c = *p; c; c = *(++p)) {
         if (c == ' ') {
             this->current_col += 1;
         } else if (c == '\t') {

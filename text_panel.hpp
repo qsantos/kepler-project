@@ -8,7 +8,7 @@
 struct TextPanel {
     TextPanel(float x, float y);
     ~TextPanel(void);
-    void print(const char* str);
+    void print(const char* format, ...);
     void clear(void);
     void bind(void);
     void draw(void);
