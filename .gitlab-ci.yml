@@ -1,7 +1,15 @@
 image: registry.gitlab.com/qsantos/orbit/ci
 
-test:
+build-linux:
   script:
     - cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor --error-exitcode=1 --quiet --enable=all *.h *.c *.hpp *.cpp
-    - make test clean
+    - make test
     - ./test
+    - make gui
+  artifacts:
+    paths:
+    - gui
+    - data/
+    expire_in: 1 week
+  after_script:
+    - make clean
