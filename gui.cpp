@@ -2,6 +2,7 @@ extern "C" {
     #include "util.h"
     #include "texture.h"
 }
+#include "text_panel.hpp"
 #include "mesh.hpp"
 #include "cubemap.hpp"
 #include "shaders.hpp"
@@ -54,6 +55,7 @@ struct RenderState {
     int windowed_height = 768;
     int viewport_width = 1024;
     int viewport_height = 768;
+    TextPanel hud = TextPanel(5.f, 5.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
     glm::mat4 model_view_projection_matrix;
     glm::mat4 model_view_matrix;
@@ -436,6 +438,32 @@ void render_helpers(RenderState* state, const vec3& scene_origin) {
     }
 }
 
+void render_hud(RenderState* state) {
+    if (state->picking_active) {
+        return;
+    }
+
+    state->hud.clear();
+    state->hud.print("Hello World!");
+
+    glUseProgram(state->base_shader);
+    setup_matrices(state);
+
+    // use orthographic projection
+    auto model_view = glm::mat4(1.0f);
+    GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
+    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(model_view));
+
+    auto proj = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -1.f, 1.f);
+    GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
+    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * model_view));
+
+    GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
+    glUniform4f(colorUniform, 1.f, 1.f, 1.f, 1.f);
+
+    state->hud.draw();
+}
+
 void render(RenderState* state) {
     if (state->picking_active) {
         state->picking_objects.clear();
@@ -449,6 +477,7 @@ void render(RenderState* state) {
     render_skybox(state);
     render_bodies(state, scene_origin);
     render_helpers(state, scene_origin);
+    render_hud(state);
 }
 
 CelestialBody* pick(RenderState* state) {

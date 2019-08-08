@@ -24,7 +24,7 @@ all: $(TARGETS)
 example: body.o orbit.o recipes.o util.o load.o lambert.o
 test: body.o orbit.o util.o load.o recipes.o lambert.o
 simulation: body.o orbit.o util.o load.o recipes.o lambert.o
-gui: mesh.o texture.o shaders.o cubemap.o body.o orbit.o load.o util.o
+gui: mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o util.o
 
 # handle include dependencies
 -include $(wildcard *.d)
