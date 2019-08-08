@@ -482,7 +482,7 @@ static void test_body(void) {
     double gravitational_parameter = 1e12;
     body_set_gravparam(&b, gravitational_parameter);
     body_set_mass(&b, b.mass);
-    assertEquals(b.mass, 1.498387734797358e+22);
+    assertEquals(b.mass, 1.4986684330971933e+22);
     assertEquals(b.gravitational_parameter, gravitational_parameter);
 
     {
