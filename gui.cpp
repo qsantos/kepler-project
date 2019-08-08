@@ -41,6 +41,11 @@ struct RenderState {
     GLuint position_marker_shader;
     Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
     GLuint vao;
+
+    double last_simulation_step;
+    double last_fps_measure;
+    size_t n_frames_since_last = 0;
+
     bool drag_active = false;
     bool picking_active = false;
     std::vector<CelestialBody*> picking_objects;
@@ -665,20 +670,19 @@ int main() {
         state.time = (double) (time(NULL) - J2000);
     }
 
-    double last_simulation_step = real_clock();
-    double last_fps_measure = real_clock();
-    size_t n_frames_since_last = 0;
+    state.last_simulation_step = real_clock();
+    state.last_fps_measure = real_clock();
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
         double now = real_clock();
 
-        if (now - last_fps_measure > 1.) {
+        if (now - state.last_fps_measure > 1.) {
             // display FPS
-            double fps = (double) n_frames_since_last / (now - last_fps_measure);
+            double fps = (double) state.n_frames_since_last / (now - state.last_fps_measure);
             printf("%.1f FPS\n", fps);
-            n_frames_since_last = 0;
-            last_fps_measure = now;
+            state.n_frames_since_last = 0;
+            state.last_fps_measure = now;
 
             // display local time
             if (string(state.root->name) == "Sun") {
@@ -691,14 +695,14 @@ int main() {
             }
         }
 
-        state.time += (now - last_simulation_step) * state.timewarp;
-        last_simulation_step = now;
+        state.time += (now - state.last_simulation_step) * state.timewarp;
+        state.last_simulation_step = now;
 
         render(&state);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-        n_frames_since_last += 1;
+        state.n_frames_since_last += 1;
     }
 
     glfwTerminate();
