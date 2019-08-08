@@ -324,27 +324,22 @@ void clear_picking_object(RenderState* state) {
     set_picking_name(0);
 }
 
-void render(RenderState* state) {
+void render_skybox(RenderState* state) {
     if (state->picking_active) {
-        state->picking_objects.clear();
+        return;
     }
 
-    glClearColor(0.f, 0.f, 0.f, .0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(state->cubemap_shader);
+    setup_matrices(state, false);
 
-    if (!state->picking_active) {
-        // skybox
-        glUseProgram(state->cubemap_shader);
-        setup_matrices(state, false);
-        glDisable(GL_DEPTH_TEST);
-        state->skybox.draw();
-        glEnable(GL_DEPTH_TEST);
-    }
+    glDisable(GL_DEPTH_TEST);
+    state->skybox.draw();
+    glEnable(GL_DEPTH_TEST);
+}
 
+void render_bodies(RenderState* state, const vec3& scene_origin) {
     glUseProgram(state->base_shader);
     setup_matrices(state);
-
-    auto scene_origin = body_global_position_at_time(state->focus, state->time);
 
     set_picking_object(state, state->root);
     render_body(state, state->root, scene_origin);
@@ -367,7 +362,9 @@ void render(RenderState* state) {
         render_body(state, body, scene_origin);
         clear_picking_object(state);
     }
+}
 
+void render_helpers(RenderState* state, const vec3& scene_origin) {
     if (!state->show_helpers) {
         return;
     }
@@ -412,7 +409,6 @@ void render(RenderState* state) {
         state->apses_meshes.at(body->name).draw();
         clear_picking_object(state);
     }
-    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
     for (auto key_value_pair : state->bodies) {
@@ -438,7 +434,21 @@ void render(RenderState* state) {
         FocusedOrbitApsesMesh(body->orbit, state->time).draw();
         clear_picking_object(state);
     }
-    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void render(RenderState* state) {
+    if (state->picking_active) {
+        state->picking_objects.clear();
+    }
+
+    glClearColor(0.f, 0.f, 0.f, .0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    auto scene_origin = body_global_position_at_time(state->focus, state->time);
+
+    render_skybox(state);
+    render_bodies(state, scene_origin);
+    render_helpers(state, scene_origin);
 }
 
 CelestialBody* pick(RenderState* state) {
