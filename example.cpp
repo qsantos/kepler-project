@@ -226,7 +226,7 @@ double rendez_vous_cost2(CelestialBody* origin, CelestialBody* target, double ti
 
 int main(void) {
     /*
-    const char* data_file = "solar_system.json";
+    const char* data_file = "data/solar_system.json";
     const char* origin_name = "Earth";
     const char* target_name = "Mars";
     double time_at_departure = 7493. * 86400.;
@@ -234,7 +234,7 @@ int main(void) {
     // */
 
     //*
-    const char* data_file = "kerbol_system.json";
+    const char* data_file = "data/kerbol_system.json";
     const char* origin_name = "Kerbin";
     const char* target_name = "Duna";
     double time_at_departure = 5091552.;
@@ -242,7 +242,7 @@ int main(void) {
     // */
 
     /*
-    const char* data_file = "kerbol_system.json";
+    const char* data_file = "data/kerbol_system.json";
     const char* origin_name = "Kerbin";
     const char* target_name = "Eve";
     double time_at_departure = 12636864.;

@@ -685,8 +685,8 @@ int main() {
     float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 
-    if (load_bodies(&state.bodies, "solar_system.json") < 0) {
-        fprintf(stderr, "Failed to load '%s'\n", "solar_system.json");
+    if (load_bodies(&state.bodies, "data/solar_system.json") < 0) {
+        fprintf(stderr, "Failed to load '%s'\n", "data/solar_system.json");
         exit(EXIT_FAILURE);
     }
     for (auto key_value_pair : state.bodies) {

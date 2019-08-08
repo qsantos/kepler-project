@@ -747,8 +747,8 @@ static void test_orbit_invalid(void) {
 
 static void test_load_solar_system(void) {
     Dict solar_system;
-    if (load_bodies(&solar_system, "solar_system.json") < 0) {
-        fprintf(stderr, "Failed to load '%s'\n", "solar_system.json");
+    if (load_bodies(&solar_system, "data/solar_system.json") < 0) {
+        fprintf(stderr, "Failed to load '%s'\n", "data/solar_system.json");
         exit(EXIT_FAILURE);
     }
 
@@ -785,8 +785,8 @@ static void test_load_solar_system(void) {
 
 static void test_load_kerbol_system(void) {
     Dict kerbol_system;
-    if (load_bodies(&kerbol_system, "kerbol_system.json") < 0) {
-        fprintf(stderr, "Failed to load '%s'\n", "kerbol.json");
+    if (load_bodies(&kerbol_system, "data/kerbol_system.json") < 0) {
+        fprintf(stderr, "Failed to load '%s'\n", "data/kerbol_system.json");
         exit(EXIT_FAILURE);
     }
 

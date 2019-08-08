@@ -209,7 +209,7 @@ def main() -> None:
     bodies['Makemake']['radius'] = 715e3
     bodies['Eris']['radius'] = 1163e3
 
-    with open('../solar_system.json', 'w') as f:
+    with open('../data/solar_system.json', 'w') as f:
         json.dump(bodies, f, sort_keys=True, indent=4, separators=(',', ': '))
         f.write('\n')
 
