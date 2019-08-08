@@ -38,4 +38,7 @@ gui: mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o uti
 clean:
 	rm -f *.o *.d *.gcda *.gcno *.gcov
 
-.PHONY: all clean
+destroy: clean
+	rm -f $(TARGETS)
+
+.PHONY: all clean destroy

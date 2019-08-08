@@ -1,15 +1,22 @@
 image: registry.gitlab.com/qsantos/orbit/ci
 
-build-linux:
+test-and-build:
   script:
+    # Linting
     - cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor --error-exitcode=1 --quiet --enable=all *.h *.c *.hpp *.cpp
+    # Tests
     - make test
     - ./test
+    # Linux GUI
     - make gui
+    - tar zcvf orbit-lin64.tgz gui data/
+    - make destroy
+    # Windows GUI
+    - PLATFORM=win32 make gui
+    - zip -r orbit-win64.zip gui.exe *.dll data/
+    - make destroy
   artifacts:
     paths:
-    - gui
-    - data/
+    - orbit-lin64.tgz
+    - orbit-win64.zip
     expire_in: 1 week
-  after_script:
-    - make clean

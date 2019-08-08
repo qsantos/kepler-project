@@ -460,7 +460,7 @@ void fill_hud(RenderState* state) {
         time_t simulation_time = J2000 + (time_t) state->time;
         struct tm* t = localtime(&simulation_time);
         char buffer[512];
-        strftime(buffer, sizeof(buffer), "%F %T %z", t);
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S %z", t);
         state->hud.print("Date: %s\n", buffer);
     }
 
