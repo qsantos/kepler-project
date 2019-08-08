@@ -31,6 +31,7 @@ struct RenderState {
     bool show_help = false;
     bool show_wireframe = false;
     bool show_helpers = true;
+    bool show_hud = true;
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
@@ -214,7 +215,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
         } else if (key == GLFW_KEY_H) {
-            state->show_help = !state->show_help;
+            if (mods & GLFW_MOD_SHIFT) {
+                state->show_hud = !state->show_hud;
+            } else {
+                state->show_help = !state->show_help;
+            }
         } else if (key == GLFW_KEY_EQUAL) {
             if (string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
@@ -478,6 +483,9 @@ void fill_hud(RenderState* state) {
 }
 
 void render_hud(RenderState* state) {
+    if (!state->show_hud) {
+        return;
+    }
     if (state->picking_active) {
         return;
     }
