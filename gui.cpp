@@ -137,9 +137,9 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
     const char* source_str;
     switch (source) {
         case GL_DEBUG_SOURCE_API:             source_str = "API"; break;
-        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   source_str = "window System"; break;
-        case GL_DEBUG_SOURCE_SHADER_COMPILER: source_str = "shader Compiler"; break;
-        case GL_DEBUG_SOURCE_THIRD_PARTY:     source_str = "third Party"; break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   source_str = "window system"; break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER: source_str = "shader compiler"; break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:     source_str = "third party"; break;
         case GL_DEBUG_SOURCE_APPLICATION:     source_str = "application"; break;
         case GL_DEBUG_SOURCE_OTHER:           source_str = "other"; break;
         default:                              source_str = "unknown"; break;
