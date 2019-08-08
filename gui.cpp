@@ -443,13 +443,44 @@ void render_helpers(RenderState* state, const vec3& scene_origin) {
     }
 }
 
+void fill_hud(RenderState* state) {
+    // time warp
+    state->hud.print("Time x%g\n", state->timewarp);
+
+    // local time
+    if (string(state->root->name) == "Sun") {
+        time_t simulation_time = J2000 + (time_t) state->time;
+        struct tm* t = localtime(&simulation_time);
+        char buffer[512];
+        strftime(buffer, sizeof(buffer), "%F %T %z", t);
+        state->hud.print("Date: %s\n", buffer);
+    }
+
+    // focus
+    state->hud.print("Focus: %s\n", state->focus->name);
+
+    // FPS
+    double now = real_clock();
+    double fps = (double) state->n_frames_since_last / (now - state->last_fps_measure);
+    state->hud.print("%.1f FPS\n", fps);
+
+    // update FPS measure every second
+    if (now - state->last_fps_measure > 1.) {
+        state->n_frames_since_last = 0;
+        state->last_fps_measure = now;
+    }
+
+    // zoom
+    state->hud.print("Zoom: %g\n", state->view_zoom);
+}
+
 void render_hud(RenderState* state) {
     if (state->picking_active) {
         return;
     }
 
     state->hud.clear();
-    state->hud.print("Hello World! %i", 3);
+    fill_hud(state);
 
     glUseProgram(state->base_shader);
     setup_matrices(state);
@@ -675,26 +706,8 @@ int main() {
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
+        // update time
         double now = real_clock();
-
-        if (now - state.last_fps_measure > 1.) {
-            // display FPS
-            double fps = (double) state.n_frames_since_last / (now - state.last_fps_measure);
-            printf("%.1f FPS\n", fps);
-            state.n_frames_since_last = 0;
-            state.last_fps_measure = now;
-
-            // display local time
-            if (string(state.root->name) == "Sun") {
-                time_t simulation_time = J2000 + (time_t) state.time;
-                struct tm* t = localtime(&simulation_time);
-
-                char buffer[512];
-                strftime(buffer, sizeof(buffer), "%c", t);
-                printf("%s\n", buffer);
-            }
-        }
-
         state.time += (now - state.last_simulation_step) * state.timewarp;
         state.last_simulation_step = now;
 
