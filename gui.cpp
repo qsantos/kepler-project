@@ -28,6 +28,7 @@ using std::string;
 struct RenderState {
     double time = 0.;
     double timewarp = 1.;
+    bool show_wireframe = false;
     bool show_helpers = true;
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
@@ -194,10 +195,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             glfwSetWindowShouldClose(window, true);
         } else if (key == GLFW_KEY_F11) {
             toggle_fullscreen(window);
-        } else if (key == GLFW_KEY_L) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        } else if (key == GLFW_KEY_F) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        } else if (key == GLFW_KEY_W) {
+            state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
             state->timewarp /= 10.;
             cout << "Time warp: "  << state->timewarp << endl;
@@ -510,9 +509,17 @@ void render(RenderState* state) {
 
     auto scene_origin = body_global_position_at_time(state->focus, state->time);
 
+    if (state->show_wireframe) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
     render_skybox(state);
     render_bodies(state, scene_origin);
     render_helpers(state, scene_origin);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     render_hud(state);
 }
 
