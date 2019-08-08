@@ -28,6 +28,7 @@ using std::string;
 struct RenderState {
     double time = 0.;
     double timewarp = 1.;
+    bool show_help = false;
     bool show_wireframe = false;
     bool show_helpers = true;
     map<string, CelestialBody*> bodies;
@@ -62,6 +63,7 @@ struct RenderState {
     int viewport_width = 1024;
     int viewport_height = 768;
     TextPanel hud = TextPanel(5.f, 5.f);
+    TextPanel help = TextPanel(5.f, 119.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
     glm::mat4 model_view_projection_matrix;
     glm::mat4 model_view_matrix;
@@ -211,6 +213,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             cout << "Time warp: "  << state->timewarp << endl;
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
+        } else if (key == GLFW_KEY_H) {
+            state->show_help = !state->show_help;
         } else if (key == GLFW_KEY_EQUAL) {
             if (string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
@@ -497,6 +501,9 @@ void render_hud(RenderState* state) {
     glUniform4f(colorUniform, 1.f, 1.f, 1.f, 1.f);
 
     state->hud.draw();
+    if (state->show_help) {
+        state->help.draw();
+    }
 }
 
 void render(RenderState* state) {
@@ -699,6 +706,10 @@ int main() {
         state.orbit_meshes.emplace(name, body->orbit);
         state.apses_meshes.emplace(name, body->orbit);
     }
+
+    char* help = load_file("data/help.txt");
+    state.help.print("%s", help);
+    free(help);
 
     // disable vsync
     // glfwSwapInterval(0);

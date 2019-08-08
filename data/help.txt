@@ -1,0 +1,29 @@
+=== HELP ===
+
+Key bindings
+============
+
+Navigation
+----------
+
+Escape       exit
+Left click   switch focus to celestial body
+Right click  drag and drop to move the view
+Mouse wheel  zoom in and out
+
+Display
+-------
+
+F11          toggle fullscreen
+w            toggle wireframe mode
+o            toggle orbits and other helpers
+h            toggle this help
+
+Time
+----
+
+, (comma)    slow down
+. (period)   speed up
+/ (slash)    reset to normal time speed
+i            invert the arrow of time
+= (equal)    go back to present
