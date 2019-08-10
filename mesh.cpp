@@ -173,7 +173,9 @@ static void quadspheremesh_add_vertex(std::vector<float>& data, size_t& i, float
     float u = sqrtf(2.f) * tu / sqrtf(1.f -tu * tu);
     float v = b / sqrtf(1.f + (1.f - b * b) * cos(a * (M_PIf32 / 3.f)));
 
-    float x, y, z;
+    float x = 0.f;
+    float y = 0.f;
+    float z = 0.f;
     switch (face) {
     case 0: { x =  u; y =  v; z = +1; break; }
     case 1: { x =  v; y =  u; z = -1; break; }
