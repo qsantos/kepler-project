@@ -1437,12 +1437,12 @@
     "Moon": {
         "gravitational_parameter": 4902801000000.0,
         "orbit": {
-            "argument_of_periapsis": 5.5527650152199595,
+            "argument_of_periapsis": 2.186442877507975,
             "eccentricity": 0.0554,
             "epoch": 0.0,
             "inclination": 0.09005898940290741,
-            "longitude_of_ascending_node": 2.1830578283945075,
-            "mean_anomaly_at_epoch": 2.3609068791727297,
+            "longitude_of_ascending_node": 2.447267182252115,
+            "mean_anomaly_at_epoch": 0.8562589905416457,
             "primary": "Earth",
             "semi_major_axis": 384400000.0
         },
