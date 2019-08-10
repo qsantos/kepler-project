@@ -8,15 +8,13 @@ test-and-build:
     - make test
     - ./test
     # Linux GUI
-    - make gui
-    - tar zcvf orbit-lin64.tgz gui data/
+    - make linux
     - make destroy
     # Windows GUI
-    - PLATFORM=win32 make gui
-    - zip -r orbit-win64.zip gui.exe *.dll data/
+    - make windows
     - make destroy
   artifacts:
     paths:
-    - orbit-lin64.tgz
-    - orbit-win64.zip
+    - "*.tgz"
+    - "*.zip"
     expire_in: 1 week

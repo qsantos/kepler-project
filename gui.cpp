@@ -1,6 +1,7 @@
 extern "C" {
     #include "util.h"
     #include "texture.h"
+    #include "version.h"
 }
 #include "text_panel.hpp"
 #include "mesh.hpp"
@@ -480,6 +481,9 @@ void fill_hud(RenderState* state) {
 
     // zoom
     state->hud.print("Zoom: %g\n", state->view_zoom);
+
+    // version
+    state->hud.print("Version " VERSION "\n");
 }
 
 void render_hud(RenderState* state) {
