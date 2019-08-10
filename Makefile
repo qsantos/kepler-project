@@ -13,7 +13,7 @@ ifeq ($(PLATFORM),win32)
 	CCFLAGS+=-D__USE_MINGW_ANSI_STDIO=1
 	LDFLAGS+=-static -mwindows
 	# NOTE: MinGW on Linux ignores LIBRARY_PATH
-	LDLIBS:=-L/usr/local/x86_64-w64-mingw32/lib -lm -lcjson -lglfw3 -lopengl32 -lglew32
+	LDLIBS:=-L/usr/local/x86_64-w64-mingw32/lib -lstdc++ -lm -lcjson -lglfw3 -lopengl32 -lglew32
 endif
 
 all: $(TARGETS)
