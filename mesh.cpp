@@ -134,6 +134,101 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+static void quadspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, int divisions, int face, int xdivision, int ydivision) {
+    float s = 2.f / (float) divisions;
+    float a = -1.f + (float) xdivision * s;
+    float b = -1.f + (float) ydivision * s;
+
+    // NOTE: here, u and v refer to the outputs of the warp function
+    // u and v are *NOT* UV coordinates
+
+    // for more information, see http://jcgt.org/published/0007/02/01/paper.pdf
+    // Cube-to-sphere Projections for Procedural Texturing and Beyond
+    // by Matt Zucker and Yosuke Higashi from Swarthmore College
+    // Journal of Computer Graphics Techniques Vol. 7, No. 2, 2018
+    // section 3, starting page 6 and especially pages 9 through 11
+
+    // identity function (subsection 3.1)
+    //float u = a;
+    //float v = b;
+
+    // tangent warp function (subsection 3.2)
+    //static const float theta = M_PIf32 / 4.f;  // Brown 2017
+    //static const float theta = 0.8687f;  // near optimal
+    //float u = tan(a * theta) / tan(theta);
+    //float v = tan(b * theta) / tan(theta);
+
+    // Everitt's univariate invertible warp function (subsection 3.3)
+    //static const float eps = 1.5f;  // 2014
+    //static const float eps = 1.375f;  // 2016
+    //static const float eps = 1.4511f;  // near optimal
+    //float u = copysign(1.f, a) * ((eps - sqrtf(eps * eps - 4.f * (eps - 1) * fabsf(a))) / 2.f / (eps - 1));
+    //float v = copysign(1.f, b) * ((eps - sqrtf(eps * eps - 4.f * (eps - 1) * fabsf(b))) / 2.f / (eps - 1));
+
+    // COBE quadrilateralized spherical cube (subsection 3.5)
+    // TODO: see https://github.com/cix/QuadSphere
+
+    // Arvo's exact equal-area method (subsection 3.6)
+    float tu = tanf(a * (M_PIf32 / 6.f));
+    float u = sqrtf(2.f) * tu / sqrtf(1.f -tu * tu);
+    float v = b / sqrtf(1.f + (1.f - b * b) * cos(a * (M_PIf32 / 3.f)));
+
+    float x, y, z;
+    switch (face) {
+    case 0: { x =  u; y =  v; z = +1; break; }
+    case 1: { x =  v; y =  u; z = -1; break; }
+    case 2: { x =  u; y = -1; z =  v; break; }
+    case 3: { x =  v; y = +1; z =  u; break; }
+    case 4: { x = +1; y =  u; z =  v; break; }
+    case 5: { x = -1; y =  v; z =  u; break; }
+    default: assert(0);
+    }
+
+    float n = sqrt(x*x + y*y + z*z);
+    x /= n;
+    y /= n;
+    z /= n;
+
+    // position
+    data[i++] = x * radius;
+    data[i++] = y * radius;
+    data[i++] = z * radius;
+    // texcoord
+    data[i++] = 0.f;  // atan2(y, x) / (2.f * M_PIf32) + .5f;
+    data[i++] = 0.f;  // asin(z) / M_PIf32 + .5f;
+    // normal
+    data[i++] = x;
+    data[i++] = y;
+    data[i++] = z;
+}
+
+QuadSphereMesh::QuadSphereMesh(float radius, int divisions) :
+    Mesh(GL_TRIANGLE_STRIP, 6 * 2 * (divisions + 2) * divisions, true)
+{
+    // make a face of divisions×divisions squares
+    std::vector<float> data;
+    data.resize(8 * this->length);
+    size_t i = 0;
+
+    for (int face = 0; face < 6; face += 1) {
+        for (int ydivision = 0; ydivision < divisions; ydivision += 1) {
+            quadspheremesh_add_vertex(data, i, radius, divisions, face, 0, ydivision);
+
+            for (int xdivision = 0; xdivision <= divisions; xdivision += 1) {
+                quadspheremesh_add_vertex(data, i, radius, divisions, face, xdivision, ydivision);
+                quadspheremesh_add_vertex(data, i, radius, divisions, face, xdivision, ydivision + 1);
+            }
+
+            quadspheremesh_add_vertex(data, i, radius, divisions, face, divisions, ydivision + 1);
+        }
+    }
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 OrbitMesh::OrbitMesh(Orbit* orbit) :
     Mesh(GL_LINE_LOOP, 256, false)
 {

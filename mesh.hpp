@@ -23,6 +23,10 @@ struct UVSphereMesh : public Mesh {
     UVSphereMesh(float radius, int stacks, int slices);
 };
 
+struct QuadSphereMesh : public Mesh {
+    QuadSphereMesh(float radius, int divisions);
+};
+
 struct OrbitMesh : public Mesh {
     OrbitMesh(Orbit* orbit);
 };
