@@ -91,6 +91,27 @@ CubeMesh::CubeMesh(double size) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void uvspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, int stacks, int slices, int stack, int slice) {
+    float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
+    float stack_angle = M_PIf32 * float(stack) / float(stacks);
+
+    float nx = sinf(stack_angle) * sinf(slice_angle);
+    float ny = sinf(stack_angle) * cosf(slice_angle);
+    float nz = cosf(stack_angle);
+
+    // position
+    data[i++] = radius * nx;
+    data[i++] = radius * ny;
+    data[i++] = radius * nz;
+    // texcoord
+    data[i++] = 1 - float(slice) / float(slices);
+    data[i++] = 1 - float(stack) / float(stacks);
+    // normal
+    data[i++] = nx;
+    data[i++] = ny;
+    data[i++] = nz;
+}
+
 UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
     Mesh(GL_TRIANGLE_STRIP, 2 * (slices + 2) * stacks, true)
 {
@@ -99,86 +120,12 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
 
     size_t i = 0;
     for (GLsizei stack = 0; stack < stacks ; stack += 1) {
-
-        {
-            GLsizei slice = 0;
-            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
-            float stack_angle = M_PIf32 * float(stack) / float(stacks);
-            float nx = sinf(stack_angle) * sinf(slice_angle);
-            float ny = sinf(stack_angle) * cosf(slice_angle);
-            float nz = cosf(stack_angle);
-            // position
-            data[i++] = radius * nx;
-            data[i++] = radius * ny;
-            data[i++] = radius * nz;
-            // texcoord
-            data[i++] = 1 - float(slice) / float(slices);
-            data[i++] = 1 - float(stack) / float(stacks);
-            // normal
-            data[i++] = nx;
-            data[i++] = ny;
-            data[i++] = nz;
-        }
-
+        uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack, 0);
         for (GLsizei slice = 0; slice <= slices; slice += 1) {
-            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
-
-            {
-                float stack_angle = M_PIf32 * float(stack) / float(stacks);
-                float nx = sinf(stack_angle) * sinf(slice_angle);
-                float ny = sinf(stack_angle) * cosf(slice_angle);
-                float nz = cosf(stack_angle);
-                // position
-                data[i++] = radius * nx;
-                data[i++] = radius * ny;
-                data[i++] = radius * nz;
-                // texcoord
-                data[i++] = 1 - float(slice) / float(slices);
-                data[i++] = 1 - float(stack) / float(stacks);
-                // normal
-                data[i++] = nx;
-                data[i++] = ny;
-                data[i++] = nz;
-            }
-
-            {
-                float stack_angle = M_PIf32 * float(stack+1) / float(stacks);
-                float nx = sinf(stack_angle) * sinf(slice_angle);
-                float ny = sinf(stack_angle) * cosf(slice_angle);
-                float nz = cosf(stack_angle);
-                // position
-                data[i++] = radius * nx;
-                data[i++] = radius * ny;
-                data[i++] = radius * nz;
-                // texcoord
-                data[i++] = 1 - float(slice) / float(slices);
-                data[i++] = 1 - float(stack+1) / float(stacks);
-                //normal
-                data[i++] = nx;
-                data[i++] = ny;
-                data[i++] = nz;
-            }
+            uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack, slice);
+            uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack + 1, slice);
         }
-
-        {
-            GLsizei slice = slices;
-            float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
-            float stack_angle = M_PIf32 * float(stack+1) / float(stacks);
-            float nx = sinf(stack_angle) * sinf(slice_angle);
-            float ny = sinf(stack_angle) * cosf(slice_angle);
-            float nz = cosf(stack_angle);
-            // position
-            data[i++] = radius * nx;
-            data[i++] = radius * ny;
-            data[i++] = radius * nz;
-            // texcoord
-            data[i++] = 1 - float(slice) / float(slices);
-            data[i++] = 1 - float(stack+1) / float(stacks);
-            //normal
-            data[i++] = nx;
-            data[i++] = ny;
-            data[i++] = nz;
-        }
+        uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack + 1, slices);
     }
 
     glGenBuffers(1, &this->vbo);
