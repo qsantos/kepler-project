@@ -67,8 +67,10 @@ struct RenderState {
     TextPanel hud = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 119.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
-    glm::mat4 model_view_projection_matrix;
-    glm::mat4 model_view_matrix;
+
+    glm::mat4 model_matrix;
+    glm::mat4 view_matrix;
+    glm::mat4 projection_matrix;
 };
 
 CelestialBody* pick(RenderState* state);
@@ -88,11 +90,25 @@ bool is_ancestor_of(CelestialBody* candidate, CelestialBody* target) {
     return false;
 }
 
-void setup_matrices(RenderState* state, bool zoom=true) {
+void update_matrices(RenderState* state) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
-    glm::mat4 model = glm::mat4(1.0f);
+    auto model_view = state->view_matrix * state->model_matrix;
+    GLint var = glGetUniformLocation(program, "model_view_matrix");
+    if (var >= 0) {
+        glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(model_view));
+    }
+
+    auto model_view_projection = state->projection_matrix * model_view;
+    var = glGetUniformLocation(program, "model_view_projection_matrix");
+    if (var >= 0) {
+        glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(model_view_projection));
+    }
+}
+
+void reset_matrices(RenderState* state, bool zoom=true) {
+    state->model_matrix = glm::mat4(1.0f);
 
     glm::mat4 view = glm::mat4(1.0f);
     if (zoom) {
@@ -100,18 +116,12 @@ void setup_matrices(RenderState* state, bool zoom=true) {
     }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
+    state->view_matrix = view;
 
     float aspect = float(state->viewport_width) / float(state->viewport_height);
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+    state->projection_matrix = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
 
-    state->model_view_projection_matrix = proj * view * model;
-    state->model_view_matrix = view * model;
-
-    GLint uniMVP = glGetUniformLocation(program, "model_view_projection_matrix");
-    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(state->model_view_projection_matrix));
-
-    GLint uniMV = glGetUniformLocation(program, "model_view_matrix");
-    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(state->model_view_matrix));
+    update_matrices(state);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -120,7 +130,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     state->viewport_width = width;
     state->viewport_height = height;
     glViewport(0, 0, width, height);
-    setup_matrices(state);
 }
 
 void toggle_fullscreen(GLFWwindow* window) {
@@ -262,8 +271,6 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y) {
         state->view_phi += (y - state->cursor_y) / 4.;
 
         state->view_phi = glm::clamp(state->view_phi, -180., 0.);
-
-        setup_matrices(state);
     }
 
     state->cursor_x = x;
@@ -275,37 +282,32 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
 
     state->view_zoom *= pow(1.2, yoffset);
-    setup_matrices(state);
 }
 
 void render_body(RenderState* state, CelestialBody* body, const vec3& scene_origin) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
-    auto transform = state->model_view_matrix;
+    auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(body, state->time) - scene_origin;
-    transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
-    transform = glm::scale(transform, glm::vec3(float(body->radius)));
+    model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
+    model = glm::scale(model, glm::vec3(float(body->radius)));
 
     // axial tilt
     if (body->north_pole != NULL) {
         double z_angle = body->north_pole->ecliptic_longitude - M_PI / 2.;
-        transform = glm::rotate(transform, float(z_angle), glm::vec3(0.f, 0.f, 1.f));
+        model = glm::rotate(model, float(z_angle), glm::vec3(0.f, 0.f, 1.f));
         double x_angle = body->north_pole->ecliptic_latitude - M_PI / 2.;
-        transform = glm::rotate(transform, float(x_angle), glm::vec3(1.f, 0.f, 0.f));
+        model = glm::rotate(model, float(x_angle), glm::vec3(1.f, 0.f, 0.f));
     }
 
     // OpenGL use single precision while Python has double precision
     // reducing modulo 2 PI in Python reduces loss of significance
     double turn_fraction = fmod(state->time / body->sidereal_day, 1.);
-    transform = glm::rotate(transform, 2.f * M_PIf32 * float(turn_fraction), glm::vec3(0.f, 0.f, 1.f));
+    model = glm::rotate(model, 2.f * M_PIf32 * float(turn_fraction), glm::vec3(0.f, 0.f, 1.f));
 
-    GLint uniMV = glGetUniformLocation(program, "model_view_matrix");
-    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
-    float aspect = float(state->viewport_width) / float(state->viewport_height);
-    glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-    GLint uniMVP = glGetUniformLocation(program, "model_view_projection_matrix");
-    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+    state->model_matrix = model;
+    update_matrices(state);
 
     auto texture = state->body_textures.at(body->name);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -346,7 +348,7 @@ void render_skybox(RenderState* state) {
     }
 
     glUseProgram(state->cubemap_shader);
-    setup_matrices(state, false);
+    reset_matrices(state, false);
 
     glDisable(GL_DEPTH_TEST);
     state->skybox.draw();
@@ -355,7 +357,7 @@ void render_skybox(RenderState* state) {
 
 void render_bodies(RenderState* state, const vec3& scene_origin) {
     glUseProgram(state->base_shader);
-    setup_matrices(state);
+    reset_matrices(state);
 
     set_picking_object(state, state->root);
     render_body(state, state->root, scene_origin);
@@ -363,9 +365,9 @@ void render_bodies(RenderState* state, const vec3& scene_origin) {
 
     // enable lighting
     glUseProgram(state->lighting_shader);
-    setup_matrices(state);
+    reset_matrices(state);
     auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
-    auto pos2 = state->model_view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+    auto pos2 = state->view_matrix * state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
     GLint lighting_source = glGetUniformLocation(state->lighting_shader, "lighting_source");
     glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
@@ -390,12 +392,12 @@ void render_helpers(RenderState* state, const vec3& scene_origin) {
     // draw circles around celestial bodies when from far away
     glPointSize(20);
     glUseProgram(state->position_marker_shader);
-    setup_matrices(state);
+    reset_matrices(state);
     glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
     OrbitSystem(state->root, scene_origin, state->time).draw();
 
     glUseProgram(state->base_shader);
-    setup_matrices(state);
+    reset_matrices(state);
 
     glPointSize(5);
 
@@ -409,16 +411,9 @@ void render_helpers(RenderState* state, const vec3& scene_origin) {
             continue;
         }
 
-        auto transform = state->model_view_matrix;
         auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
-        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
-
-        GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
-        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
-        float aspect = float(state->viewport_width) / float(state->viewport_height);
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-        GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
-        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+        state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        update_matrices(state);
 
         set_picking_object(state, body);
         state->orbit_meshes.at(body->name).draw();
@@ -433,17 +428,9 @@ void render_helpers(RenderState* state, const vec3& scene_origin) {
             continue;
         }
 
-        setup_matrices(state);
-        auto transform = state->model_view_matrix;
         auto position = body_global_position_at_time(body, state->time) - scene_origin;
-        transform = glm::translate(transform, glm::vec3(position[0], position[1], position[2]));
-
-        GLint uniMV = glGetUniformLocation(state->base_shader, "model_view_matrix");
-        glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(transform));
-        float aspect = float(state->viewport_width) / float(state->viewport_height);
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
-        GLint uniMVP = glGetUniformLocation(state->base_shader, "model_view_projection_matrix");
-        glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * transform));
+        state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        update_matrices(state);
 
         set_picking_object(state, body);
         FocusedOrbitMesh(body->orbit, state->time).draw();
@@ -498,7 +485,7 @@ void render_hud(RenderState* state) {
     fill_hud(state);
 
     glUseProgram(state->base_shader);
-    setup_matrices(state);
+    reset_matrices(state);
 
     // use orthographic projection
     auto model_view = glm::mat4(1.0f);
@@ -690,7 +677,7 @@ int main() {
 
     // initialize viewport
     glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
-    setup_matrices(&state);
+    reset_matrices(&state);
 
     // fill default texture with white for convenience
     glBindTexture(GL_TEXTURE_2D, 0);
