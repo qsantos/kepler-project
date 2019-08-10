@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import json
-import re
 from datetime import datetime
-from math import acos, asin, atan, cos, pi, radians, sin, tan
+from math import acos, asin, atan, cos, pi, sin, tan
 from typing import Dict
-from urllib.request import urlopen
 
 from parse import (
     ReferencePlane, parse_factsheets, parse_p_elem_t1, parse_planet_phys_par,
-    parse_sat_elem, parse_sat_phys_par, planet_phys_par_G, parse_sbdb,
+    parse_sat_elem, parse_sat_phys_par, parse_sbdb, planet_phys_par_G,
 )
 
-astronomical_unit = 149597870700.
 J2000 = datetime(2000, 1, 1, 12)
 obliquity_of_the_ecliptic = 0.40910517666747087
 
