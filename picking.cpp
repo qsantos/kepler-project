@@ -11,7 +11,7 @@ void set_picking_name(size_t name) {
     );
 }
 
-void set_picking_object(RenderState* state, CelestialBody* object) {
+void set_picking_object(GlobalState* state, CelestialBody* object) {
     if (!state->picking_active) {
         return;
     }
@@ -20,14 +20,14 @@ void set_picking_object(RenderState* state, CelestialBody* object) {
     set_picking_name(state->picking_objects.size());
 }
 
-void clear_picking_object(RenderState* state) {
+void clear_picking_object(GlobalState* state) {
     if (!state->picking_active) {
         return;
     }
     set_picking_name(0);
 }
 
-CelestialBody* pick(RenderState* state) {
+CelestialBody* pick(GlobalState* state) {
     // render with picking activated
     state->picking_active = true;
     glUseProgram(state->position_marker_shader);

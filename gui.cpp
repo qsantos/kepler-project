@@ -55,7 +55,7 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     state->viewport_width = width;
     state->viewport_height = height;
@@ -63,7 +63,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 void toggle_fullscreen(GLFWwindow* window) {
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     GLFWmonitor* monitor = glfwGetWindowMonitor(window);
     if (monitor == NULL) {
@@ -88,7 +88,7 @@ void error_callback(int error, const char* description) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     (void) scancode;
     (void) mods;
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_ESCAPE) {
@@ -131,7 +131,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     (void) mods;
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         if (action == GLFW_PRESS) {
@@ -151,7 +151,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 }
 
 static void cursor_position_callback(GLFWwindow* window, double x, double y) {
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     if (state->drag_active) {
         state->view_theta += (x - state->cursor_x) / 4.;
@@ -166,7 +166,7 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y) {
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     (void) xoffset;
-    RenderState* state = static_cast<RenderState*>(glfwGetWindowUserPointer(window));
+    GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     state->view_zoom *= pow(1.2, yoffset);
 }
@@ -200,7 +200,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    RenderState state;
+    GlobalState state;
     glfwSetWindowUserPointer(window, &state);
 
     // enable OpenGL debugging

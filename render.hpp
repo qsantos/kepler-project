@@ -15,7 +15,7 @@ extern "C" {
 using std::map;
 using std::string;
 
-struct RenderState {
+struct GlobalState {
     double time = 0.;
     double timewarp = 1.;
     bool show_help = false;
@@ -62,7 +62,7 @@ struct RenderState {
     glm::mat4 projection_matrix;
 };
 
-void reset_matrices(RenderState* state, bool zoom=true);
-void render(RenderState* state);
+void reset_matrices(GlobalState* state, bool zoom=true);
+void render(GlobalState* state);
 
 #endif

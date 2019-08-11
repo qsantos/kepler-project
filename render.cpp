@@ -9,7 +9,7 @@ extern "C" {
 
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
-void update_matrices(RenderState* state) {
+void update_matrices(GlobalState* state) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -26,7 +26,7 @@ void update_matrices(RenderState* state) {
     }
 }
 
-void reset_matrices(RenderState* state, bool zoom) {
+void reset_matrices(GlobalState* state, bool zoom) {
     state->model_matrix = glm::mat4(1.0f);
 
     glm::mat4 view = glm::mat4(1.0f);
@@ -58,7 +58,7 @@ static bool is_ancestor_of(CelestialBody* candidate, CelestialBody* target) {
     return false;
 }
 
-static void render_skybox(RenderState* state) {
+static void render_skybox(GlobalState* state) {
     if (state->picking_active) {
         return;
     }
@@ -71,7 +71,7 @@ static void render_skybox(RenderState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
-static void render_body(RenderState* state, CelestialBody* body, const vec3& scene_origin) {
+static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -102,7 +102,7 @@ static void render_body(RenderState* state, CelestialBody* body, const vec3& sce
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void render_bodies(RenderState* state, const vec3& scene_origin) {
+static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     glUseProgram(state->base_shader);
     reset_matrices(state);
 
@@ -129,7 +129,7 @@ static void render_bodies(RenderState* state, const vec3& scene_origin) {
     }
 }
 
-static void render_helpers(RenderState* state, const vec3& scene_origin) {
+static void render_helpers(GlobalState* state, const vec3& scene_origin) {
     if (!state->show_helpers) {
         return;
     }
@@ -186,7 +186,7 @@ static void render_helpers(RenderState* state, const vec3& scene_origin) {
     }
 }
 
-static void fill_hud(RenderState* state) {
+static void fill_hud(GlobalState* state) {
     // time warp
     state->hud.print("Time x%g\n", state->timewarp);
 
@@ -220,7 +220,7 @@ static void fill_hud(RenderState* state) {
     state->hud.print("Version " VERSION "\n");
 }
 
-static void render_hud(RenderState* state) {
+static void render_hud(GlobalState* state) {
     if (!state->show_hud) {
         return;
     }
@@ -252,7 +252,7 @@ static void render_hud(RenderState* state) {
     }
 }
 
-void render(RenderState* state) {
+void render(GlobalState* state) {
     if (state->picking_active) {
         state->picking_objects.clear();
     }
