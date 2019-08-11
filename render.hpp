@@ -9,11 +9,14 @@ extern "C" {
 }
 
 #include <GL/glew.h>
-#include <glm/gtc/type_ptr.hpp>
 #include <map>
 
 using std::map;
 using std::string;
+
+struct RenderState;
+
+RenderState* make_render_state();
 
 struct GlobalState {
     double time = 0.;
@@ -57,9 +60,7 @@ struct GlobalState {
     TextPanel help = TextPanel(5.f, 119.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
 
-    glm::mat4 model_matrix;
-    glm::mat4 view_matrix;
-    glm::mat4 projection_matrix;
+    RenderState* render = make_render_state();
 };
 
 void reset_matrices(GlobalState* state, bool zoom=true);

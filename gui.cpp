@@ -7,6 +7,7 @@ extern "C" {
 #include "picking.hpp"
 
 #include <GLFW/glfw3.h>
+#include <cstring>
 
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
@@ -157,7 +158,8 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y) {
         state->view_theta += (x - state->cursor_x) / 4.;
         state->view_phi += (y - state->cursor_y) / 4.;
 
-        state->view_phi = glm::clamp(state->view_phi, -180., 0.);
+        // clamp to [-180, 0]
+        state->view_phi = std::max(-180., std::min(state->view_phi, 0.));
     }
 
     state->cursor_x = x;

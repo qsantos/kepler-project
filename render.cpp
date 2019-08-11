@@ -7,19 +7,31 @@ extern "C" {
 
 #include "picking.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+
+struct RenderState {
+    glm::mat4 model_matrix;
+    glm::mat4 view_matrix;
+    glm::mat4 projection_matrix;
+};
+
+RenderState* make_render_state() {
+    return new RenderState;
+}
+
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
 void update_matrices(GlobalState* state) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
-    auto model_view = state->view_matrix * state->model_matrix;
+    auto model_view = state->render->view_matrix * state->render->model_matrix;
     GLint var = glGetUniformLocation(program, "model_view_matrix");
     if (var >= 0) {
         glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(model_view));
     }
 
-    auto model_view_projection = state->projection_matrix * model_view;
+    auto model_view_projection = state->render->projection_matrix * model_view;
     var = glGetUniformLocation(program, "model_view_projection_matrix");
     if (var >= 0) {
         glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(model_view_projection));
@@ -27,7 +39,7 @@ void update_matrices(GlobalState* state) {
 }
 
 void reset_matrices(GlobalState* state, bool zoom) {
-    state->model_matrix = glm::mat4(1.0f);
+    state->render->model_matrix = glm::mat4(1.0f);
 
     glm::mat4 view = glm::mat4(1.0f);
     if (zoom) {
@@ -35,10 +47,10 @@ void reset_matrices(GlobalState* state, bool zoom) {
     }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
-    state->view_matrix = view;
+    state->render->view_matrix = view;
 
     float aspect = float(state->viewport_width) / float(state->viewport_height);
-    state->projection_matrix = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
+    state->render->projection_matrix = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
 
     update_matrices(state);
 }
@@ -93,7 +105,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     double turn_fraction = fmod(state->time / body->sidereal_day, 1.);
     model = glm::rotate(model, 2.f * M_PIf32 * float(turn_fraction), glm::vec3(0.f, 0.f, 1.f));
 
-    state->model_matrix = model;
+    state->render->model_matrix = model;
     update_matrices(state);
 
     auto texture = state->body_textures.at(body->name);
@@ -114,7 +126,7 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     glUseProgram(state->lighting_shader);
     reset_matrices(state);
     auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
-    auto pos2 = state->view_matrix * state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+    auto pos2 = state->render->view_matrix * state->render->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
     GLint lighting_source = glGetUniformLocation(state->lighting_shader, "lighting_source");
     glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
@@ -159,7 +171,7 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
         }
 
         auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
-        state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        state->render->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
         update_matrices(state);
 
         set_picking_object(state, body);
@@ -176,7 +188,7 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
         }
 
         auto position = body_global_position_at_time(body, state->time) - scene_origin;
-        state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        state->render->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
         update_matrices(state);
 
         set_picking_object(state, body);
