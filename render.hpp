@@ -35,7 +35,12 @@ struct GlobalState {
     GLuint cubemap_shader;
     GLuint lighting_shader;
     GLuint position_marker_shader;
+    GLuint star_glow_shader;
+    GLuint lens_flare_shader;
     GLuint vao;
+
+    GLint star_glow_texture;
+    GLint lens_flare_texture;
 
     double last_simulation_step;
     double last_fps_measure;

@@ -30,6 +30,8 @@ void clear_picking_object(GlobalState* state) {
 CelestialBody* pick(GlobalState* state) {
     // render with picking activated
     state->picking_active = true;
+    glUseProgram(state->star_glow_shader);
+    glUniform1i(glGetUniformLocation(state->star_glow_shader, "picking_active"), 1);
     glUseProgram(state->position_marker_shader);
     glUniform1i(glGetUniformLocation(state->position_marker_shader, "picking_active"), 1);
     glUseProgram(state->lighting_shader);
@@ -47,6 +49,8 @@ CelestialBody* pick(GlobalState* state) {
     glUniform1i(glGetUniformLocation(state->lighting_shader, "picking_active"), 0);
     glUseProgram(state->position_marker_shader);
     glUniform1i(glGetUniformLocation(state->position_marker_shader, "picking_active"), 0);
+    glUseProgram(state->star_glow_shader);
+    glUniform1i(glGetUniformLocation(state->star_glow_shader, "picking_active"), 0);
     state->picking_active = false;
 
     // search names in color components

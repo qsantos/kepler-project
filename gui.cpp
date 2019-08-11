@@ -229,25 +229,35 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    state.cubemap_shader = make_program(2, "base", "cubemap");
+    state.cubemap_shader = make_program(3, "base", "cubemap", "logz");
     glUseProgram(state.cubemap_shader);
     glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
     glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
-    state.lighting_shader = make_program(3, "base", "lighting", "picking");
+    state.lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     glUseProgram(state.lighting_shader);
     glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
 
-    state.position_marker_shader = make_program(3, "base", "position_marker", "picking");
+    state.position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
     glUseProgram(state.position_marker_shader);
     glUniform4f(glGetUniformLocation(state.position_marker_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.position_marker_shader, "picking_active"), 0);
 
-    state.base_shader = make_program(2, "base", "picking");
+    state.base_shader = make_program(3, "base", "picking", "logz");
     glUseProgram(state.base_shader);
     glUniform4f(glGetUniformLocation(state.base_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
+    glUniform1i(glGetUniformLocation(state.base_shader, "picking_active"), 0);
+
+    state.star_glow_shader = make_program(3, "base", "star_glow", "logz");
+    glUseProgram(state.star_glow_shader);
+    glUniform4f(glGetUniformLocation(state.star_glow_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform1i(glGetUniformLocation(state.star_glow_shader, "picking_active"), 0);
+
+    state.lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
+    glUseProgram(state.lens_flare_shader);
+    glUniform4f(glGetUniformLocation(state.lens_flare_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform1i(glGetUniformLocation(state.lens_flare_shader, "picking_active"), 0);
 
     glGenVertexArrays(1, &state.vao);
     glBindVertexArray(state.vao);
@@ -270,6 +280,8 @@ int main() {
         auto path = "data/textures/solar/" + name + ".jpg";
         state.body_textures[name] = load_texture(path.c_str());
     }
+    state.star_glow_texture = load_texture("data/textures/star_glow.png");
+    state.lens_flare_texture = load_texture("data/textures/lens_flares.png");
     state.focus = state.bodies.at("Earth");
     state.root = state.bodies.at("Sun");
 

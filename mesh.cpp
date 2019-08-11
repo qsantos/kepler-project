@@ -19,7 +19,7 @@ Mesh::Mesh(int mode_, int length_, bool is_3d_) :
 }
 
 Mesh::~Mesh(void) {
-    glDeleteBuffers(1, &this->vbo);
+    //glDeleteBuffers(1, &this->vbo);
 }
 
 void Mesh::bind(void) {
@@ -57,11 +57,28 @@ void Mesh::draw(void) {
     glDrawArrays(this->mode, 0, this->length);
 }
 
+SquareMesh::SquareMesh(double size) :
+    Mesh(GL_TRIANGLE_STRIP, 4, true)
+{
+    float s = (float) size / 2.f;
+
+    float data[] = {
+        -s, -s, 0, 0, 0, 0, 0, 0,
+        +s, -s, 0, 1, 0, 0, 0, 0,
+        -s, +s, 0, 0, 1, 0, 0, 0,
+        +s, +s, 0, 1, 1, 0, 0, 0,
+    };
+
+    glGenBuffers(1, &this->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 CubeMesh::CubeMesh(double size) :
     Mesh(GL_TRIANGLES, 36, false)
 {
-
-    float s = (float) size;
+    float s = (float) size / 2.f;
 
     float data[] = {
         // each row is a full triangle, two rows make a face

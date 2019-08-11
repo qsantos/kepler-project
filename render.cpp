@@ -127,15 +127,16 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void render_bodies(GlobalState* state, const vec3& scene_origin) {
+void render_star(GlobalState* state, const vec3& scene_origin) {
     glUseProgram(state->base_shader);
     reset_matrices(state);
 
     set_picking_object(state, state->root);
     render_body(state, state->root, scene_origin);
     clear_picking_object(state);
+}
 
-    // enable lighting
+static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     glUseProgram(state->lighting_shader);
     reset_matrices(state);
     auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
@@ -152,6 +153,212 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
         render_body(state, body, scene_origin);
         clear_picking_object(state);
     }
+}
+
+double glow_size(double radius, double temperature, double distance) {
+    // from https://www.seedofandromeda.com/blogs/51-procedural-star-rendering
+    static const double sun_radius = 696e6;
+    static const double sun_surface_temperature = 5778.0;
+
+    double luminosity = (radius / sun_radius) * pow(temperature / sun_surface_temperature, 4.);
+    return 1e17 * pow(luminosity, 0.25) / pow(distance, 0.5);
+}
+
+GLuint init_lens_flare(void) {
+    struct Sprite {
+        float offset;
+        float size;
+        int texture_index;
+    } sprites[] = {
+        { 1.00f, 1.30f, 1 },
+        { 1.25f, 1.00f, 1 },
+        { 1.10f, 1.75f, 0 },
+        { 1.50f, 0.65f, 0 },
+        { 1.60f, 0.90f, 0 },
+        { 1.70f, 0.45f, 0 },
+    };
+    size_t n_sprites = sizeof(sprites) / sizeof(sprites[0]);
+
+    size_t n = sizeof(float) * 6 * 6 * n_sprites;
+    float* data = (float*) MALLOC(n);
+
+    size_t k = 0;
+    for (size_t i = 0; i < n_sprites; i += 1) {
+        float o = sprites[i].offset;
+        float s = sprites[i].size;
+        int t = sprites[i].texture_index;
+
+        float l = t == 0 ? 0.f : .5f;
+
+        data[k++] = -s; data[k++] = -s; data[k++] = 0.f; data[k++] = l + 0.0f; data[k++] = 0.f; data[k++] = o;
+        data[k++] = +s; data[k++] = -s; data[k++] = 0.f; data[k++] = l + 0.5f; data[k++] = 0.f; data[k++] = o;
+        data[k++] = -s; data[k++] = +s; data[k++] = 0.f; data[k++] = l + 0.0f; data[k++] = 1.f; data[k++] = o;
+
+        data[k++] = -s; data[k++] = +s; data[k++] = 0.f; data[k++] = l + 0.0f; data[k++] = 1.f; data[k++] = o;
+        data[k++] = +s; data[k++] = -s; data[k++] = 0.f; data[k++] = l + 0.5f; data[k++] = 0.f; data[k++] = o;
+        data[k++] = +s; data[k++] = +s; data[k++] = 0.f; data[k++] = l + 0.5f; data[k++] = 1.f; data[k++] = o;
+    }
+
+    /*
+    for (size_t i = 0; i < n / sizeof(float); ) {
+        for (size_t x = 0; x < 6; x += 1) {
+            for (size_t j = 0; j < 6; j += 1) {
+                printf("%20.9g", data[i++]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
+    */
+
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, n, data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    free(data);
+
+    return vbo;
+}
+
+void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visibility) {
+    static GLuint lens_flare_vbo = 0;
+    if (lens_flare_vbo == 0) {
+        lens_flare_vbo = init_lens_flare();
+    }
+
+    auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
+    glm::vec3 light_source = {position[0], position[1], position[2]};
+
+    //glm::vec2 light_source = {.5f, .5f};
+
+    //glm::mat4 view = state->render_state->view_matrix;
+    //glm::vec4 z = {view * glm::vec4(0.f, 0.f, 1.f, 1.f)};
+    //glm::vec3 light_source = {z[0], z[1], z[2]};
+
+    float size = .1f;
+    float aspect = float(state->viewport_width) / float(state->viewport_height);
+    glm::vec2 dims(size, size * aspect);
+
+    float intensity = .2f * visibility;
+
+    glUseProgram(state->lens_flare_shader);
+    reset_matrices(state);
+
+    glBindBuffer(GL_ARRAY_BUFFER, lens_flare_vbo);
+
+    GLint var = glGetAttribLocation(state->lens_flare_shader, "v_position");
+    glEnableVertexAttribArray(var);
+    glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 6 * (GLsizei) sizeof(float), NULL);
+
+    var = glGetAttribLocation(state->lens_flare_shader, "v_texcoord");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, 6 * (GLsizei) sizeof(float), (GLvoid*)(3 * sizeof(float)));
+    }
+
+    var = glGetAttribLocation(state->lens_flare_shader, "v_offset");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 1, GL_FLOAT, GL_FALSE, 6 * (GLsizei) sizeof(float), (GLvoid*)(5 * sizeof(float)));
+    }
+
+    glBindTexture(GL_TEXTURE_2D, state->lens_flare_texture);
+    glUniform2fv(glGetUniformLocation(state->lens_flare_shader, "u_dims"), 1, glm::value_ptr(dims));
+    glUniform3fv(glGetUniformLocation(state->lens_flare_shader, "u_light_source"), 1, glm::value_ptr(light_source));
+    glUniform1f(glGetUniformLocation(state->lens_flare_shader, "u_intensity"), intensity);
+
+    glDisable(GL_DEPTH_TEST);
+    glBlendFunc(GL_ONE, GL_ONE);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void render_star_glow(GlobalState* state, const vec3& scene_origin) {
+    if (state->picking_active) {
+        return;
+    }
+
+    // Update queries from previous frame, or create the query objects if needed
+    float visibility = 1.f;
+    static GLuint occlusionQuery[2] = {0, 0};
+    if (occlusionQuery[0] == 0) {
+        glGenQueries(2, occlusionQuery);
+    } else {
+        int totalSamples = 0;
+        int passedSamples= 0;
+        glGetQueryObjectiv(occlusionQuery[0], GL_QUERY_RESULT, &totalSamples );
+        glGetQueryObjectiv(occlusionQuery[1], GL_QUERY_RESULT, &passedSamples);
+        if (passedSamples == 0) {
+            visibility = 0.0f;
+        } else {
+            float param = (float) passedSamples/ (float) totalSamples;
+            visibility = 1.f - expf(-4.f * param);
+        }
+    }
+
+    auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
+    glm::vec3 star_glow_position = {position[0], position[1], position[2]};
+    glm::mat4 view = state->render_state->view_matrix;
+    glm::vec3 camera_right = {view[0][0], view[1][0], view[2][0]};
+    glm::vec3 camera_up = {view[0][1], view[1][1], view[2][1]};
+
+    glm::vec4 z = {view * glm::vec4(0.f, 0.f, 1.f, 1.f)};
+    glm::vec3 camera_z = {z[0], z[1], z[2]};
+
+    // double d = state->focus->orbit->semi_major_axis;
+    double d = glm::length(star_glow_position - camera_z);
+    double s = glow_size(state->root->radius, 5778., d);
+    glm::vec2 star_glow_size = {s, s};
+
+    glUseProgram(state->star_glow_shader);
+    reset_matrices(state);
+
+    float unNoiseZ = (float) abs(
+            glm::dot(camera_right, glm::vec3(1.f, 3.f, 6.f))
+            + glm::dot(camera_up, glm::vec3(1.f, 3.f, 6.f))
+    );
+
+    glBindTexture(GL_TEXTURE_2D, state->star_glow_texture);
+    glUniform1f(glGetUniformLocation(state->star_glow_shader, "visibility"), visibility);
+    glUniform2fv(glGetUniformLocation(state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
+    glUniform3fv(glGetUniformLocation(state->star_glow_shader, "star_glow_position"), 1, glm::value_ptr(star_glow_position));
+    glUniform3fv(glGetUniformLocation(state->star_glow_shader, "camera_right"), 1, glm::value_ptr(camera_right));
+    glUniform3fv(glGetUniformLocation(state->star_glow_shader, "camera_up"), 1, glm::value_ptr(camera_up));
+    glUniform1f(glGetUniformLocation(state->star_glow_shader, "unNoiseZ"), unNoiseZ);
+
+    glDepthMask(GL_FALSE);
+    s = (float) state->root->radius;
+    star_glow_size = {s, s};
+    glUniform1f(glGetUniformLocation(state->star_glow_shader, "visibility"), -1.f);
+    glUniform2fv(glGetUniformLocation(state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
+
+    // Query for passed samples
+    glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[0]);
+    glDisable(GL_DEPTH_TEST);
+    SquareMesh(1.f).draw();
+    glEnable(GL_DEPTH_TEST);
+    glEndQuery(GL_SAMPLES_PASSED);
+
+    // Query for total samples
+    glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[1]);
+    SquareMesh(1.f).draw();
+    glEndQuery(GL_SAMPLES_PASSED);
+
+    s = glow_size(state->root->radius, 5778., d);
+    star_glow_size = {s, s};
+    glUniform1f(glGetUniformLocation(state->star_glow_shader, "visibility"), visibility);
+    glUniform2fv(glGetUniformLocation(state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
+    SquareMesh(1.f).draw();
+    glDepthMask(GL_TRUE);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    render_lens_flare(state, scene_origin, visibility);
 }
 
 static void render_helpers(GlobalState* state, const vec3& scene_origin) {
@@ -295,7 +502,9 @@ void render(GlobalState* state) {
 
     render_skybox(state);
     render_bodies(state, scene_origin);
+    render_star_glow(state, scene_origin);
     render_helpers(state, scene_origin);
+    render_star(state, scene_origin);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     render_hud(state);
