@@ -283,10 +283,6 @@ int main() {
         state.apses_meshes.emplace(name, body->orbit);
     }
 
-    char* help = load_file("data/help.txt");
-    state.help.print("%s", help);
-    free(help);
-
     // disable vsync
     // glfwSwapInterval(0);
 

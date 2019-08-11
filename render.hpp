@@ -1,7 +1,6 @@
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
-#include "text_panel.hpp"
 #include "cubemap.hpp"
 #include "body.hpp"
 extern "C" {
@@ -10,6 +9,7 @@ extern "C" {
 
 #include <GL/glew.h>
 #include <map>
+#include <vector>
 
 using std::map;
 using std::string;
@@ -35,7 +35,6 @@ struct GlobalState {
     GLuint cubemap_shader;
     GLuint lighting_shader;
     GLuint position_marker_shader;
-    Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
     GLuint vao;
 
     double last_simulation_step;
@@ -56,11 +55,8 @@ struct GlobalState {
     int windowed_height = 768;
     int viewport_width = 1024;
     int viewport_height = 768;
-    TextPanel hud = TextPanel(5.f, 5.f);
-    TextPanel help = TextPanel(5.f, 119.f);
-    UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
 
-    RenderState* render = make_render_state();
+    RenderState* render_state = make_render_state();
 };
 
 void reset_matrices(GlobalState* state, bool zoom=true);
