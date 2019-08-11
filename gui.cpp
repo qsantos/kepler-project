@@ -8,13 +8,8 @@ extern "C" {
 
 #include <GLFW/glfw3.h>
 
-#include <iostream>
-
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
-
-using std::cout;
-using std::endl;
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     (void) length;
@@ -104,16 +99,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
             state->timewarp /= 10.;
-            cout << "Time warp: "  << state->timewarp << endl;
+            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_PERIOD) {
             state->timewarp *= 10.;
-            cout << "Time warp: "  << state->timewarp << endl;
+            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_SLASH) {
             state->timewarp = 1.;
-            cout << "Time warp: "  << state->timewarp << endl;
+            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_I) {
             state->timewarp *= -1.;
-            cout << "Time warp: "  << state->timewarp << endl;
+            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
         } else if (key == GLFW_KEY_H) {
@@ -125,10 +120,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_EQUAL) {
             if (std::string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
-                cout << "Back to present" << endl;
+                fprintf(stderr, "Back to present\n");
             } else {
                 state->time = 0.f;
-                cout << "Back to epoch" << endl;
+                fprintf(stderr, "Back to epoch\n");
             }
         }
     }
@@ -187,7 +182,7 @@ int main() {
     glfwWindowHint(GLFW_SAMPLES, 4);
     GLFWwindow* window = glfwCreateWindow(1024, 768, "Orbit", NULL, NULL);
     if (window == NULL) {
-        cout << "Failed to create GLFW window" << endl;
+        fprintf(stderr, "Failed to create GFLW window\n");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }

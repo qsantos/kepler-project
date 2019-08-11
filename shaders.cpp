@@ -4,11 +4,8 @@ extern "C" {
     #include "util.h"
 }
 
-#include <iostream>
 #include <sstream>
 
-using std::cerr;
-using std::endl;
 using std::string;
 
 // how is this not part of the STL?
@@ -32,8 +29,8 @@ void attach_shader(GLuint program, GLenum shader_type, const char* source, const
     if (!success) {
         GLchar infoLog[512];
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        cerr << "ERROR: shader compilation failed\n";
-        cerr << replace(infoLog, "0:", string(filename) + ":");
+        const char* error = replace(infoLog, "0:", string(filename) + ":").c_str();
+        fprintf(stderr, "ERROR: shader compilation failed\n%s", error);
         exit(EXIT_FAILURE);
     }
 
@@ -81,7 +78,7 @@ GLuint make_program(std::initializer_list<string> shaders) {
     if (!success) {
         GLchar infoLog[512];
         glGetProgramInfoLog(program, 512, NULL, infoLog);
-        cerr << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << endl;
+        fprintf(stderr, "ERROR::SHADER::LINKING_FAILED\n%s", infoLog);
         exit(EXIT_FAILURE);
     }
     return program;
