@@ -3,8 +3,10 @@
 
 #include "text_panel.hpp"
 #include "cubemap.hpp"
-#include "shaders.hpp"
 #include "body.hpp"
+extern "C" {
+#include "shaders.h"
+}
 
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>

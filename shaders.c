@@ -1,11 +1,9 @@
-#include "shaders.hpp"
+#include "shaders.h"
 
-extern "C" {
-    #include "util.h"
-}
+#include "util.h"
 
-#include <cstdio>
-#include <cstdarg>
+#include <stdio.h>
+#include <stdarg.h>
 
 void attach_shader(GLuint program, GLenum shader_type, const char* source, const char* filename) {
     GLuint shader = glCreateShader(shader_type);
@@ -32,27 +30,53 @@ void attach_shader_from_file(GLuint program, GLenum shader_type, const char* fil
     free(source);
 }
 
-static size_t make_main(char* buffer, size_t n, int n_shaders, const char** shaders) {
-    size_t s = 0;
-    s += snprintf(buffer, n, "#version 110\n");
+static int make_main(char* buffer, size_t n, size_t n_shaders, const char** shaders) {
+    int ret;
+    unsigned  s = 0;
+
+    ret = snprintf(buffer, n, "#version 110\n");
+    if (ret < 0) {
+        return ret;
+    }
+    s += (unsigned) ret;
+
     // declarations
-    for (int i = 0; i < n_shaders; i++) {
-        s += snprintf(buffer + s, n > 0 ? n - s : 0, "void %s();\n", shaders[i]);
+    for (size_t i = 0; i < n_shaders; i++) {
+        ret = snprintf(buffer + s, n > 0 ? n - s : 0, "void %s();\n", shaders[i]);
+        if (ret < 0) {
+            return ret;
+        }
+        s += (unsigned) ret;
     }
+
+    ret = snprintf(buffer + s, n > 0 ? n - s : 0, "void main() {\n");
+    if (ret < 0) {
+        return ret;
+    }
+    s += (unsigned) ret;
+
     // calls
-    s += snprintf(buffer + s, n > 0 ? n - s : 0, "void main() {\n");
-    for (int i = 0; i < n_shaders; i++) {
-        s += snprintf(buffer + s, n > 0 ? n - s : 0, "%s();\n", shaders[i]);
+    for (size_t i = 0; i < n_shaders; i++) {
+        ret = snprintf(buffer + s, n > 0 ? n - s : 0, "%s();\n", shaders[i]);
+        if (ret < 0) {
+            return ret;
+        }
+        s += (unsigned) ret;
     }
-    s += snprintf(buffer + s, n > 0 ? n - s : 0, "}\n");
-    return s;
+
+    ret = snprintf(buffer + s, n > 0 ? n - s : 0, "}\n");
+    if (ret < 0) {
+        return ret;
+    }
+    s += (unsigned) ret;
+    return (int) s;
 }
 
-GLuint make_program(int n_shaders, ...) {
+GLuint make_program(size_t n_shaders, ...) {
     va_list shader_list;
     va_start(shader_list, n_shaders);
-    const char** shaders = (const char**) MALLOC(n_shaders * sizeof(const char*));
-    for (int i = 0; i < n_shaders; i++) {
+    const char** shaders = MALLOC(n_shaders * sizeof(const char*));
+    for (size_t i = 0; i < n_shaders; i++) {
         shaders[i] = va_arg(shader_list, const char*);
     }
     va_end(shader_list);
@@ -60,7 +84,7 @@ GLuint make_program(int n_shaders, ...) {
     GLuint program = glCreateProgram();
 
     // compile individual shaders
-    for (int i = 0; i < n_shaders; i++) {
+    for (size_t i = 0; i < n_shaders; i++) {
         const char* shader = shaders[i];
         char path[512];
 
@@ -75,9 +99,18 @@ GLuint make_program(int n_shaders, ...) {
 
     // generate source code main(), hich calls each shader in the given order
     char dummy_buffer[1];  // makes cppcheck happy
-    size_t n = make_main(dummy_buffer, 0, n_shaders, shaders) + 1;
-    char* buffer = (char*) MALLOC(n);
-    make_main(buffer, n, n_shaders, shaders);
+    int ret = make_main(dummy_buffer, 0, n_shaders, shaders) + 1;
+    if (ret < 0) {
+        fprintf(stderr, "Error while sizing the main shader (%i)\n", ret);
+        exit(EXIT_FAILURE);
+    }
+
+    char* buffer = MALLOC((unsigned) ret);
+    ret = make_main(buffer, (unsigned) ret, n_shaders, shaders);
+    if (ret < 0) {
+        fprintf(stderr, "Error while generating the main shader (%i)\n", ret);
+        exit(EXIT_FAILURE);
+    }
 
     // attach main
     attach_shader(program, GL_VERTEX_SHADER, buffer, "<main>");
