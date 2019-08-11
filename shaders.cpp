@@ -4,7 +4,7 @@ extern "C" {
     #include "util.h"
 }
 
-#include <sstream>
+#include <cstdio>
 #include <cstdarg>
 
 void attach_shader(GLuint program, GLenum shader_type, const char* source, const char* filename) {
@@ -32,6 +32,22 @@ void attach_shader_from_file(GLuint program, GLenum shader_type, const char* fil
     free(source);
 }
 
+static size_t make_main(char* buffer, size_t n, int n_shaders, const char** shaders) {
+    size_t s = 0;
+    s += snprintf(buffer, n, "#version 110\n");
+    // declarations
+    for (int i = 0; i < n_shaders; i++) {
+        s += snprintf(buffer + s, n > 0 ? n - s : 0, "void %s();\n", shaders[i]);
+    }
+    // calls
+    s += snprintf(buffer + s, n > 0 ? n - s : 0, "void main() {\n");
+    for (int i = 0; i < n_shaders; i++) {
+        s += snprintf(buffer + s, n > 0 ? n - s : 0, "%s();\n", shaders[i]);
+    }
+    s += snprintf(buffer + s, n > 0 ? n - s : 0, "}\n");
+    return s;
+}
+
 GLuint make_program(int n_shaders, ...) {
     va_list shader_list;
     va_start(shader_list, n_shaders);
@@ -57,25 +73,17 @@ GLuint make_program(int n_shaders, ...) {
         attach_shader_from_file(program, GL_FRAGMENT_SHADER, path);
     }
 
-    // source for shader with main() function that calls each shader in the given order
-    std::ostringstream main;
-    main << "#version 110\n";
-    // declarations
-    for (int i = 0; i < n_shaders; i++) {
-        const char* shader = shaders[i];
-        main << "void " << shader << "();\n";
-    }
-    // calls
-    main << "void main() {\n";
-    for (int i = 0; i < n_shaders; i++) {
-        const char* shader = shaders[i];
-        main << shader << "();\n";
-    }
-    main << "}\n";
+    // generate source code main(), hich calls each shader in the given order
+    char dummy_buffer[1];  // makes cppcheck happy
+    size_t n = make_main(dummy_buffer, 0, n_shaders, shaders) + 1;
+    char* buffer = (char*) MALLOC(n);
+    make_main(buffer, n, n_shaders, shaders);
 
     // attach main
-    attach_shader(program, GL_VERTEX_SHADER, main.str().c_str(), "<main>");
-    attach_shader(program, GL_FRAGMENT_SHADER, main.str().c_str(), "<main>");
+    attach_shader(program, GL_VERTEX_SHADER, buffer, "<main>");
+    attach_shader(program, GL_FRAGMENT_SHADER, buffer, "<main>");
+
+    free(buffer);
 
     glLinkProgram(program);
 
