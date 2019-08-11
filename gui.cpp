@@ -227,22 +227,22 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    state.cubemap_shader = make_program({"base", "cubemap"});
+    state.cubemap_shader = make_program(2, "base", "cubemap");
     glUseProgram(state.cubemap_shader);
     glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
     glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
-    state.lighting_shader = make_program({"base", "lighting", "picking"});
+    state.lighting_shader = make_program(3, "base", "lighting", "picking");
     glUseProgram(state.lighting_shader);
     glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
 
-    state.position_marker_shader = make_program({"base", "position_marker", "picking"});
+    state.position_marker_shader = make_program(3, "base", "position_marker", "picking");
     glUseProgram(state.position_marker_shader);
     glUniform4f(glGetUniformLocation(state.position_marker_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.position_marker_shader, "picking_active"), 0);
 
-    state.base_shader = make_program({"base", "picking"});
+    state.base_shader = make_program(2, "base", "picking");
     glUseProgram(state.base_shader);
     glUniform4f(glGetUniformLocation(state.base_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
     glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
