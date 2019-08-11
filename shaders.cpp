@@ -7,18 +7,6 @@ extern "C" {
 #include <sstream>
 #include <cstdarg>
 
-using std::string;
-
-// how is this not part of the STL?
-static string replace(string s, string pattern, string replacement) {
-    size_t pos = s.find(pattern);
-    while (pos != string::npos) {
-        s.replace(pos, pattern.size(), replacement);
-        pos = s.find(pattern, pos + replacement.size());
-    }
-    return s;
-}
-
 void attach_shader(GLuint program, GLenum shader_type, const char* source, const char* filename) {
     GLuint shader = glCreateShader(shader_type);
 
@@ -30,8 +18,7 @@ void attach_shader(GLuint program, GLenum shader_type, const char* source, const
     if (!success) {
         GLchar infoLog[512];
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        const char* error = replace(infoLog, "0:", string(filename) + ":").c_str();
-        fprintf(stderr, "ERROR: shader compilation failed\n%s", error);
+        fprintf(stderr, "ERROR: compilation of %s failed\n%s", filename, infoLog);
         exit(EXIT_FAILURE);
     }
 
@@ -59,8 +46,15 @@ GLuint make_program(int n_shaders, ...) {
     // compile individual shaders
     for (int i = 0; i < n_shaders; i++) {
         const char* shader = shaders[i];
-        attach_shader_from_file(program, GL_VERTEX_SHADER, ("data/shaders/" + string(shader) + ".vert").c_str());
-        attach_shader_from_file(program, GL_FRAGMENT_SHADER, ("data/shaders/" + string(shader) + ".frag").c_str());
+        char path[512];
+
+        // vertex shader
+        snprintf(path, sizeof(path), "data/shaders/%s.vert", shader);
+        attach_shader_from_file(program, GL_VERTEX_SHADER, path);
+
+        // fragment shader
+        snprintf(path, sizeof(path), "data/shaders/%s.frag", shader);
+        attach_shader_from_file(program, GL_FRAGMENT_SHADER, path);
     }
 
     // source for shader with main() function that calls each shader in the given order
