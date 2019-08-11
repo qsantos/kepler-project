@@ -159,16 +159,16 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
         return;
     }
 
-    GLint colorUniform = glGetUniformLocation(state->base_shader, "u_color");
-
     // draw circles around celestial bodies when from far away
     glPointSize(20);
     glUseProgram(state->position_marker_shader);
     reset_matrices(state);
+    GLint colorUniform = glGetUniformLocation(state->position_marker_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
     OrbitSystem(state->root, scene_origin, state->time).draw();
 
     glUseProgram(state->base_shader);
+    colorUniform = glGetUniformLocation(state->base_shader, "u_color");
     reset_matrices(state);
 
     glPointSize(5);
