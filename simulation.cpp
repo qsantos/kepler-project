@@ -6,6 +6,11 @@
 #include <iostream>
 
 template<class T>
+T euler(T(*f)(double, T), double t, T y, double h) {
+    return y + f(t, y) * h;
+}
+
+template<class T>
 T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
     /*
      * Run a numerical integration step `h` on `y` of derivative `f` along `t`
