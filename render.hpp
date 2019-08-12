@@ -22,7 +22,8 @@ void delete_render_state(RenderState* render_state);
 
 struct GlobalState {
     double time = 0.;
-    double timewarp = 1.;
+    double target_timewarp = 1.;
+    double real_timewarp = 1.;
     bool show_help = false;
     bool show_wireframe = false;
     bool show_helpers = true;

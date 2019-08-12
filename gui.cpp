@@ -102,13 +102,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_W) {
             state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
-            state->timewarp /= 10.;
+            state->target_timewarp /= 10.;
         } else if (key == GLFW_KEY_PERIOD) {
-            state->timewarp *= 10.;
+            state->target_timewarp *= 10.;
         } else if (key == GLFW_KEY_SLASH) {
-            state->timewarp = 1.;
+            state->target_timewarp = 1.;
         } else if (key == GLFW_KEY_I) {
-            state->timewarp *= -1.;
+            state->target_timewarp *= -1.;
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
         } else if (key == GLFW_KEY_H) {
@@ -315,18 +315,33 @@ int main() {
     state.last_fps_measure = real_clock();
 
     double last = real_clock();
-    double elapsed = 0.;
+    double unprocessed_time = 0.;
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
         // update time
         double now = real_clock();
-        elapsed += (now - last) * state.timewarp;
+        double elapsed = now - last;
+        unprocessed_time += elapsed * state.target_timewarp;
         last = now;
-        while (elapsed >= SIMULATION_STEP) {
+
+        size_t steps = 0;
+        while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
             rocket_update(&state.rocket, state.time, SIMULATION_STEP);
-            elapsed -= SIMULATION_STEP;
+            unprocessed_time -= SIMULATION_STEP;
             state.time += SIMULATION_STEP;
+            steps += 1;
+        }
+
+        if (unprocessed_time >= SIMULATION_STEP) {
+            // we had to interrupt the simulation
+            state.real_timewarp = (double) steps * SIMULATION_STEP / elapsed;
+            // avoid accumulating unprocessed time that will have to be
+            // processed even after the player has reduced time warp
+            unprocessed_time = 0.;
+        } else {
+            // we simulated all the steps
+            state.real_timewarp = state.target_timewarp;
         }
 
         render(&state);

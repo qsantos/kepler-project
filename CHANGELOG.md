@@ -5,6 +5,7 @@
 - Added CHANGELOG
 - Removed obsolete console message when changing focus or timewarp
 - Added numeric simulation of a simple space ship displayed as a 2km sphere
+- Timewarp automatically plateaus when CPU is saturated
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies
