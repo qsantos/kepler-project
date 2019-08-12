@@ -58,5 +58,6 @@ inline double real_clock(void) {
 }
 
 char* load_file(const char* filename);
+char* human_quantity(double v, const char* unit);
 
 #endif

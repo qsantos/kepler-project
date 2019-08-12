@@ -60,7 +60,7 @@ void reset_matrices(GlobalState* state, bool zoom) {
 
     glm::mat4 view = glm::mat4(1.0f);
     if (zoom) {
-        view = glm::translate(view, glm::vec3(0.f, 0.f, -1.f / state->view_zoom));
+        view = glm::translate(view, glm::vec3(0.f, 0.f, -state->view_distance));
     }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -471,6 +471,16 @@ static void fill_hud(GlobalState* state) {
     // focus
     state->render_state->hud.print("Focus: %s\n", state->focus->name);
 
+    // distance
+    char* s = human_quantity(state->view_distance, "m");
+    state->render_state->hud.print("Distance: %s\n", s);
+    free(s);
+
+    // altitude
+    s = human_quantity(state->view_distance - state->focus->radius, "m");
+    state->render_state->hud.print("Altitude: %s\n", s);
+    free(s);
+
     // FPS
     double now = real_clock();
     double fps = (double) state->n_frames_since_last / (now - state->last_fps_measure);
@@ -481,9 +491,6 @@ static void fill_hud(GlobalState* state) {
         state->n_frames_since_last = 0;
         state->last_fps_measure = now;
     }
-
-    // zoom
-    state->render_state->hud.print("Zoom: %g\n", state->view_zoom);
 
     // version
     state->render_state->hud.print("Version " VERSION "\n");

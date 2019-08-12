@@ -1,6 +1,7 @@
 #include "util.h"
 
 #include <stdio.h>
+#include <string.h>
 
 void* _malloc(size_t s, const char* filename, int line, const char* funcname) {
     if (s == 0) {
@@ -62,5 +63,46 @@ char* load_file(const char* filename) {
     if (fclose(f) < 0) {
         perror("failed to close file");
     }
+    return ret;
+}
+
+char* human_quantity(double value, const char* unit) {
+    size_t n = 100 + strlen(unit);
+    char* ret = (char*) MALLOC(n);
+
+    static const double c = 299792458.;
+    static const double ly = c * 365.25 * 86400.;
+
+    // choose SI prefix
+    double v = value;
+    const char* prefix;
+         if (v > 10e24) { prefix = "Y"; v /= 1e24; }
+    else if (v > 10e21) { prefix = "Z"; v /= 1e21; }
+    else if (v > 10e18) { prefix = "E"; v /= 1e18; }
+    else if (v > 10e15) { prefix = "P"; v /= 1e15; }
+    else if (v > 10e12) { prefix = "T"; v /= 1e12; }
+    else if (v > 10e09) { prefix = "G"; v /= 1e09; }
+    else if (v > 10e06) { prefix = "M"; v /= 1e06; }
+    else if (v > 10e03) { prefix = "k"; v /= 1e03; }
+    else { prefix = ""; }
+
+    // precision with SI prefix
+    int s = 0;
+    if (v >= 1e3) {
+        // handle single comma
+        double thousands = floor(v / 1e3);
+        double ones = v - 1e3 * thousands;
+        s += snprintf(ret, n, "%.0f,%.0f %s%s", thousands, ones, prefix, unit);
+    }
+    else if (v > 1e2) { s += snprintf(ret, n, "%.1f %s%s", v, prefix, unit); }
+    else if (v > 1e1) { s += snprintf(ret, n, "%.2f %s%s", v, prefix, unit); }
+    else if (v > 1e0) { s += snprintf(ret, n, "%.3f %s%s", v, prefix, unit); }
+    else              { s += snprintf(ret, n, "%.4f %s%s", v, prefix, unit); }
+
+    // additional information
+    if (value > ly) {
+        s += snprintf(ret + s, n - (size_t) s, " (%.0f ly)", value / ly);
+    }
+
     return ret;
 }

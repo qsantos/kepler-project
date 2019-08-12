@@ -57,7 +57,7 @@ struct GlobalState {
 
     double cursor_x;
     double cursor_y;
-    double view_zoom = 1e-7;
+    double view_distance = 1e7;
     double view_theta = 0.;
     double view_phi = -90.;
     int windowed_x = 0;
