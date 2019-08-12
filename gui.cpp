@@ -100,16 +100,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
             state->timewarp /= 10.;
-            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_PERIOD) {
             state->timewarp *= 10.;
-            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_SLASH) {
             state->timewarp = 1.;
-            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_I) {
             state->timewarp *= -1.;
-            fprintf(stderr, "Time warp: %f\n", state->timewarp);
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
         } else if (key == GLFW_KEY_H) {
@@ -121,10 +117,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_EQUAL) {
             if (std::string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
-                fprintf(stderr, "Back to present\n");
             } else {
                 state->time = 0.f;
-                fprintf(stderr, "Back to epoch\n");
             }
         }
     }

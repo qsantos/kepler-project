@@ -3,6 +3,7 @@
 - Added version management
 - Added graphical effects on Sun/Kerbol: glow and lens flare
 - Added CHANGELOG
+- Removed obsolete console message when changing focus or timewarp
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies
