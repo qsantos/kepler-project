@@ -21,8 +21,7 @@ all: $(TARGETS)
 
 example: example.o body.o orbit.o recipes.o util.o load.o lambert.o
 test: test.o body.o orbit.o util.o load.o recipes.o lambert.o
-simulation: simulation.o body.o orbit.o util.o load.o recipes.o lambert.o
-gui: gui.o picking.o render.o mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o util.o
+gui: gui.o picking.o render.o mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o util.o simulation.o
 
 set_version:
 	[ -z "$(git difftool -y -x "diff -I '^#define VERSION '")" ] || (echo "ERROR: uncommitted changes" && exit 1)

@@ -5,9 +5,12 @@ extern "C" {
 #include "load.hpp"
 #include "render.hpp"
 #include "picking.hpp"
+#include "simulation.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cstring>
+
+static const double SIMULATION_STEP = 1. / 128.;
 
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
@@ -297,15 +300,34 @@ int main() {
         state.time = (double) (time(NULL) - J2000);
     }
 
-    state.last_simulation_step = real_clock();
+    Orbit orbit;
+    state.rocket.name = "Rocket";
+    state.rocket.n_satellites = 0;
+    state.rocket.orbit = &orbit;
+    state.rocket.state = {
+        vec3{6371e3 + 300e3, 0, 0},
+        vec3{0, 7660, 0},
+    },
+    state.rocket.orbit_updated = 0.f;
+    body_append_satellite(state.focus, &state.rocket);
+    orbit_from_state(&orbit, state.focus, state.rocket.state, state.time);
+
     state.last_fps_measure = real_clock();
+
+    double last = real_clock();
+    double elapsed = 0.;
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
         // update time
         double now = real_clock();
-        state.time += (now - state.last_simulation_step) * state.timewarp;
-        state.last_simulation_step = now;
+        elapsed += (now - last) * state.timewarp;
+        last = now;
+        while (elapsed >= SIMULATION_STEP) {
+            rocket_update(&state.rocket, state.time, SIMULATION_STEP);
+            elapsed -= SIMULATION_STEP;
+            state.time += SIMULATION_STEP;
+        }
 
         render(&state);
 

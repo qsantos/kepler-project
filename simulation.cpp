@@ -1,29 +1,9 @@
-#include "vector.hpp"
+#include "simulation.hpp"
+
 #include "matrix.hpp"
 
 #include <chrono>
 #include <iostream>
-
-struct State : vec6 {
-    State(const vec6& values) : vec6{values} {}
-    State(const vec3& position, const vec3& velocity) :
-        vec6{
-            position[0], position[1], position[2],
-            velocity[0], velocity[1], velocity[2],
-        }
-    {
-    }
-
-    vec3 position() const {
-        const State& self = *this;
-        return {self[0], self[1], self[2]};
-    }
-
-    vec3 velocity() const {
-        const State& self = *this;
-        return {self[3], self[4], self[5]};
-    }
-};
 
 template<class T>
 T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
@@ -63,21 +43,6 @@ State f(double t, State state) {
     return {velocity, acceleration};
 }
 
-int main(void) {
-    State state{
-        vec3{6371e3 + 300e3, 0, 0},
-        vec3{0, 7660, 0},
-    };
-    const double dt = 1. / 64;
-
-    // simulate
-    auto start = std::chrono::high_resolution_clock::now();
-    for (double t = 0; t < 1<<20; t += dt) {
-        state = runge_kutta_4(f, t, state, dt);
-    }
-    std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - start;
-
-    std::cout << state << std::endl;
-    std::cout << elapsed.count() << " s" << std::endl;
-    return 0;
+void rocket_update(Rocket* rocket, double time, double step) {
+    rocket->state = runge_kutta_4(f, time, rocket->state, step);
 }

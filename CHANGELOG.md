@@ -4,6 +4,7 @@
 - Added graphical effects on Sun/Kerbol: glow and lens flare
 - Added CHANGELOG
 - Removed obsolete console message when changing focus or timewarp
+- Added numeric simulation of a simple space ship displayed as a 2km sphere
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies

@@ -1,6 +1,7 @@
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
+#include "simulation.hpp"
 #include "cubemap.hpp"
 #include "body.hpp"
 extern "C" {
@@ -26,12 +27,15 @@ struct GlobalState {
     bool show_wireframe = false;
     bool show_helpers = true;
     bool show_hud = true;
+
     map<string, CelestialBody*> bodies;
     map<string, GLuint> body_textures;
     map<string, OrbitMesh> orbit_meshes;
     map<string, OrbitApsesMesh> apses_meshes;
     CelestialBody* root;
     CelestialBody* focus;
+    Rocket rocket;
+
     GLuint base_shader;
     GLuint cubemap_shader;
     GLuint lighting_shader;
@@ -43,13 +47,13 @@ struct GlobalState {
     GLint star_glow_texture;
     GLint lens_flare_texture;
 
-    double last_simulation_step;
     double last_fps_measure;
     size_t n_frames_since_last = 0;
 
     bool drag_active = false;
     bool picking_active = false;
     std::vector<CelestialBody*> picking_objects;
+
     double cursor_x;
     double cursor_y;
     double view_zoom = 1e-7;

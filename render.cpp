@@ -157,6 +157,20 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
         render_body(state, body, scene_origin);
         clear_picking_object(state);
     }
+
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
+    auto model = glm::mat4(1.f);
+    auto position = body_global_position_at_time(state->rocket.orbit->primary, state->time)
+        - scene_origin
+        + state->rocket.state.position();
+    model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
+    model = glm::scale(model, glm::vec3(1e3f));
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    state->render_state->uv_sphere.draw();
 }
 
 double glow_size(double radius, double temperature, double distance) {
@@ -365,11 +379,7 @@ void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     render_lens_flare(state, scene_origin, visibility);
 }
 
-static void render_helpers(GlobalState* state, const vec3& scene_origin) {
-    if (!state->show_helpers) {
-        return;
-    }
-
+static void render_position_markers(GlobalState* state, const vec3& scene_origin) {
     // draw circles around celestial bodies when from far away
     glPointSize(20);
     glUseProgram(state->position_marker_shader);
@@ -377,13 +387,16 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
     GLint colorUniform = glGetUniformLocation(state->position_marker_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
     OrbitSystem(state->root, scene_origin, state->time).draw();
+}
 
+static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     glUseProgram(state->base_shader);
-    colorUniform = glGetUniformLocation(state->base_shader, "u_color");
+    GLint colorUniform = glGetUniformLocation(state->position_marker_shader, "u_color");
     reset_matrices(state);
 
     glPointSize(5);
 
+    // unfocused orbits
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
@@ -404,6 +417,7 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
         clear_picking_object(state);
     }
 
+    // focused orbits
     glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
@@ -420,6 +434,21 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
         FocusedOrbitApsesMesh(body->orbit, state->time).draw();
         clear_picking_object(state);
     }
+
+    CelestialBody* body = &state->rocket;
+    auto position = body_global_position_at_time(body, state->time) - scene_origin;
+    state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+    OrbitMesh(body->orbit).draw();
+    OrbitApsesMesh(body->orbit).draw();
+}
+
+static void render_helpers(GlobalState* state, const vec3& scene_origin) {
+    if (!state->show_helpers) {
+        return;
+    }
+
+    render_position_markers(state, scene_origin);
+    render_orbits(state, scene_origin);
 }
 
 static void fill_hud(GlobalState* state) {
