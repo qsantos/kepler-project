@@ -63,4 +63,8 @@ char* human_quantity(double v, const char* unit);
 size_t count(const char* s, const char* pattern);
 char* replace(const char* s, const char* pattern, const char* replacement);
 
+#ifdef MSYS2
+char* strdup(const char* s);
+#endif
+
 #endif

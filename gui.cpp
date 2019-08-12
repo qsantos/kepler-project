@@ -4,6 +4,9 @@ extern "C" {
 #include "load.hpp"
 #include "render.hpp"
 
+#ifdef MSYS2
+#include <windef.h>
+#endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <cstring>

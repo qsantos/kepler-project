@@ -15,6 +15,9 @@ ifeq ($(PLATFORM),win32)
 	LDFLAGS+=-static -mwindows
 	# NOTE: MinGW on Linux ignores LIBRARY_PATH
 	LDLIBS:=-L/usr/local/x86_64-w64-mingw32/lib -lstdc++ -lm -lcjson -lglfw3 -lopengl32 -lglew32
+else ifeq ($(OS),Windows_NT)
+	LDLIBS:=-L/usr/local/lib -lm -lcjson -lglfw3 -lgdi32 -lopengl32 -lglew32 -lstdc++
+	CCFLAGS+=-DMSYS2
 endif
 
 all: $(TARGETS)

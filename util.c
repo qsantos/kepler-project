@@ -101,7 +101,7 @@ char* human_quantity(double value, const char* unit) {
 
     // additional information
     if (value > ly) {
-        s += snprintf(ret + s, n - (size_t) s, " (%.0f ly)", value / ly);
+        snprintf(ret + s, n - (size_t) s, " (%.0f ly)", value / ly);
     }
 
     return ret;
@@ -163,3 +163,17 @@ char* replace(const char* s, const char* pattern, const char* replacement) {
 
     return ret;
 }
+
+#ifdef MSYS2
+char* strdup(const char* s) {
+    size_t n = strlen(s);
+
+    char* r = malloc(n + 1);
+    if (r == NULL) {
+        return NULL;
+    }
+
+    memcpy(r, s, n + 1);
+    return r;
+}
+#endif

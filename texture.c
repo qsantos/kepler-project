@@ -2,6 +2,9 @@
 
 #include "util.h"
 
+#ifdef MSYS2
+#include <windef.h>
+#endif
 #include <GL/glew.h>
 #define STBI_FAILURE_USERMSG
 #define STB_IMAGE_IMPLEMENTATION

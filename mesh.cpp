@@ -4,6 +4,9 @@ extern "C" {
 #include "util.h"
 }
 
+#ifdef MSYS2
+#include <windef.h>
+#endif
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 

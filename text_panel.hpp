@@ -1,6 +1,9 @@
 #ifndef TEXT_PANEL_HPP
 #define TEXT_PANEL_HPP
 
+#ifdef MSYS2
+#include <windef.h>
+#endif
 #include <GL/glew.h>
 
 #include <vector>
