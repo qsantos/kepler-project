@@ -32,6 +32,10 @@ RenderState* make_render_state() {
     return render_state;
 }
 
+void delete_render_state(RenderState* render_state) {
+    delete render_state;
+}
+
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
 void update_matrices(GlobalState* state) {

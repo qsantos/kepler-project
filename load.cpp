@@ -161,12 +161,14 @@ int parse_bodies(Dict* bodies, const char* json) {
 }
 
 int load_bodies(Dict* bodies, const char* filename) {
-    const char* json = load_file(filename);
+    char* json = load_file(filename);
     if (json == NULL) {
         fprintf(stderr, "Failed to open '%s'\n", filename);
         return -1;
     }
-    return parse_bodies(bodies, json);
+    int ret = parse_bodies(bodies, json);
+    free(json);
+    return ret;
 }
 
 void unload_bodies(Dict* bodies) {

@@ -101,6 +101,7 @@ GLuint make_program(size_t n_shaders, ...) {
     char dummy_buffer[1];  // makes cppcheck happy
     int ret = make_main(dummy_buffer, 0, n_shaders, shaders) + 1;
     if (ret < 0) {
+        free(shaders);
         fprintf(stderr, "Error while sizing the main shader (%i)\n", ret);
         exit(EXIT_FAILURE);
     }
@@ -108,6 +109,8 @@ GLuint make_program(size_t n_shaders, ...) {
     char* buffer = MALLOC((unsigned) ret);
     ret = make_main(buffer, (unsigned) ret, n_shaders, shaders);
     if (ret < 0) {
+        free(buffer);
+        free(shaders);
         fprintf(stderr, "Error while generating the main shader (%i)\n", ret);
         exit(EXIT_FAILURE);
     }
@@ -117,6 +120,7 @@ GLuint make_program(size_t n_shaders, ...) {
     attach_shader(program, GL_FRAGMENT_SHADER, buffer, "<main>");
 
     free(buffer);
+    free(shaders);
 
     glLinkProgram(program);
 

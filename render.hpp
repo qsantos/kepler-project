@@ -16,7 +16,8 @@ using std::string;
 
 struct RenderState;
 
-RenderState* make_render_state();
+RenderState* make_render_state(void);
+void delete_render_state(RenderState* render_state);
 
 struct GlobalState {
     double time = 0.;
@@ -62,6 +63,8 @@ struct GlobalState {
     int viewport_height = 768;
 
     RenderState* render_state = make_render_state();
+
+    ~GlobalState() { delete_render_state(this->render_state); }
 };
 
 void reset_matrices(GlobalState* state, bool zoom=true);
