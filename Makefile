@@ -29,7 +29,8 @@ set_version:
 
 %.tgz: set_version
 	$(MAKE) gui
-	tar --exclude ".*" -zcf $@ gui data/
+	tar --transform 's/^/$*\//' --exclude ".*" -zcf $@ gui data/
+	
 
 %.zip: set_version
 	PLATFORM=win32 $(MAKE) gui
