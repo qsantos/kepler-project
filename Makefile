@@ -33,7 +33,7 @@ set_version:
 
 %.zip: set_version
 	PLATFORM=win32 $(MAKE) gui
-	zip --exclude "*/.*" --quiet -r - gui *.dll data/ >$@
+	zip --exclude "*/.*" --quiet -r - gui.exe *.dll data/ >$@
 
 linux: $(GIT_VERSION).tgz
 windows: $(GIT_VERSION).zip
