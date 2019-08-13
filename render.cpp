@@ -16,6 +16,7 @@ struct RenderState {
     TextPanel hud = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 119.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
+    SquareMesh square = SquareMesh(1.);
 
     glm::mat4 model_matrix;
     glm::mat4 view_matrix;
@@ -166,11 +167,16 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
         - scene_origin
         + state->rocket.state.position();
     model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
-    model = glm::scale(model, glm::vec3(1e3f));
+    model = glm::rotate(model, M_PIf32/2, glm::vec3(0.f, 1.f, 0.f));
+    model = glm::scale(model, glm::vec3(1e5f));
     state->render_state->model_matrix = model;
     update_matrices(state);
 
-    state->render_state->uv_sphere.draw();
+    glDisable(GL_CULL_FACE);
+    glBindTexture(GL_TEXTURE_2D, state->rocket_texture);
+    state->render_state->square.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glEnable(GL_CULL_FACE);
 }
 
 double glow_size(double radius, double temperature, double distance) {
@@ -358,20 +364,20 @@ void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     // Query for passed samples
     glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[0]);
     glDisable(GL_DEPTH_TEST);
-    SquareMesh(1.f).draw();
+    state->render_state->square.draw();
     glEnable(GL_DEPTH_TEST);
     glEndQuery(GL_SAMPLES_PASSED);
 
     // Query for total samples
     glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[1]);
-    SquareMesh(1.f).draw();
+    state->render_state->square.draw();
     glEndQuery(GL_SAMPLES_PASSED);
 
     s = glow_size(state->root->radius, 5778., d);
     star_glow_size = {s, s};
     glUniform1f(glGetUniformLocation(state->star_glow_shader, "visibility"), visibility);
     glUniform2fv(glGetUniformLocation(state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
-    SquareMesh(1.f).draw();
+    state->render_state->square.draw();
     glDepthMask(GL_TRUE);
 
     glBindTexture(GL_TEXTURE_2D, 0);

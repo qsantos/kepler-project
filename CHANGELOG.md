@@ -7,6 +7,7 @@
 - Added numeric simulation of a simple space ship displayed as a 2km sphere
 - Timewarp automatically plateaus when CPU is saturated
 - Changed HUD to display distance from focus and altitude instead of zoom
+- Show basic rocket as 2D texture
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies

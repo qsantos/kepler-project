@@ -63,10 +63,10 @@ SquareMesh::SquareMesh(double size) :
     float s = (float) size / 2.f;
 
     float data[] = {
-        -s, -s, 0, 0, 0, 0, 0, 0,
-        +s, -s, 0, 1, 0, 0, 0, 0,
-        -s, +s, 0, 0, 1, 0, 0, 0,
-        +s, +s, 0, 1, 1, 0, 0, 0,
+        -s, -s, 0, 0, 0, 0, 0, -1,
+        +s, -s, 0, 1, 0, 0, 0, -1,
+        -s, +s, 0, 0, 1, 0, 0, -1,
+        +s, +s, 0, 1, 1, 0, 0, -1,
     };
 
     glGenBuffers(1, &this->vbo);

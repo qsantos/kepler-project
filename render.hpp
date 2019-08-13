@@ -47,6 +47,7 @@ struct GlobalState {
 
     GLint star_glow_texture;
     GLint lens_flare_texture;
+    GLint rocket_texture;
 
     double last_fps_measure;
     size_t n_frames_since_last = 0;

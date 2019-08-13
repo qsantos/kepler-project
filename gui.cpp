@@ -279,6 +279,7 @@ int main() {
     }
     state.star_glow_texture = load_texture("data/textures/star_glow.png");
     state.lens_flare_texture = load_texture("data/textures/lens_flares.png");
+    state.rocket_texture = load_texture("data/textures/rocket_on.png");
     state.focus = state.bodies.at("Earth");
     state.root = state.bodies.at("Sun");
 
