@@ -31,6 +31,10 @@ struct QuadSphereMesh : public Mesh {
     QuadSphereMesh(float radius, int divisions);
 };
 
+struct IcoSphereMesh : public Mesh {
+    IcoSphereMesh(float radius, int divisions);
+};
+
 struct OrbitMesh : public Mesh {
     OrbitMesh(Orbit* orbit);
 };
