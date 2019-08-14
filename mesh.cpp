@@ -19,7 +19,7 @@ Mesh::Mesh(int mode_, int length_, bool is_3d_) :
 }
 
 Mesh::~Mesh(void) {
-    //glDeleteBuffers(1, &this->vbo);
+    glDeleteBuffers(1, &this->vbo);
 }
 
 void Mesh::bind(void) {
