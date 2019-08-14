@@ -13,9 +13,9 @@ extern "C" {
 Mesh::Mesh(int mode_, int length_, bool is_3d_) :
     mode{mode_},
     length{length_},
-    is_3d{is_3d_},
-    vbo{0}
+    is_3d{is_3d_}
 {
+    glGenBuffers(1, &this->vbo);
 }
 
 Mesh::~Mesh(void) {
@@ -69,7 +69,6 @@ SquareMesh::SquareMesh(double size) :
         +s, +s, 0, 1, 1, 0, 0, -1,
     };
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -102,7 +101,6 @@ CubeMesh::CubeMesh(double size) :
         +s, -s, -s,   -s, +s, -s,   -s, -s, -s,
     };
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -145,7 +143,6 @@ UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
         uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack + 1, slices);
     }
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -242,7 +239,6 @@ QuadSphereMesh::QuadSphereMesh(float radius, int divisions) :
         }
     }
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -270,7 +266,6 @@ OrbitMesh::OrbitMesh(Orbit* orbit) :
         data[i++] = v[2];
     }
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -294,7 +289,6 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit) :
          apoapsis[0],  apoapsis[1],  apoapsis[2],
     };
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -347,7 +341,6 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
         }
     }
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -365,7 +358,6 @@ FocusedOrbitApsesMesh::FocusedOrbitApsesMesh(Orbit* orbit, double time) :
         (float)  apoapsis[0], (float)  apoapsis[1], (float)  apoapsis[2],
     };
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -391,7 +383,6 @@ OrbitSystem::OrbitSystem(CelestialBody* root, const vec3& scene_origin, double t
 
     this->length = (int) data.size();
 
-    glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
