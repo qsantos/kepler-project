@@ -106,7 +106,7 @@ CubeMesh::CubeMesh(double size) :
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void uvspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, int stacks, int slices, int stack, int slice) {
+void uvspheremesh_add_vertex(std::vector<float>& data, float radius, int stacks, int slices, int stack, int slice) {
     float slice_angle = (2.f * M_PIf32) * float(slice) / float(slices);
     float stack_angle = M_PIf32 * float(stack) / float(stacks);
 
@@ -115,43 +115,42 @@ void uvspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, 
     float nz = cosf(stack_angle);
 
     // position
-    data[i++] = radius * nx;
-    data[i++] = radius * ny;
-    data[i++] = radius * nz;
+    data.push_back(radius * nx);
+    data.push_back(radius * ny);
+    data.push_back(radius * nz);
     // texcoord
-    data[i++] = 1 - float(slice) / float(slices);
-    data[i++] = 1 - float(stack) / float(stacks);
+    data.push_back(1 - float(slice) / float(slices));
+    data.push_back(1 - float(stack) / float(stacks));
     // normal
-    data[i++] = nx;
-    data[i++] = ny;
-    data[i++] = nz;
+    data.push_back(nx);
+    data.push_back(ny);
+    data.push_back(nz);
 }
 
 UVSphereMesh::UVSphereMesh(float radius, int lod) :
-    Mesh(GL_TRIANGLE_STRIP, 2 * ((4<<lod) + 2) * (2<<lod), true)
+    Mesh(GL_TRIANGLE_STRIP, 0, true)
 {
     int stacks = 2 << lod;
     int slices = 4 << lod;
 
     std::vector<float> data;
-    data.resize(8 * this->length);
-
-    size_t i = 0;
     for (GLsizei stack = 0; stack < stacks ; stack += 1) {
-        uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack, 0);
+        uvspheremesh_add_vertex(data, radius, stacks, slices, stack, 0);
         for (GLsizei slice = 0; slice <= slices; slice += 1) {
-            uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack, slice);
-            uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack + 1, slice);
+            uvspheremesh_add_vertex(data, radius, stacks, slices, stack, slice);
+            uvspheremesh_add_vertex(data, radius, stacks, slices, stack + 1, slice);
         }
-        uvspheremesh_add_vertex(data, i, radius, stacks, slices, stack + 1, slices);
+        uvspheremesh_add_vertex(data, radius, stacks, slices, stack + 1, slices);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    this->length = (int) data.size() / 8;
 }
 
-static void quadspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, int divisions, int face, int xdivision, int ydivision) {
+static void quadspheremesh_add_vertex(std::vector<float>& data, float radius, int divisions, int face, int xdivision, int ydivision) {
     float s = 2.f / (float) divisions;
     float a = -1.f + (float) xdivision * s;
     float b = -1.f + (float) ydivision * s;
@@ -209,44 +208,41 @@ static void quadspheremesh_add_vertex(std::vector<float>& data, size_t& i, float
     z /= n;
 
     // position
-    data[i++] = x * radius;
-    data[i++] = y * radius;
-    data[i++] = z * radius;
+    data.push_back(x * radius);
+    data.push_back(y * radius);
+    data.push_back(z * radius);
     // texcoord
-    data[i++] = 0.f;  // atan2(y, x) / (2.f * M_PIf32) + .5f;
-    data[i++] = 0.f;  // asin(z) / M_PIf32 + .5f;
+    data.push_back(0.f);  // atan2(y, x) / (2.f * M_PIf32) + .5f
+    data.push_back(0.f);  // asin(z) / M_PIf32 + .5f
     // normal
-    data[i++] = x;
-    data[i++] = y;
-    data[i++] = z;
+    data.push_back(x);
+    data.push_back(y);
+    data.push_back(z);
 }
 
 QuadSphereMesh::QuadSphereMesh(float radius, int lod) :
-    Mesh(GL_TRIANGLE_STRIP, 6 * 2 * ((1<<lod) + 2) * (1<<lod), true)
+    Mesh(GL_TRIANGLE_STRIP, 0, true)
 {
     int divisions = 1 << lod;
 
     // make a face of divisions×divisions squares
     std::vector<float> data;
-    data.resize(8 * this->length);
-    size_t i = 0;
-
     for (int face = 0; face < 6; face += 1) {
         for (int ydivision = 0; ydivision < divisions; ydivision += 1) {
-            quadspheremesh_add_vertex(data, i, radius, divisions, face, 0, ydivision);
-
+            quadspheremesh_add_vertex(data, radius, divisions, face, 0, ydivision);
             for (int xdivision = 0; xdivision <= divisions; xdivision += 1) {
-                quadspheremesh_add_vertex(data, i, radius, divisions, face, xdivision, ydivision);
-                quadspheremesh_add_vertex(data, i, radius, divisions, face, xdivision, ydivision + 1);
+                quadspheremesh_add_vertex(data, radius, divisions, face, xdivision, ydivision);
+                quadspheremesh_add_vertex(data, radius, divisions, face, xdivision, ydivision + 1);
             }
-
-            quadspheremesh_add_vertex(data, i, radius, divisions, face, divisions, ydivision + 1);
+            quadspheremesh_add_vertex(data, radius, divisions, face, divisions, ydivision + 1);
         }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    this->length = (int) data.size() / 8;
 }
 
 glm::vec3 midpoint(glm::vec3 a, glm::vec3 b) {
@@ -327,30 +323,28 @@ IcoSphereMesh::IcoSphereMesh(float radius, int lod) :
     }
 
     std::vector<float> data;
-    this->length = (int) triangles.size() * 3;
-    data.resize(8 * this->length);
-
-    size_t i = 0;
     for (auto triangle : triangles) {
         for (int k = 0; k < 3; k += 1) {
             auto vertex = triangle[k];
             // position
-            data[i++] = vertex[0] * radius;
-            data[i++] = vertex[1] * radius;
-            data[i++] = vertex[2] * radius;
+            data.push_back(vertex[0] * radius);
+            data.push_back(vertex[1] * radius);
+            data.push_back(vertex[2] * radius);
             // tex coord
-            data[i++] = 0.f;
-            data[i++] = 0.f;
+            data.push_back(0.f);
+            data.push_back(0.f);
             // normal
-            data[i++] = vertex[0];
-            data[i++] = vertex[1];
-            data[i++] = vertex[2];
+            data.push_back(vertex[0]);
+            data.push_back(vertex[1]);
+            data.push_back(vertex[2]);
         }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    this->length = (int) data.size() / 8;
 }
 
 OrbitMesh::OrbitMesh(Orbit* orbit) :
@@ -364,19 +358,17 @@ OrbitMesh::OrbitMesh(Orbit* orbit) :
     transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
 
     std::vector<float> data;
-    data.resize(3 * this->length);
-    size_t i = 0;
     for (int j = 0; j < this->length; j += 1) {
         float theta = M_PIf32 * (2.f * float(j) / float(this->length) - 1.f);
         auto v = glm::vec4{cosf(theta), sinf(theta), 0.f, 1.f};
         v = transform * v;
-        data[i++] = v[0];
-        data[i++] = v[1];
-        data[i++] = v[2];
+        data.push_back(v[0]);
+        data.push_back(v[1]);
+        data.push_back(v[2]);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -408,8 +400,6 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
     Mesh(GL_LINE_LOOP, 256, false)
 {
     std::vector<float> data;
-    data.resize(3 * this->length);
-    size_t i = 0;
 
     // issues when drawing the orbit of a focused body:
     // 1. moving to system center and back close to camera induces
@@ -444,14 +434,14 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
             float x = 2.f * float(point) / float(this->length) - 1.f;
             float theta = M_PIf32 * powf(x, 3.f);
             glm::vec3 pos = transform * glm::vec4(1.f - cosf(theta), sinf(theta), 0.f, 0.f);
-            data[i++] = pos[0];
-            data[i++] = pos[1];
-            data[i++] = pos[2];
+            data.push_back(pos[0]);
+            data.push_back(pos[1]);
+            data.push_back(pos[2]);
         }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, i * sizeof(float), data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -490,9 +480,9 @@ OrbitSystem::OrbitSystem(CelestialBody* root, const vec3& scene_origin, double t
     std::vector<float> data;
     append_object_and_children_coordinates(data, scene_origin, time, root);
 
-    this->length = (int) data.size();
-
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    this->length = (int) data.size();
 }
