@@ -24,15 +24,15 @@ struct CubeMesh : public Mesh {
 };
 
 struct UVSphereMesh : public Mesh {
-    UVSphereMesh(float radius, int stacks, int slices);
+    UVSphereMesh(float radius, int lod);
 };
 
 struct QuadSphereMesh : public Mesh {
-    QuadSphereMesh(float radius, int divisions);
+    QuadSphereMesh(float radius, int lod);
 };
 
 struct IcoSphereMesh : public Mesh {
-    IcoSphereMesh(float radius, int divisions);
+    IcoSphereMesh(float radius, int lod);
 };
 
 struct OrbitMesh : public Mesh {

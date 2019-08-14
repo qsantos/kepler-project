@@ -127,9 +127,12 @@ void uvspheremesh_add_vertex(std::vector<float>& data, size_t& i, float radius, 
     data[i++] = nz;
 }
 
-UVSphereMesh::UVSphereMesh(float radius, GLsizei stacks, GLsizei slices) :
-    Mesh(GL_TRIANGLE_STRIP, 2 * (slices + 2) * stacks, true)
+UVSphereMesh::UVSphereMesh(float radius, int lod) :
+    Mesh(GL_TRIANGLE_STRIP, 2 * ((4<<lod) + 2) * (2<<lod), true)
 {
+    int stacks = 2 << lod;
+    int slices = 4 << lod;
+
     std::vector<float> data;
     data.resize(8 * this->length);
 
@@ -218,9 +221,11 @@ static void quadspheremesh_add_vertex(std::vector<float>& data, size_t& i, float
     data[i++] = z;
 }
 
-QuadSphereMesh::QuadSphereMesh(float radius, int divisions) :
-    Mesh(GL_TRIANGLE_STRIP, 6 * 2 * (divisions + 2) * divisions, true)
+QuadSphereMesh::QuadSphereMesh(float radius, int lod) :
+    Mesh(GL_TRIANGLE_STRIP, 6 * 2 * ((1<<lod) + 2) * (1<<lod), true)
 {
+    int divisions = 1 << lod;
+
     // make a face of divisions×divisions squares
     std::vector<float> data;
     data.resize(8 * this->length);
@@ -248,7 +253,7 @@ glm::vec3 midpoint(glm::vec3 a, glm::vec3 b) {
     return glm::normalize((a + b) / 2.f);
 }
 
-IcoSphereMesh::IcoSphereMesh(float radius, int divisions) :
+IcoSphereMesh::IcoSphereMesh(float radius, int lod) :
     Mesh(GL_TRIANGLES, 0, true)
 {
     float t = (1.f + sqrtf(5.f)) / 2.f;
@@ -306,7 +311,7 @@ IcoSphereMesh::IcoSphereMesh(float radius, int divisions) :
     }
 
     std::vector<glm::mat3> new_triangles;
-    for (int division = 0; division < divisions; division += 1) {
+    for (int level = 0; level < lod; level += 1) {
         for (auto triangle : triangles) {
             auto a = midpoint(triangle[0], triangle[1]);
             auto b = midpoint(triangle[1], triangle[2]);

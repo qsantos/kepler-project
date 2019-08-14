@@ -16,7 +16,7 @@ struct RenderState {
     Cubemap earth_cubemap = Cubemap(10, "data/textures/Earth/{}.jpg");
     TextPanel hud = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 119.f);
-    UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
+    UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
     SquareMesh square = SquareMesh(1.);
 
     glm::mat4 model_matrix;
