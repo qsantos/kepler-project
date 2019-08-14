@@ -93,7 +93,7 @@ static void render_skybox(GlobalState* state) {
         return;
     }
 
-    glUseProgram(state->cubemap_shader);
+    glUseProgram(state->skybox_shader);
     reset_matrices(state, false);
 
     glDisable(GL_DEPTH_TEST);

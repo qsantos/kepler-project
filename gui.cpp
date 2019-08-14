@@ -226,10 +226,10 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    state.cubemap_shader = make_program(3, "base", "cubemap", "logz");
-    glUseProgram(state.cubemap_shader);
-    glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
-    glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+    state.skybox_shader = make_program(3, "base", "skybox", "logz");
+    glUseProgram(state.skybox_shader);
+    glUniform1i(glGetUniformLocation(state.skybox_shader, "skybox_texture"), 0);  // TODO
+    glUniform4f(glGetUniformLocation(state.skybox_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
     state.lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     glUseProgram(state.lighting_shader);
