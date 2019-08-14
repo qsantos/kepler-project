@@ -231,6 +231,11 @@ int main() {
     glUniform1i(glGetUniformLocation(state.skybox_shader, "skybox_texture"), 0);  // TODO
     glUniform4f(glGetUniformLocation(state.skybox_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
 
+    state.cubemap_shader = make_program(4, "base", "cubemap", "lighting", "logz");
+    glUseProgram(state.cubemap_shader);
+    glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
+    glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+
     state.lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     glUseProgram(state.lighting_shader);
     glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);

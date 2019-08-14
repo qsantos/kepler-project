@@ -8,7 +8,6 @@
 #include <stb/stb_image.h>
 
 unsigned char* load_image(const char* filename, int* width, int* height) {
-    stbi_set_flip_vertically_on_load(1);
     unsigned char* data = stbi_load(filename, width, height, NULL, 4);
     if (data == NULL) {
         fprintf(stderr, "WARNING: failed to load image %s\n", filename);
@@ -21,7 +20,9 @@ unsigned load_texture(const char* filename) {
     double start = real_clock();
 
     int width, height;
+    stbi_set_flip_vertically_on_load(1);
     unsigned char* data = load_image(filename, &width, &height);
+    stbi_set_flip_vertically_on_load(0);
     if (data == NULL) {
         return 0;
     }

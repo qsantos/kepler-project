@@ -39,6 +39,7 @@ struct GlobalState {
 
     GLuint base_shader;
     GLuint skybox_shader;
+    GLuint cubemap_shader;
     GLuint lighting_shader;
     GLuint position_marker_shader;
     GLuint star_glow_shader;

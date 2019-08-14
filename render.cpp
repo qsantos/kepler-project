@@ -13,6 +13,7 @@ extern "C" {
 
 struct RenderState {
     Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
+    Cubemap earth_cubemap = Cubemap(10, "data/textures/Earth/{}.jpg");
     TextPanel hud = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 119.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 64, 64);
@@ -102,6 +103,14 @@ static void render_skybox(GlobalState* state) {
 }
 
 static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
+    if (std::string(body->name) == "Earth") {
+        glUseProgram(state->cubemap_shader);
+        reset_matrices(state);
+    } else {
+        glUseProgram(state->base_shader);
+        reset_matrices(state);
+    }
+
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -126,10 +135,26 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     state->render_state->model_matrix = model;
     update_matrices(state);
 
-    auto texture = state->body_textures.at(body->name);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    state->render_state->uv_sphere.draw();
-    glBindTexture(GL_TEXTURE_2D, 0);
+    if (std::string(body->name) == "Earth") {
+        glm::mat4 cubemap_matrix = glm::mat4(1.f);
+        cubemap_matrix = glm::rotate(cubemap_matrix, -M_PIf32/2.f, glm::vec3(1.f, 0.f, 0.f));
+        cubemap_matrix = glm::rotate(cubemap_matrix, M_PIf32/2.f, glm::vec3(0.f, 0.f, 1.f));
+        GLint var = glGetUniformLocation(program, "cubemap_matrix");
+        glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(cubemap_matrix));
+
+        auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
+        auto pos2 = state->render_state->view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+        GLint lighting_source = glGetUniformLocation(program, "lighting_source");
+        glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
+
+        glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->earth_cubemap.texture);
+        state->render_state->uv_sphere.draw();
+    } else {
+        auto texture = state->body_textures.at(body->name);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        state->render_state->uv_sphere.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 void render_star(GlobalState* state, const vec3& scene_origin) {
@@ -254,12 +279,6 @@ void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visib
 
     auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
     glm::vec3 light_source = {position[0], position[1], position[2]};
-
-    //glm::vec2 light_source = {.5f, .5f};
-
-    //glm::mat4 view = state->render_state->view_matrix;
-    //glm::vec4 z = {view * glm::vec4(0.f, 0.f, 1.f, 1.f)};
-    //glm::vec3 light_source = {z[0], z[1], z[2]};
 
     float size = .1f;
     float aspect = float(state->viewport_width) / float(state->viewport_height);
