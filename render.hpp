@@ -2,22 +2,13 @@
 #define RENDER_HPP
 
 #include "simulation.hpp"
-#include "cubemap.hpp"
 #include "body.hpp"
-extern "C" {
-#include "shaders.h"
-}
 
-#include <GL/glew.h>
 #include <map>
-#include <vector>
-
-using std::map;
-using std::string;
 
 struct RenderState;
 
-RenderState* make_render_state(void);
+RenderState* make_render_state(const std::map<std::string, CelestialBody*>& bodies);
 void delete_render_state(RenderState* render_state);
 
 struct GlobalState {
@@ -29,34 +20,15 @@ struct GlobalState {
     bool show_helpers = true;
     bool show_hud = true;
 
-    map<string, CelestialBody*> bodies;
-    map<string, GLuint> body_textures;
-    map<string, OrbitMesh> orbit_meshes;
-    map<string, OrbitApsesMesh> apses_meshes;
+    std::map<std::string, CelestialBody*> bodies;
     CelestialBody* root;
     CelestialBody* focus;
     Rocket rocket;
-
-    GLuint base_shader;
-    GLuint skybox_shader;
-    GLuint cubemap_shader;
-    GLuint lighting_shader;
-    GLuint position_marker_shader;
-    GLuint star_glow_shader;
-    GLuint lens_flare_shader;
-    GLuint vao;
-
-    GLint star_glow_texture;
-    GLint lens_flare_texture;
-    GLint rocket_texture;
 
     double last_fps_measure;
     size_t n_frames_since_last = 0;
 
     bool drag_active = false;
-    bool picking_active = false;
-    std::vector<CelestialBody*> picking_objects;
-
     double cursor_x;
     double cursor_y;
     double view_distance = 1e7;
@@ -69,12 +41,17 @@ struct GlobalState {
     int viewport_width = 1024;
     int viewport_height = 768;
 
-    RenderState* render_state = make_render_state();
+    RenderState* render_state = NULL;
 
     ~GlobalState() { delete_render_state(this->render_state); }
 };
 
 void reset_matrices(GlobalState* state, bool zoom=true);
 void render(GlobalState* state);
+
+void set_picking_name(size_t name);
+void set_picking_object(GlobalState* state, CelestialBody* object);
+void clear_picking_object(GlobalState* state);
+CelestialBody* pick(GlobalState* state);
 
 #endif

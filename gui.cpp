@@ -1,12 +1,10 @@
 extern "C" {
     #include "util.h"
-    #include "texture.h"
 }
 #include "load.hpp"
 #include "render.hpp"
-#include "picking.hpp"
-#include "simulation.hpp"
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <cstring>
 
@@ -226,47 +224,8 @@ int main() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    state.skybox_shader = make_program(3, "base", "skybox", "logz");
-    glUseProgram(state.skybox_shader);
-    glUniform1i(glGetUniformLocation(state.skybox_shader, "skybox_texture"), 0);  // TODO
-    glUniform4f(glGetUniformLocation(state.skybox_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-
-    state.cubemap_shader = make_program(4, "base", "cubemap", "lighting", "logz");
-    glUseProgram(state.cubemap_shader);
-    glUniform1i(glGetUniformLocation(state.cubemap_shader, "cubemap_texture"), 0);  // TODO
-    glUniform4f(glGetUniformLocation(state.cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-
-    state.lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
-    glUseProgram(state.lighting_shader);
-    glUniform4f(glGetUniformLocation(state.lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.lighting_shader, "picking_active"), 0);
-
-    state.position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
-    glUseProgram(state.position_marker_shader);
-    glUniform4f(glGetUniformLocation(state.position_marker_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.position_marker_shader, "picking_active"), 0);
-
-    state.base_shader = make_program(3, "base", "picking", "logz");
-    glUseProgram(state.base_shader);
-    glUniform4f(glGetUniformLocation(state.base_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.base_shader, "picking_active"), 0);
-
-    state.star_glow_shader = make_program(3, "base", "star_glow", "logz");
-    glUseProgram(state.star_glow_shader);
-    glUniform4f(glGetUniformLocation(state.star_glow_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.star_glow_shader, "picking_active"), 0);
-
-    state.lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
-    glUseProgram(state.lens_flare_shader);
-    glUniform4f(glGetUniformLocation(state.lens_flare_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(state.lens_flare_shader, "picking_active"), 0);
-
-    glGenVertexArrays(1, &state.vao);
-    glBindVertexArray(state.vao);
-
     // initialize viewport
     glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
-    reset_matrices(&state);
 
     // fill default texture with white for convenience
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -277,26 +236,13 @@ int main() {
         fprintf(stderr, "Failed to load '%s'\n", "data/solar_system.json");
         exit(EXIT_FAILURE);
     }
-    for (auto key_value_pair : state.bodies) {
-        auto name = key_value_pair.first;
-        auto path = "data/textures/solar/" + name + ".jpg";
-        state.body_textures[name] = load_texture(path.c_str());
-    }
-    state.star_glow_texture = load_texture("data/textures/star_glow.png");
-    state.lens_flare_texture = load_texture("data/textures/lens_flares.png");
-    state.rocket_texture = load_texture("data/textures/rocket_on.png");
+
+    state.render_state = make_render_state(state.bodies);
+
+    reset_matrices(&state);
+
     state.focus = state.bodies.at("Earth");
     state.root = state.bodies.at("Sun");
-
-    for (auto key_value_pair : state.bodies) {
-        auto name = key_value_pair.first;
-        auto body = key_value_pair.second;
-        if (body->orbit == NULL) {
-            continue;
-        }
-        state.orbit_meshes.emplace(name, body->orbit);
-        state.apses_meshes.emplace(name, body->orbit);
-    }
 
     // disable vsync
     // glfwSwapInterval(0);
