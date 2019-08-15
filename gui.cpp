@@ -168,9 +168,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     state->view_distance *= pow(1.2, -yoffset);
 }
 
-int main() {
-    setlocale(LC_ALL, "");
-
+GLFWwindow* init_glfw(void) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -197,9 +195,18 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    GlobalState state;
-    glfwSetWindowUserPointer(window, &state);
+    // GLFW callbacks
+    glfwSetErrorCallback(error_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
+    return window;
+}
+
+void init_ogl(void) {
     // enable OpenGL debugging
     GLint flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -210,32 +217,34 @@ int main() {
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
     }
 
-    // GLFW callbacks
-    glfwSetErrorCallback(error_callback);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
-    glfwSetCursorPosCallback(window, cursor_position_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // initialize viewport
-    glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
-
     // fill default texture with white for convenience
     glBindTexture(GL_TEXTURE_2D, 0);
     float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
+}
+
+int main() {
+    setlocale(LC_ALL, "");
+
+    GLFWwindow* window = init_glfw();
+    init_ogl();
+
+    GlobalState state;
+    glfwSetWindowUserPointer(window, &state);
 
     if (load_bodies(&state.bodies, "data/solar_system.json") < 0) {
         fprintf(stderr, "Failed to load '%s'\n", "data/solar_system.json");
         exit(EXIT_FAILURE);
     }
+
+    // initialize viewport
+    glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
 
     state.render_state = make_render_state(state.bodies);
 
