@@ -7,7 +7,7 @@ extern "C" {
 #include "shaders.h"
 }
 
-#include "cubemap.hpp"
+#include "mesh.hpp"
 #include "text_panel.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -34,6 +34,7 @@ struct RenderState {
     GLuint vao;
 
     // meshes
+    CubeMesh cube = CubeMesh(10.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
     SquareMesh square = SquareMesh(1.);
     map<CelestialBody*, OrbitMesh> orbit_meshes;
@@ -43,11 +44,11 @@ struct RenderState {
     GLint star_glow_texture;
     GLint lens_flare_texture;
     GLint rocket_texture;
+    GLint skybox_texture;
+    GLint earth_texture;
     map<CelestialBody*, GLuint> body_textures;
 
     // models
-    Cubemap skybox = Cubemap(10, "data/textures/skybox/GalaxyTex_{}.jpg");
-    Cubemap earth_cubemap = Cubemap(10, "data/textures/Earth/{}.jpg");
     TextPanel hud = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 119.f);
 
@@ -110,14 +111,16 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     }
 
     // textures
+    render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
+    render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
+    render_state->rocket_texture = load_texture("data/textures/rocket_on.png");
+    render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
+    render_state->earth_texture = load_cubemap("data/textures/Earth/{}.jpg");
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
         auto path = "data/textures/solar/" + std::string(body->name) + ".jpg";
         render_state->body_textures[body] = load_texture(path.c_str());
     }
-    render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
-    render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
-    render_state->rocket_texture = load_texture("data/textures/rocket_on.png");
 
     // models
     char* help = load_file("data/help.txt");
@@ -191,7 +194,9 @@ static void render_skybox(GlobalState* state) {
     reset_matrices(state, false);
 
     glDisable(GL_DEPTH_TEST);
-    state->render_state->skybox.draw();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->skybox_texture);
+    state->render_state->cube.draw();
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -240,7 +245,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         GLint lighting_source = glGetUniformLocation(program, "lighting_source");
         glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
-        glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->earth_cubemap.texture);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->earth_texture);
         state->render_state->uv_sphere.draw();
     } else {
         auto texture = state->render_state->body_textures.at(body);
