@@ -3,7 +3,7 @@ CFLAGS+=$(CCFLAGS) -std=c99 -Wstrict-prototypes
 CXXFLAGS+=$(CCFLAGS) -std=c++11
 LDFLAGS+=-O3
 LDLIBS:=-lm -lcjson -lGL -lGLEW -lglfw -lstdc++
-TARGETS:=test example simulation gui
+TARGETS:=test example gui
 GIT_VERSION=$(shell git describe --tags)
 
 ifeq ($(PLATFORM),win32)
@@ -21,7 +21,7 @@ all: $(TARGETS)
 
 example: example.o body.o orbit.o recipes.o util.o load.o lambert.o
 test: test.o body.o orbit.o util.o load.o recipes.o lambert.o
-gui: gui.o render.o mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o util.o simulation.o
+gui: gui.o render.o mesh.o texture.o shaders.o cubemap.o text_panel.o body.o orbit.o load.o util.o rocket.o
 
 set_version:
 	[ -z "$(git difftool -y -x "diff -I '^#define VERSION '")" ] || (echo "ERROR: uncommitted changes" && exit 1)

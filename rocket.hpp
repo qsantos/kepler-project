@@ -1,5 +1,5 @@
-#ifndef SIMULATION_HPP
-#define SIMULATION_HPP
+#ifndef ROCKET_HPP
+#define ROCKET_HPP
 
 #include "vector.hpp"
 #include "orbit.hpp"

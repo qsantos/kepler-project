@@ -1,8 +1,8 @@
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
-#include "simulation.hpp"
 #include "body.hpp"
+#include "rocket.hpp"
 
 #include <map>
 
