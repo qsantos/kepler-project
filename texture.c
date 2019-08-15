@@ -47,3 +47,36 @@ unsigned load_texture(const char* filename) {
     }
     return texture;
 }
+
+unsigned load_cubemap(const char* path_pattern) {
+    unsigned texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+
+    static const char* faces[] = {
+        "PositiveX", "NegativeX",
+        "PositiveY", "NegativeY",
+        "PositiveZ", "NegativeZ",
+    };
+
+    for (GLenum i = 0; i < 6; i += 1) {
+        char* path = replace(path_pattern, "{}", faces[i]);
+        int width, height;
+        unsigned char* data = load_image(path, &width, &height);
+        free(path);
+        if (data == NULL) {
+            continue;
+        }
+        glTexImage2D(
+            GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+            0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data
+        );
+        // stb_image_free(data);  // TODO
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+    return texture;
+}
