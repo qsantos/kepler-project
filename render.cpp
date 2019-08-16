@@ -216,6 +216,9 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
+    GLint colorUniform = glGetUniformLocation(program, "u_color");
+    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
+
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(body, state->time) - scene_origin;
     model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
