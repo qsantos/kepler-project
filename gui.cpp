@@ -182,7 +182,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     (void) xoffset;
     GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
-    state->view_altitude *= pow(1.2, -yoffset);
+    // each scroll unit effects the altitude by one decibel
+    state->view_altitude *= pow(10., -yoffset / 10.);
 }
 
 GLFWwindow* init_glfw(void) {
