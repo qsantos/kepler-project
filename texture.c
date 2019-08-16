@@ -17,8 +17,6 @@ unsigned char* load_image(const char* filename, int* width, int* height) {
 }
 
 unsigned load_texture(const char* filename) {
-    double start = real_clock();
-
     int width, height;
     stbi_set_flip_vertically_on_load(1);
     unsigned char* data = load_image(filename, &width, &height);
@@ -41,10 +39,6 @@ unsigned load_texture(const char* filename) {
     // free temporary storage
     stbi_image_free(data);
 
-    double elapsed = real_clock() - start;
-    if (data != NULL) {
-        printf("%s loaded in %.3f s\n", filename, elapsed);
-    }
     return texture;
 }
 
