@@ -150,8 +150,25 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y) {
     GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
     if (state->drag_active) {
-        state->view_theta += (x - state->cursor_x) / 4.;
-        state->view_phi += (y - state->cursor_y) / 4.;
+        double dx = x - state->cursor_x;
+        double dy = y - state->cursor_y;
+
+        // approximate map and drop at low altitude
+        double H = state->view_altitude;
+        double R = state->focus->radius;
+        double dtheta = degrees(atan(dx / state->viewport_width * 2 * H / R));
+        double dphi = degrees(atan(dy / state->viewport_height * H / R));
+
+        // clamp speed at high altitude
+        if (abs(dtheta) > abs(dx / 4.)) {
+            dtheta = dx / 4.;
+        }
+        if (abs(dphi) > abs(dy / 4.)) {
+            dphi = dy / 4.;
+        }
+
+        state->view_theta += dtheta;
+        state->view_phi += dphi;
 
         // clamp to [-180, 0]
         state->view_phi = std::max(-180., std::min(state->view_phi, 0.));

@@ -9,6 +9,7 @@
 - Changed HUD to display distance from focus and altitude instead of zoom
 - Show basic rocket as 2D texture
 - Zoom is now limited by surface of focused object
+- View rotation speed during drag-and-drop more natural when zoomed in
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies
