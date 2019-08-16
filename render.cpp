@@ -756,16 +756,24 @@ CelestialBody* pick(GlobalState* state) {
     glReadPixels(min_x, min_y, w, h, GL_RGBA,  GL_UNSIGNED_BYTE, components);
 
     size_t name = 0;
+    int best_cursor_d2 = search_radius * search_radius;  // squared distance to cursor
     for (int y = 0; y < h; y += 1) {
         for (int x = 0; x < w; x += 1) {
             size_t candidate_name = 0;
             candidate_name |= components[(y*w + x)*4 + 0] << 16;
             candidate_name |= components[(y*w + x)*4 + 1] <<  8;
             candidate_name |= components[(y*w + x)*4 + 2] <<  0;
-            if (candidate_name > 0) {
-                name = candidate_name;
-                break;
+            if (candidate_name == 0) {
+                continue;
             }
+            int dx = (x - w / 2);
+            int dy = (y - h / 2);
+            int cursor_d2 = dx * dx + dy * dy;
+            if (cursor_d2 > best_cursor_d2) {
+                continue;
+            }
+            name = candidate_name;
+            best_cursor_d2 = cursor_d2;
         }
     }
     delete[] components;
