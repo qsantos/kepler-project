@@ -4,7 +4,7 @@ CXXFLAGS+=$(CCFLAGS) -std=c++11
 LDFLAGS+=-O3
 LDLIBS:=-lm -lcjson -lGL -lGLEW -lglfw -lstdc++
 TARGETS:=test example gui
-GIT_VERSION=$(shell git describe --tags)
+GIT_VERSION=$(shell git describe --tags --always)
 
 ifeq ($(PLATFORM),win32)
 	export C_INCLUDE_PATH:=/usr/local/x86_64-w64-mingw32/include/
