@@ -158,7 +158,11 @@ void reset_matrices(GlobalState* state, bool zoom) {
 
     glm::mat4 view = glm::mat4(1.0f);
     if (zoom) {
-        view = glm::translate(view, glm::vec3(0.f, 0.f, -state->view_distance));
+        double d = state->view_altitude;
+        if (state->focus != NULL) {
+            d += state->focus->radius;
+        }
+        view = glm::translate(view, glm::vec3(0.f, 0.f, -d));
     }
     view = glm::rotate(view, float(glm::radians(state->view_phi)), glm::vec3(1.0f, 0.0f, 0.0f));
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -596,12 +600,12 @@ static void fill_hud(GlobalState* state) {
     state->render_state->hud.print("Focus: %s\n", state->focus->name);
 
     // distance
-    char* s = human_quantity(state->view_distance, "m");
+    char* s = human_quantity(state->view_altitude + state->focus->radius, "m");
     state->render_state->hud.print("Distance: %s\n", s);
     free(s);
 
     // altitude
-    s = human_quantity(state->view_distance - state->focus->radius, "m");
+    s = human_quantity(state->view_altitude, "m");
     state->render_state->hud.print("Altitude: %s\n", s);
     free(s);
 

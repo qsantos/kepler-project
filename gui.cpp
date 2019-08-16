@@ -165,7 +165,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     (void) xoffset;
     GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
-    state->view_distance *= pow(1.2, -yoffset);
+    state->view_altitude *= pow(1.2, -yoffset);
 }
 
 GLFWwindow* init_glfw(void) {
