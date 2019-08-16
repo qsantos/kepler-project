@@ -71,7 +71,7 @@ unsigned load_cubemap(const char* path_pattern) {
             GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
             0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data
         );
-        // stb_image_free(data);  // TODO
+        stbi_image_free(data);
     }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
