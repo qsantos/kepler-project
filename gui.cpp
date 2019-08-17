@@ -184,6 +184,9 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
     // each scroll unit effects the altitude by one decibel
     state->view_altitude *= pow(10., -yoffset / 10.);
+
+    // clamp to [1 mm, 1 Tm]
+    state->view_altitude = std::max(1e-3, std::min(state->view_altitude, 1e15));
 }
 
 GLFWwindow* init_glfw(void) {

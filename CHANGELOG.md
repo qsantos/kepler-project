@@ -1,4 +1,7 @@
-# v0.3.0 - Unreleased
+# v0.4.0 - Unreleased
+- Clamp camera altitude to [1 mm, 1 Tm]
+
+# v0.3.0 - 2019-08-17
 - Use Moon orbital elements of 2019-08-11
 - Added version management
 - Added graphical effects on Sun/Kerbol: glow and lens flare
