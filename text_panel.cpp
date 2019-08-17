@@ -1,6 +1,7 @@
 #include "text_panel.hpp"
 
 extern "C" {
+#include "util.h"
 #include "texture.h"
 }
 #include <cstdio>
@@ -35,11 +36,15 @@ void append_vertex(TextPanel* self, int font_row, int font_col, int drow, int dc
 }
 
 void TextPanel::print(const char* format, ...) {
-    char buffer[1024];
-
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
+    size_t n = vsnprintf(NULL, 0, format, args) + 1;
+    va_end(args);
+
+    char* buffer = (char*) MALLOC(n);
+
+    va_start(args, format);
+    n = vsnprintf(buffer, n, format, args);
     va_end(args);
 
     int initial_col = this->current_col;
@@ -73,6 +78,8 @@ void TextPanel::print(const char* format, ...) {
             this->current_col += 1;
         }
     }
+
+    free(buffer);
 }
 
 void TextPanel::clear(void) {
@@ -81,6 +88,7 @@ void TextPanel::clear(void) {
     this->current_col = 0;
 
 }
+
 void TextPanel::bind(void) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
