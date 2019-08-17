@@ -13,4 +13,5 @@ gcc -fsyntax-only -Werror -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla "
 #        .-- disable lookup for system includes
 #        v
 cppcheck --suppress=missingIncludeSystem --suppress=noExplicitConstructor \
-    --error-exitcode=1 --quiet --enable=all "${CPPCHECK_FLAGS}" "$@"
+    --enable=warning,style,performance,portability,unusedFunction,missingInclude \
+    --error-exitcode=1 --quiet "${CPPCHECK_FLAGS}" "$@"
