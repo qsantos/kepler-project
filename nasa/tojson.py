@@ -2,7 +2,7 @@
 import json
 from datetime import datetime
 from math import acos, asin, atan, cos, pi, sin, tan
-from typing import Dict
+from typing import Dict, Tuple
 
 from parse import (
     ReferencePlane, parse_factsheets, parse_p_elem_t1, parse_planet_phys_par,
@@ -87,6 +87,18 @@ def get_moons_physics(bodies: Dict) -> None:
         }
 
 
+def emo_from_eme(right_ascension: float, declination: float) -> Tuple[float, float]:
+    # see https://en.wikipedia.org/wiki/Celestial_coordinate_system#Equatorial_%E2%86%94_ecliptic
+    ε = obliquity_of_the_ecliptic
+    α = right_ascension
+    δ = declination
+    λ = atan((sin(α) * cos(ε) + tan(δ) * sin(ε)) / cos(α))
+    β = asin(sin(δ) * cos(ε) - cos(δ) * sin(ε) * sin(α))
+    ecliptic_longitude = λ
+    ecliptic_latitude = β
+    return ecliptic_longitude, ecliptic_latitude
+
+
 def get_moons_orbits(bodies: Dict) -> None:
     """Get orbital information of moons of the Solar System"""
 
@@ -102,41 +114,51 @@ def get_moons_orbits(bodies: Dict) -> None:
             # the primary; longitude of the ascending node is given
             # relative to the northward equinox
 
-            # recover ecliptic coordinates of the primary's north pole
+            # north pole of the primary
             north_pole = bodies[orbit.primary]['north_pole']
-            ra: float = north_pole['right_ascension']
-            dec: float = north_pole['declination']
-
-            e = obliquity_of_the_ecliptic
-            ecliptic_longitude = atan((sin(ra) * cos(e) + tan(dec) * sin(e)) / cos(ra))
-            ecliptic_latitude = asin(sin(dec) * cos(e) - cos(dec) * sin(e) * sin(ra))
+            north_pole_ecliptic_longitude, north_pole_ecliptic_latitude = emo_from_eme(
+                right_ascension=north_pole['right_ascension'],
+                declination=north_pole['declination'],
+            )
 
             # from http://www.krysstal.com/sphertrig.html
-            # the blue great circle is the ecliptic
-            # A is the normal of the ecliptic
-            # B is the primary's north pole
-            # C is the normal of the satellite's orbital plane
-            # a is the equatorial orbital inclination of the satellite
-            # b is the ecliptic orbital inclination of the satellite
-            # c is the orbital inclination of the primary
-            # B' is orthogonal to the line of nodes of the primary
-            # C' is orthogonal to the line of nodes of the satellite
+            # Setting:
+            # - blue great circle as the ecliptic
+            # - point A as the normal of the ecliptic
+            # - point B as the primary's north pole
+            # - point C as the normal of the satellite's orbital plane
+            #
+            # Note that:
+            # - B' is orthogonal to the line of nodes of the primary
+            # - C' is orthogonal to the line of nodes of the satellite
+            #
+            # Then:
+            # - A
+            # - B is π-complementary to the longitude of the ascending node in the primary's equator plane
+            # - C
+            # - a is the orbital inclination in the primary's equator plane
+            # - b is the orbital inclination in the ecliptic
+            # - c is π/2-complementary to the ecliptic latitude of the primary's north pole
 
-            # compute ecliptic inclination
+            # set known values
             a = orbit.inclination
-            c = pi / 2 - ecliptic_latitude
-            B = orbit.longitude_of_ascending_node + pi / 2
-            cb = cos(a) * cos(c) + sin(a) * sin(c) * cos(B)
-            b = acos(cb)
+            c = pi / 2 - north_pole_ecliptic_latitude
+            B = pi - orbit.longitude_of_ascending_node
 
-            # compute ecliptic longitude of the orbital normal
-            sA = sin(B) * sin(a) / sin(b)
-            A = asin(sA)
-            A += ecliptic_longitude
+            # From the spherical law of cosines, we get:
+            b = acos(cos(a) * cos(c) + sin(a) * sin(c) * cos(B))
+
+            # From the spherical law of sines, we get:
+            A = asin(sin(B) * sin(a) / sin(b))
 
             # ecliptic elements
-            inclination = b  # relative to the ecliptic
-            longitude_of_ascending_node = A + pi / 2
+            inclination = b
+            longitude_of_orbital_normal = north_pole_ecliptic_longitude + A
+            if orbit.reference_plane == ReferencePlane.LAPLACE:
+                # TODO: this is an approximation
+                longitude_of_ascending_node = longitude_of_orbital_normal + pi / 2
+            else:
+                longitude_of_ascending_node = longitude_of_orbital_normal - pi / 2
 
         # save orbit
         body = bodies.setdefault(orbit.name, {})
