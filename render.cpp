@@ -51,7 +51,7 @@ struct RenderState {
 
     // models
     TextPanel hud = TextPanel(5.f, 5.f);
-    TextPanel help = TextPanel(5.f, 119.f);
+    TextPanel help = TextPanel(5.f, 157.f);
 
     bool picking_active = false;
     std::vector<CelestialBody*> picking_objects;

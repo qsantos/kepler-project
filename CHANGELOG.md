@@ -1,6 +1,7 @@
 # v0.4.0 - Unreleased
 - Clamp camera altitude to [1 mm, 1 Tm]
 - Fix help message randomly not showing up
+- Fix vertical position of help message
 
 # v0.3.0 - 2019-08-17
 - Use Moon orbital elements of 2019-08-11
