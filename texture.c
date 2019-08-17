@@ -8,12 +8,7 @@
 #include <stb/stb_image.h>
 
 unsigned char* load_image(const char* filename, int* width, int* height) {
-    unsigned char* data = stbi_load(filename, width, height, NULL, 4);
-    if (data == NULL) {
-        fprintf(stderr, "WARNING: failed to load image %s\n", filename);
-        return 0;
-    }
-    return data;
+    return stbi_load(filename, width, height, NULL, 4);
 }
 
 unsigned load_texture(const char* filename) {
@@ -59,7 +54,9 @@ unsigned load_cubemap(const char* path_pattern) {
         unsigned char* data = load_image(path, &width, &height);
         free(path);
         if (data == NULL) {
-            continue;
+            stbi_image_free(data);
+            glDeleteTextures(1, &texture);
+            return 0;
         }
         glTexImage2D(
             GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,

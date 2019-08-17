@@ -12,6 +12,7 @@
 - View rotation speed during drag-and-drop more natural when zoomed in
 - Picking now prioritize object closest to mouse cursor
 - Zoom factor changed to one decibel per scroll wheel tick
+- Add support for cubemap textures
 
 # v0.2.0 - 2019-08-09
 - Added position markers for celestial bodies

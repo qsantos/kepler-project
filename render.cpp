@@ -45,8 +45,9 @@ struct RenderState {
     GLint lens_flare_texture;
     GLint rocket_texture;
     GLint skybox_texture;
-    GLint earth_texture;
+
     map<CelestialBody*, GLuint> body_textures;
+    map<CelestialBody*, GLuint> body_cubemaps;
 
     // models
     TextPanel hud = TextPanel(5.f, 5.f);
@@ -115,11 +116,25 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
     render_state->rocket_texture = load_texture("data/textures/rocket_on.png");
     render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
-    render_state->earth_texture = load_cubemap("data/textures/Earth/{}.jpg");
+
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
-        auto path = "data/textures/solar/" + std::string(body->name) + ".jpg";
-        render_state->body_textures[body] = load_texture(path.c_str());
+
+        auto cubemap_path = "data/textures/solar/" + std::string(body->name) + "/{}.jpg";
+        auto cubemap = load_cubemap(cubemap_path.c_str());
+        if (cubemap != 0) {
+            render_state->body_cubemaps[body] = cubemap;
+            continue;
+        }
+
+        auto texture_path = "data/textures/solar/" + std::string(body->name) + ".jpg";
+        auto texture = load_texture(texture_path.c_str());
+        if (texture != 0) {
+            render_state->body_textures[body] = texture;
+            continue;
+        }
+
+        fprintf(stderr, "WARNING: failed to find texture or cubemap for %s\n", body->name);
     }
 
     // models
@@ -204,14 +219,8 @@ static void render_skybox(GlobalState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
-static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
-    if (std::string(body->name) == "Earth") {
-        glUseProgram(state->render_state->cubemap_shader);
-        reset_matrices(state);
-    } else {
-        glUseProgram(state->render_state->base_shader);
-        reset_matrices(state);
-    }
+static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
+    reset_matrices(state);
 
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
@@ -239,8 +248,23 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
 
     state->render_state->model_matrix = model;
     update_matrices(state);
+}
 
-    if (std::string(body->name) == "Earth") {
+static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
+    // draw sphere textured with cubemap (preferrably), or equirectangular texture
+    auto& cubemaps = state->render_state->body_cubemaps;
+    auto search = cubemaps.find(body);
+    if (search != cubemaps.end()) {
+        // cubemap
+        auto cubemap = search->second;
+
+        // prepare shader
+        glUseProgram(state->render_state->cubemap_shader);
+        set_body_matrices(state, body, scene_origin);
+
+        GLint program;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
         glm::mat4 cubemap_matrix = glm::mat4(1.f);
         cubemap_matrix = glm::rotate(cubemap_matrix, -M_PIf32/2.f, glm::vec3(1.f, 0.f, 0.f));
         cubemap_matrix = glm::rotate(cubemap_matrix, M_PIf32/2.f, glm::vec3(0.f, 0.f, 1.f));
@@ -252,11 +276,26 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         GLint lighting_source = glGetUniformLocation(program, "lighting_source");
         glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
-        glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->earth_texture);
+        // bind cubemap texture
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
+
+        // draw
         state->render_state->uv_sphere.draw();
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     } else {
-        auto texture = state->render_state->body_textures.at(body);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        // equirectangular texture
+        glUseProgram(state->render_state->base_shader);
+        set_body_matrices(state, body, scene_origin);
+
+        // bind equirectangular texture if it exists
+        auto& textures = state->render_state->body_textures;
+        search = textures.find(body);
+        if (search != textures.end()) {
+            auto texture = search->second;
+            glBindTexture(GL_TEXTURE_2D, texture);
+        }
+
+        // draw
         state->render_state->uv_sphere.draw();
         glBindTexture(GL_TEXTURE_2D, 0);
     }

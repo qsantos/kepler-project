@@ -21,6 +21,9 @@ from math import atan2, hypot, pi
 
 from PIL import Image
 
+
+Image.MAX_IMAGE_PIXELS = 256 * 1024**2
+
 parser = ArgumentParser()
 parser.add_argument('image', type=FileType('rb'))
 parser.add_argument('size', type=int)
