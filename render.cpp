@@ -139,8 +139,12 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
 
     // models
     char* help = load_file("data/help.txt");
-    render_state->help.print("%s", help);
-    free(help);
+    if (help == NULL) {
+        render_state->help.print("COULD NOT LOAD HELP FILE\n");
+    } else {
+        render_state->help.print("%s", help);
+        free(help);
+    }
 
     return render_state;
 }
