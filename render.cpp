@@ -57,35 +57,6 @@ struct RenderState {
     std::vector<CelestialBody*> picking_objects;
 };
 
-void use_program(GlobalState* state, GLuint program, bool zoom=true) {
-    glUseProgram(program);
-    reset_matrices(state, zoom);
-
-    GLint var;
-
-    // color
-    var = glGetUniformLocation(program, "u_color");
-    if (var >= 0) {
-        glUniform4f(var, 1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    // lighting source
-    var = glGetUniformLocation(program, "lighting_source");
-    if (var >= 0) {
-        auto scene_origin = body_global_position_at_time(state->focus, state->time);
-        auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
-        auto pos2 = state->render_state->view_matrix * state->render_state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
-        glUniform3fv(var, 1, glm::value_ptr(pos2));
-    }
-
-    // picking
-    var = glGetUniformLocation(program, "picking_active");
-    if (var >= 0) {
-        glUniform1i(var, state->render_state->picking_active);
-        set_picking_name(state->render_state->picking_objects.size());
-    }
-}
-
 RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     auto render_state = new RenderState;
 
@@ -97,6 +68,14 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->base_shader = make_program(3, "base", "picking", "logz");
     render_state->star_glow_shader = make_program(3, "base", "star_glow", "logz");
     render_state->lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
+
+    // fix orientation of cubemap (e.g. Y up → Z up)
+    glUseProgram(render_state->cubemap_shader);
+    glm::mat4 cubemap_matrix = glm::mat4(1.f);
+    cubemap_matrix = glm::rotate(cubemap_matrix, -M_PIf32/2.f, glm::vec3(1.f, 0.f, 0.f));
+    cubemap_matrix = glm::rotate(cubemap_matrix, M_PIf32/2.f, glm::vec3(0.f, 0.f, 1.f));
+    GLint var = glGetUniformLocation(render_state->cubemap_shader, "cubemap_matrix");
+    glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(cubemap_matrix));
 
     // TODO
     glUseProgram(render_state->skybox_shader);
@@ -162,6 +141,40 @@ void delete_render_state(RenderState* render_state) {
 }
 
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
+
+void set_color(float red, float green, float blue, float alpha=1.f) {
+    GLint program;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+
+    GLint var = glGetUniformLocation(program, "u_color");
+    if (var >= 0) {
+        glUniform4f(var, red, green, blue, alpha);
+    }
+}
+
+void use_program(GlobalState* state, GLuint program, bool zoom=true) {
+    glUseProgram(program);
+    reset_matrices(state, zoom);
+    set_color(1, 1, 1);
+
+    GLint var;
+
+    // lighting source
+    var = glGetUniformLocation(program, "lighting_source");
+    if (var >= 0) {
+        auto scene_origin = body_global_position_at_time(state->focus, state->time);
+        auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
+        auto pos2 = state->render_state->view_matrix * state->render_state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+        glUniform3fv(var, 1, glm::value_ptr(pos2));
+    }
+
+    // picking
+    var = glGetUniformLocation(program, "picking_active");
+    if (var >= 0) {
+        glUniform1i(var, state->render_state->picking_active);
+        set_picking_name(state->render_state->picking_objects.size());
+    }
+}
 
 void update_matrices(GlobalState* state) {
     GLint program;
@@ -270,17 +283,6 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
 
         GLint program;
         glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-
-        glm::mat4 cubemap_matrix = glm::mat4(1.f);
-        cubemap_matrix = glm::rotate(cubemap_matrix, -M_PIf32/2.f, glm::vec3(1.f, 0.f, 0.f));
-        cubemap_matrix = glm::rotate(cubemap_matrix, M_PIf32/2.f, glm::vec3(0.f, 0.f, 1.f));
-        GLint var = glGetUniformLocation(program, "cubemap_matrix");
-        glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(cubemap_matrix));
-
-        auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
-        auto pos2 = state->render_state->view_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
-        GLint lighting_source = glGetUniformLocation(program, "lighting_source");
-        glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
 
         // bind cubemap texture
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
@@ -550,19 +552,17 @@ static void render_position_markers(GlobalState* state, const vec3& scene_origin
     // draw circles around celestial bodies when from far away
     glPointSize(20);
     use_program(state, state->render_state->position_marker_shader);
-    GLint colorUniform = glGetUniformLocation(state->render_state->position_marker_shader, "u_color");
-    glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
+    set_color(1, 0, 0, .5);
     OrbitSystem(state->root, scene_origin, state->time).draw();
 }
 
 static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     use_program(state, state->render_state->base_shader);
-    GLint colorUniform = glGetUniformLocation(state->render_state->position_marker_shader, "u_color");
 
     glPointSize(5);
 
     // unfocused orbits
-    glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 0.2f);
+    set_color(1, 1, 1, .2f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (is_ancestor_of(body, state->focus)) {
@@ -583,7 +583,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     }
 
     // focused orbits
-    glUniform4f(colorUniform, 1.0f, 1.0f, 0.0f, 1.0f);
+    set_color(1, 1, 0);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (body == state->root || !is_ancestor_of(body, state->focus)) {
@@ -720,12 +720,16 @@ void render(GlobalState* state) {
 void set_picking_name(size_t name) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-    glUniform3f(
-        glGetUniformLocation(program, "picking_name"),
-        float((name >> 16) & 0xff) / 255.f,
-        float((name >>  8) & 0xff) / 255.f,
-        float((name >>  0) & 0xff) / 255.f
-    );
+
+    GLint var = glGetUniformLocation(program, "picking_name");
+    if (var >= 0) {
+        glUniform3f(
+            var,
+            float((name >> 16) & 0xff) / 255.f,
+            float((name >>  8) & 0xff) / 255.f,
+            float((name >>  0) & 0xff) / 255.f
+        );
+    }
 }
 
 void set_picking_object(GlobalState* state, CelestialBody* object) {
