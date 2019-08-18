@@ -57,44 +57,52 @@ struct RenderState {
     std::vector<CelestialBody*> picking_objects;
 };
 
+void use_program(GlobalState* state, GLuint program, bool zoom=true) {
+    glUseProgram(program);
+    reset_matrices(state, zoom);
+
+    GLint var;
+
+    // color
+    var = glGetUniformLocation(program, "u_color");
+    if (var >= 0) {
+        glUniform4f(var, 1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    // lighting source
+    var = glGetUniformLocation(program, "lighting_source");
+    if (var >= 0) {
+        auto scene_origin = body_global_position_at_time(state->focus, state->time);
+        auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
+        auto pos2 = state->render_state->view_matrix * state->render_state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
+        glUniform3fv(var, 1, glm::value_ptr(pos2));
+    }
+
+    // picking
+    var = glGetUniformLocation(program, "picking_active");
+    if (var >= 0) {
+        glUniform1i(var, state->render_state->picking_active);
+        set_picking_name(state->render_state->picking_objects.size());
+    }
+}
+
 RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     auto render_state = new RenderState;
 
     // shaders
     render_state->skybox_shader = make_program(3, "base", "skybox", "logz");
-    glUseProgram(render_state->skybox_shader);
-    glUniform1i(glGetUniformLocation(render_state->skybox_shader, "skybox_texture"), 0);  // TODO
-    glUniform4f(glGetUniformLocation(render_state->skybox_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-
     render_state->cubemap_shader = make_program(4, "base", "cubemap", "lighting", "logz");
-    glUseProgram(render_state->cubemap_shader);
-    glUniform1i(glGetUniformLocation(render_state->cubemap_shader, "cubemap_texture"), 0);  // TODO
-    glUniform4f(glGetUniformLocation(render_state->cubemap_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-
     render_state->lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
-    glUseProgram(render_state->lighting_shader);
-    glUniform4f(glGetUniformLocation(render_state->lighting_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(render_state->lighting_shader, "picking_active"), 0);
-
     render_state->position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
-    glUseProgram(render_state->position_marker_shader);
-    glUniform4f(glGetUniformLocation(render_state->position_marker_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(render_state->position_marker_shader, "picking_active"), 0);
-
     render_state->base_shader = make_program(3, "base", "picking", "logz");
-    glUseProgram(render_state->base_shader);
-    glUniform4f(glGetUniformLocation(render_state->base_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(render_state->base_shader, "picking_active"), 0);
-
     render_state->star_glow_shader = make_program(3, "base", "star_glow", "logz");
-    glUseProgram(render_state->star_glow_shader);
-    glUniform4f(glGetUniformLocation(render_state->star_glow_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(render_state->star_glow_shader, "picking_active"), 0);
-
     render_state->lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
-    glUseProgram(render_state->lens_flare_shader);
-    glUniform4f(glGetUniformLocation(render_state->lens_flare_shader, "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-    glUniform1i(glGetUniformLocation(render_state->lens_flare_shader, "picking_active"), 0);
+
+    // TODO
+    glUseProgram(render_state->skybox_shader);
+    glUniform1i(glGetUniformLocation(render_state->skybox_shader, "skybox_texture"), 0);
+    glUseProgram(render_state->cubemap_shader);
+    glUniform1i(glGetUniformLocation(render_state->cubemap_shader, "cubemap_texture"), 0);
 
     // VAOs
     glGenVertexArrays(1, &render_state->vao);
@@ -213,8 +221,7 @@ static void render_skybox(GlobalState* state) {
         return;
     }
 
-    glUseProgram(state->render_state->skybox_shader);
-    reset_matrices(state, false);
+    use_program(state, state->render_state->skybox_shader, false);
 
     glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->skybox_texture);
@@ -224,13 +231,8 @@ static void render_skybox(GlobalState* state) {
 }
 
 static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
-    reset_matrices(state);
-
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-
-    GLint colorUniform = glGetUniformLocation(program, "u_color");
-    glUniform4f(colorUniform, 1.0f, 1.0f, 1.0f, 1.0f);
 
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(body, state->time) - scene_origin;
@@ -263,7 +265,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         auto cubemap = search->second;
 
         // prepare shader
-        glUseProgram(state->render_state->cubemap_shader);
+        use_program(state, state->render_state->cubemap_shader);
         set_body_matrices(state, body, scene_origin);
 
         GLint program;
@@ -288,7 +290,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     } else {
         // equirectangular texture
-        glUseProgram(state->render_state->base_shader);
+        use_program(state, state->render_state->base_shader);
         set_body_matrices(state, body, scene_origin);
 
         // bind equirectangular texture if it exists
@@ -306,8 +308,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
 }
 
 void render_star(GlobalState* state, const vec3& scene_origin) {
-    glUseProgram(state->render_state->base_shader);
-    reset_matrices(state);
+    use_program(state, state->render_state->base_shader);
 
     set_picking_object(state, state->root);
     render_body(state, state->root, scene_origin);
@@ -315,13 +316,6 @@ void render_star(GlobalState* state, const vec3& scene_origin) {
 }
 
 static void render_bodies(GlobalState* state, const vec3& scene_origin) {
-    glUseProgram(state->render_state->lighting_shader);
-    reset_matrices(state);
-    auto pos = body_global_position_at_time(state->root, state->time) - scene_origin;
-    auto pos2 = state->render_state->view_matrix * state->render_state->model_matrix * glm::vec4(pos[0], pos[1], pos[2], 1.0f);
-    GLint lighting_source = glGetUniformLocation(state->render_state->lighting_shader, "lighting_source");
-    glUniform3fv(lighting_source, 1, glm::value_ptr(pos2));
-
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (body == state->root) {
@@ -434,8 +428,7 @@ void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visib
 
     float intensity = .2f * visibility;
 
-    glUseProgram(state->render_state->lens_flare_shader);
-    reset_matrices(state);
+    use_program(state, state->render_state->lens_flare_shader);
 
     glBindBuffer(GL_ARRAY_BUFFER, lens_flare_vbo);
 
@@ -506,8 +499,7 @@ void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     double s = glow_size(state->root->radius, 5778., d);
     glm::vec2 star_glow_size = {s, s};
 
-    glUseProgram(state->render_state->star_glow_shader);
-    reset_matrices(state);
+    use_program(state, state->render_state->star_glow_shader);
 
     float unNoiseZ = (float) abs(
             glm::dot(camera_right, glm::vec3(1.f, 3.f, 6.f))
@@ -555,17 +547,15 @@ void render_star_glow(GlobalState* state, const vec3& scene_origin) {
 static void render_position_markers(GlobalState* state, const vec3& scene_origin) {
     // draw circles around celestial bodies when from far away
     glPointSize(20);
-    glUseProgram(state->render_state->position_marker_shader);
-    reset_matrices(state);
+    use_program(state, state->render_state->position_marker_shader);
     GLint colorUniform = glGetUniformLocation(state->render_state->position_marker_shader, "u_color");
     glUniform4f(colorUniform, 1.0f, 0.0f, 0.0f, 0.5f);
     OrbitSystem(state->root, scene_origin, state->time).draw();
 }
 
 static void render_orbits(GlobalState* state, const vec3& scene_origin) {
-    glUseProgram(state->render_state->base_shader);
+    use_program(state, state->render_state->base_shader);
     GLint colorUniform = glGetUniformLocation(state->render_state->position_marker_shader, "u_color");
-    reset_matrices(state);
 
     glPointSize(5);
 
@@ -681,8 +671,7 @@ static void render_hud(GlobalState* state) {
     state->render_state->hud.clear();
     fill_hud(state);
 
-    glUseProgram(state->render_state->base_shader);
-    reset_matrices(state);
+    use_program(state, state->render_state->base_shader);
 
     // use orthographic projection
     auto model_view = glm::mat4(1.0f);
@@ -692,9 +681,6 @@ static void render_hud(GlobalState* state) {
     auto proj = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -1.f, 1.f);
     GLint uniMVP = glGetUniformLocation(state->render_state->base_shader, "model_view_projection_matrix");
     glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * model_view));
-
-    GLint colorUniform = glGetUniformLocation(state->render_state->base_shader, "u_color");
-    glUniform4f(colorUniform, 1.f, 1.f, 1.f, 1.f);
 
     state->render_state->hud.draw();
     if (state->show_help) {
@@ -758,27 +744,9 @@ void clear_picking_object(GlobalState* state) {
 CelestialBody* pick(GlobalState* state) {
     // render with picking activated
     state->render_state->picking_active = true;
-    glUseProgram(state->render_state->star_glow_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->star_glow_shader, "picking_active"), 1);
-    glUseProgram(state->render_state->position_marker_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->position_marker_shader, "picking_active"), 1);
-    glUseProgram(state->render_state->lighting_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->lighting_shader, "picking_active"), 1);
-    glUseProgram(state->render_state->base_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->base_shader, "picking_active"), 1);
-
     glDisable(GL_MULTISAMPLE);
     render(state);
     glEnable(GL_MULTISAMPLE);
-
-    glUseProgram(state->render_state->base_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->base_shader, "picking_active"), 0);
-    glUseProgram(state->render_state->lighting_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->lighting_shader, "picking_active"), 0);
-    glUseProgram(state->render_state->position_marker_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->position_marker_shader, "picking_active"), 0);
-    glUseProgram(state->render_state->star_glow_shader);
-    glUniform1i(glGetUniformLocation(state->render_state->star_glow_shader, "picking_active"), 0);
     state->render_state->picking_active = false;
 
     // search names in color components
