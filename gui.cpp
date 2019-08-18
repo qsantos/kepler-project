@@ -247,6 +247,7 @@ void init_ogl(void) {
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
     // fill default texture with white for convenience
     glBindTexture(GL_TEXTURE_2D, 0);
