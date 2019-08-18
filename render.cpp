@@ -339,11 +339,13 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     state->render_state->model_matrix = model;
     update_matrices(state);
 
+    set_picking_object(state, &state->rocket);
     glDisable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture);
     state->render_state->square.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
     glEnable(GL_CULL_FACE);
+    clear_picking_object(state);
 }
 
 double glow_size(double radius, double temperature, double distance) {
@@ -598,12 +600,17 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
         clear_picking_object(state);
     }
 
+    // rocket
     CelestialBody* body = &state->rocket;
+
     auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
     state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
     update_matrices(state);
+
+    set_picking_object(state, body);
     OrbitMesh(body->orbit).draw();
     OrbitApsesMesh(body->orbit).draw();
+    clear_picking_object(state);
 }
 
 static void render_helpers(GlobalState* state, const vec3& scene_origin) {

@@ -285,6 +285,7 @@ int main() {
 
     Orbit orbit;
     state.rocket.name = "Rocket";
+    state.rocket.radius = 100.;
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;
     state.rocket.state = {
@@ -296,6 +297,7 @@ int main() {
     orbit_from_state(&orbit, state.focus, state.rocket.state, state.time);
 
     state.last_fps_measure = real_clock();
+    state.focus = &state.rocket;
 
     double last = real_clock();
     double unprocessed_time = 0.;

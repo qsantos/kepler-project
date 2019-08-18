@@ -8,6 +8,7 @@
 - Fix rotation direction of Uranus
 - Fix lighting of Sun, planets and moons (only Earth was okay)
 - Fix selection of Earth by clicking on it
+- Make rocket focusable
 
 # v0.3.0 - 2019-08-17
 - Use Moon orbital elements of 2019-08-11
