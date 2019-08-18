@@ -681,13 +681,9 @@ static void render_hud(GlobalState* state) {
     use_program(state, state->render_state->base_shader);
 
     // use orthographic projection
-    auto model_view = glm::mat4(1.0f);
-    GLint uniMV = glGetUniformLocation(state->render_state->base_shader, "model_view_matrix");
-    glUniformMatrix4fv(uniMV, 1, GL_FALSE, glm::value_ptr(model_view));
-
-    auto proj = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -1.f, 1.f);
-    GLint uniMVP = glGetUniformLocation(state->render_state->base_shader, "model_view_projection_matrix");
-    glUniformMatrix4fv(uniMVP, 1, GL_FALSE, glm::value_ptr(proj * model_view));
+    state->render_state->view_matrix = glm::mat4(1.0f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -1.f, 1.f);
+    update_matrices(state);
 
     state->render_state->hud.draw();
     if (state->show_help) {
