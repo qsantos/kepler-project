@@ -91,7 +91,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
 
     // shaders
     render_state->skybox_shader = make_program(3, "base", "skybox", "logz");
-    render_state->cubemap_shader = make_program(4, "base", "cubemap", "lighting", "logz");
+    render_state->cubemap_shader = make_program(5, "base", "cubemap", "lighting", "picking", "logz");
     render_state->lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     render_state->position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
     render_state->base_shader = make_program(3, "base", "picking", "logz");
