@@ -47,6 +47,16 @@ void Mesh::bind(void) {
         GLint var = glGetAttribLocation(program, "v_position");
         glEnableVertexAttribArray(var);
         glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+        var = glGetAttribLocation(program, "v_texcoord");
+        if (var >= 0) {
+            glDisableVertexAttribArray(var);
+        }
+
+        var = glGetAttribLocation(program, "v_normal");
+        if (var >= 0) {
+            glDisableVertexAttribArray(var);
+        }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
