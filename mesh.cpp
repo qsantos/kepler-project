@@ -494,5 +494,5 @@ OrbitSystem::OrbitSystem(CelestialBody* root, const vec3& scene_origin, double t
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    this->length = (int) data.size();
+    this->length = (int) data.size() / 3;
 }
