@@ -290,7 +290,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     } else {
         // equirectangular texture
-        use_program(state, state->render_state->base_shader);
+        use_program(state, state->render_state->lighting_shader);
         set_body_matrices(state, body, scene_origin);
 
         // bind equirectangular texture if it exists
