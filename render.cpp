@@ -238,16 +238,16 @@ static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec
     model = glm::scale(model, glm::vec3(float(body->radius)));
 
     // axial tilt
-    if (body->north_pole != NULL) {
-        double z_angle = body->north_pole->ecliptic_longitude - M_PI / 2.;
+    if (body->positive_pole != NULL) {
+        double z_angle = body->positive_pole->ecliptic_longitude - M_PI / 2.;
         model = glm::rotate(model, float(z_angle), glm::vec3(0.f, 0.f, 1.f));
-        double x_angle = body->north_pole->ecliptic_latitude - M_PI / 2.;
+        double x_angle = body->positive_pole->ecliptic_latitude - M_PI / 2.;
         model = glm::rotate(model, float(x_angle), glm::vec3(1.f, 0.f, 0.f));
     }
 
     // OpenGL use single precision while Python has double precision
     // reducing modulo 2 PI in Python reduces loss of significance
-    double turn_fraction = fmod(state->time / body->sidereal_day, 1.);
+    double turn_fraction = fmod(state->time / abs(body->sidereal_day), 1.);
     model = glm::rotate(model, 2.f * M_PIf32 * float(turn_fraction), glm::vec3(0.f, 0.f, 1.f));
 
     state->render_state->model_matrix = model;

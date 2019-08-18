@@ -503,14 +503,14 @@ static void test_body(void) {
         assertIsClose(2*M_PI*b.radius / b.surface_velocity, b.sidereal_day);
     }
 
-    CelestialCoordinates north_pole;
+    CelestialCoordinates positive_pole;
     {
         // celestial coordinates might just be copied as well
         // Venus north pole
         double right_ascension = radians(272.76);
         double declination = radians(67.16);
-        north_pole = CelestialCoordinates::from_equatorial(right_ascension, declination, INFINITY);
-        body_set_axis(&b, &north_pole);
+        positive_pole = CelestialCoordinates::from_equatorial(right_ascension, declination, INFINITY);
+        body_set_axis(&b, &positive_pole);
         assertIsCloseAngle(b.tilt, radians(2.6378801547605204));
         // a negative rotational period should invert the tilt
         body_set_rotation(&b, -42.41);

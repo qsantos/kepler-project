@@ -24,7 +24,7 @@ struct CelestialBody {
     double sphere_of_influence;
 
     // rotation
-    CelestialCoordinates* north_pole;
+    CelestialCoordinates* positive_pole;
     double sidereal_day;
     double synodic_day;  // aka. solar day for Earth
     double tilt;
@@ -41,7 +41,7 @@ void body_set_radius   (CelestialBody* body, double radius);
 void body_set_gravparam(CelestialBody* body, double gravitational_parameter);
 void body_set_mass     (CelestialBody* body, double mass);
 void body_set_orbit    (CelestialBody* body, Orbit* orbit);
-void body_set_axis     (CelestialBody* body, CelestialCoordinates* north_pole);
+void body_set_axis     (CelestialBody* body, CelestialCoordinates* positive_pole);
 void body_set_rotation (CelestialBody* body, double sidereal_day);
 
 double body_gravity         (CelestialBody* body, double distance);

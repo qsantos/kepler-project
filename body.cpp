@@ -16,7 +16,7 @@ void body_init(CelestialBody* body) {
 
 void body_clear(CelestialBody* body) {
     free(body->satellites);
-    free(body->north_pole);
+    free(body->positive_pole);
     free(body->orbit);
 }
 
@@ -38,7 +38,7 @@ static void _body_update_surface_velocity(CelestialBody* body) {
 }
 
 static void _body_update_tilt(CelestialBody* body) {
-    if (body->north_pole == NULL || body->orbit == NULL) {
+    if (body->positive_pole == NULL || body->orbit == NULL) {
         body->tilt = 0.;
         return;
     }
@@ -55,11 +55,11 @@ static void _body_update_tilt(CelestialBody* body) {
      * C' is orthogonal to the line of nodes
      */
     double b = body->orbit->inclination;
-    double c = body->north_pole->ecliptic_latitude - M_PI/2.;
+    double c = body->positive_pole->ecliptic_latitude - M_PI/2.;
     if (body->sidereal_day < 0.) {  // retrograde rotation
         c += M_PI;
     }
-    double A = body->orbit->longitude_of_ascending_node + M_PI/2. - body->north_pole->ecliptic_longitude;
+    double A = body->orbit->longitude_of_ascending_node + M_PI/2. - body->positive_pole->ecliptic_longitude;
     double ca = cos(b)*cos(c) + sin(b)*sin(c)*cos(A);
     body->tilt = acos(ca);
 }
@@ -131,8 +131,8 @@ void body_set_rotation(CelestialBody* body, double sidereal_day) {
     _body_update_solar_day(body);
 }
 
-void body_set_axis(CelestialBody* body, CelestialCoordinates* north_pole) {
-    body->north_pole = north_pole;
+void body_set_axis(CelestialBody* body, CelestialCoordinates* positive_pole) {
+    body->positive_pole = positive_pole;
     _body_update_tilt(body);
 }
 

@@ -506,10 +506,6 @@
     },
     "Earth": {
         "gravitational_parameter": 398600751695999.94,
-        "north_pole": {
-            "declination": 1.5707963267948966,
-            "right_ascension": 0.0
-        },
         "orbit": {
             "argument_of_periapsis": 1.7966014740491711,
             "eccentricity": 0.01671123,
@@ -519,6 +515,10 @@
             "mean_anomaly_at_epoch": -0.043163916976385774,
             "primary": "Sun",
             "semi_major_axis": 149598261150.4425
+        },
+        "positive_pole": {
+            "declination": 1.5707963267948966,
+            "right_ascension": 0.0
         },
         "radius": 6371008.399999999,
         "rotational_period": 86164.10035200001
@@ -1085,10 +1085,6 @@
     },
     "Jupiter": {
         "gravitational_parameter": 1.2668651892959997e+17,
-        "north_pole": {
-            "declination": 1.125650101073743,
-            "right_ascension": 4.67847723301844
-        },
         "orbit": {
             "argument_of_periapsis": -1.4965400591228852,
             "eccentricity": 0.04838624,
@@ -1098,6 +1094,10 @@
             "mean_anomaly_at_epoch": 0.3432706710187829,
             "primary": "Sun",
             "semi_major_axis": 778340816692.7108
+        },
+        "positive_pole": {
+            "declination": 1.125650101073743,
+            "right_ascension": 4.67847723301844
         },
         "radius": 69911000.0,
         "rotational_period": 35729.856
@@ -1314,10 +1314,6 @@
     },
     "Mars": {
         "gravitational_parameter": 42828372249599.99,
-        "north_pole": {
-            "declination": 0.9230522815022411,
-            "right_ascension": 5.544579421028105
-        },
         "orbit": {
             "argument_of_periapsis": -1.2828723009731817,
             "eccentricity": 0.0933941,
@@ -1327,6 +1323,10 @@
             "mean_anomaly_at_epoch": 0.33842278968510486,
             "primary": "Sun",
             "semi_major_axis": 227943822427.57306
+        },
+        "positive_pole": {
+            "declination": 0.9230522815022411,
+            "right_ascension": 5.544579421028105
         },
         "radius": 3389500.0,
         "rotational_period": 88642.664064
@@ -1347,10 +1347,6 @@
     },
     "Mercury": {
         "gravitational_parameter": 22032072451199.996,
-        "north_pole": {
-            "declination": 1.0718765068197975,
-            "right_ascension": 4.904549731029265
-        },
         "orbit": {
             "argument_of_periapsis": 0.5083625809358163,
             "eccentricity": 0.20563593,
@@ -1360,6 +1356,10 @@
             "mean_anomaly_at_epoch": 3.0507051078708107,
             "primary": "Sun",
             "semi_major_axis": 57909226541.52439
+        },
+        "positive_pole": {
+            "declination": 1.0718765068197975,
+            "right_ascension": 4.904549731029265
         },
         "radius": 2439400.0,
         "rotational_period": 5067031.68
@@ -1492,10 +1492,6 @@
     },
     "Neptune": {
         "gravitational_parameter": 6835098854079999.0,
-        "north_pole": {
-            "declination": 0.7585200929167356,
-            "right_ascension": 5.224817648770225
-        },
         "orbit": {
             "argument_of_periapsis": -1.5152854923664416,
             "eccentricity": 0.00859048,
@@ -1505,6 +1501,10 @@
             "mean_anomaly_at_epoch": -1.7468091508755488,
             "primary": "Sun",
             "semi_major_axis": 4498396417009.467
+        },
+        "positive_pole": {
+            "declination": 0.7585200929167356,
+            "right_ascension": 5.224817648770225
         },
         "radius": 24622000.0,
         "rotational_period": 57996.0
@@ -1721,10 +1721,6 @@
     },
     "Pluto": {
         "gravitational_parameter": 869632623999.9999,
-        "north_pole": {
-            "declination": -0.1075122819228507,
-            "right_ascension": 2.321113372227259
-        },
         "orbit": {
             "argument_of_periapsis": 1.9651908506066829,
             "eccentricity": 0.250248713478499,
@@ -1734,6 +1730,10 @@
             "mean_anomaly_at_epoch": 0.4406465873533273,
             "primary": "Sun",
             "semi_major_axis": 5900898440583.108
+        },
+        "positive_pole": {
+            "declination": -0.1075122819228507,
+            "right_ascension": 2.321113372227259
         },
         "radius": 1188300.0,
         "rotational_period": 551856.6
@@ -2258,10 +2258,6 @@
     },
     "Saturn": {
         "gravitational_parameter": 3.793119930879999e+16,
-        "north_pole": {
-            "declination": 1.457995697238503,
-            "right_ascension": 0.7084116900919784
-        },
         "orbit": {
             "argument_of_periapsis": -0.367628232812341,
             "eccentricity": 0.05386179,
@@ -2271,6 +2267,10 @@
             "mean_anomaly_at_epoch": -0.744289273004183,
             "primary": "Sun",
             "semi_major_axis": 1426666414179.921
+        },
+        "positive_pole": {
+            "declination": 1.457995697238503,
+            "right_ascension": 0.7084116900919784
         },
         "radius": 58232000.0,
         "rotational_period": 38362.464
@@ -2674,10 +2674,6 @@
     },
     "Uranus": {
         "gravitational_parameter": 5793949048159999.0,
-        "north_pole": {
-            "declination": -0.2648537139901395,
-            "right_ascension": 4.4909241515991285
-        },
         "orbit": {
             "argument_of_periapsis": 1.6918759478238068,
             "eccentricity": 0.04725744,
@@ -2688,15 +2684,15 @@
             "primary": "Sun",
             "semi_major_axis": 2870658170655.7324
         },
+        "positive_pole": {
+            "declination": -0.2648537139901395,
+            "right_ascension": 4.4909241515991285
+        },
         "radius": 25362000.0,
         "rotational_period": -62063.712
     },
     "Venus": {
         "gravitational_parameter": 324858841775999.94,
-        "north_pole": {
-            "declination": 1.1721631256393916,
-            "right_ascension": 4.760560067739733
-        },
         "orbit": {
             "argument_of_periapsis": 0.9585806336304323,
             "eccentricity": 0.00677672,
@@ -2706,6 +2702,10 @@
             "mean_anomaly_at_epoch": 0.8792381000505896,
             "primary": "Sun",
             "semi_major_axis": 108209474537.37917
+        },
+        "positive_pole": {
+            "declination": -1.1721631256393916,
+            "right_ascension": 7.902152721329526
         },
         "radius": 6051800.0,
         "rotational_period": -20996755.2

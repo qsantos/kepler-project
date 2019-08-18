@@ -130,6 +130,10 @@ def parse_planet_phys_par() -> Iterator[PlanetPhysParDataRow]:
             equatorial_gravity, escape_velocity,
         ) = [float(match) for match in matches]
 
+        if planet == 'Pluto':
+            # see IAU definition of positive pole for dwarf planets
+            sidereal_rotation_period = abs(sidereal_rotation_period)
+
         # normalize to SI units and export
         yield PlanetPhysParDataRow(
             name=planet,
@@ -479,6 +483,8 @@ def parse_sbdb(name: str) -> SBDBDataRow:
             parameters['bulk_density'] = float(value) * 1e3
         elif parameter == 'rotation period':
             parameters['rotation_period'] = float(value) * 3600.
+            if name == 'Pluto':
+                print('X', parameters['rotation_period'])
         elif parameter == 'pole direction':
             ra, dec = value.split('/')
             parameters['north_pole_right_ascension'] = float(ra)

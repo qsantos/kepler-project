@@ -128,10 +128,10 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
         body_set_rotation(ret, rotational_period);
     }
 
-    cJSON* jnorth_pole = cJSON_GetObjectItemCaseSensitive(jbody, "north_pole");
-    CelestialCoordinates* north_pole = parse_coordinates(jnorth_pole, name);
-    if (north_pole != NULL) {
-        body_set_axis(ret, north_pole);
+    cJSON* jpositive_pole = cJSON_GetObjectItemCaseSensitive(jbody, "positive_pole");
+    CelestialCoordinates* positive_pole = parse_coordinates(jpositive_pole, name);
+    if (positive_pole != NULL) {
+        body_set_axis(ret, positive_pole);
     }
 
     cJSON* jorbit = cJSON_GetObjectItemCaseSensitive(jbody, "orbit");

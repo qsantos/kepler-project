@@ -40,10 +40,20 @@ def get_more_physics(bodies: Dict) -> None:
     for body in parse_factsheets():
         if body.north_pole_right_ascension is None:
             continue
-        bodies[body.name]['north_pole'] = {
-            'right_ascension': body.north_pole_right_ascension,
-            'declination': body.north_pole_declination,
-        }
+        assert body.north_pole_declination is not None
+
+        if bodies[body.name]['rotational_period'] < 0 and body.name != 'Uranus':  # TODO
+            print(body.name, bodies[body.name]['rotational_period'])
+            # we're going to guess the positive pole is opposite to the north pole
+            bodies[body.name]['positive_pole'] = {
+                'right_ascension': body.north_pole_right_ascension + pi,
+                'declination': -body.north_pole_declination,
+            }
+        else:
+            bodies[body.name]['positive_pole'] = {
+                'right_ascension': body.north_pole_right_ascension,
+                'declination': body.north_pole_declination,
+            }
 
 
 def get_planets_orbits(bodies: Dict) -> None:
@@ -115,10 +125,10 @@ def get_moons_orbits(bodies: Dict) -> None:
             # relative to the northward equinox
 
             # north pole of the primary
-            north_pole = bodies[orbit.primary]['north_pole']
-            north_pole_ecliptic_longitude, north_pole_ecliptic_latitude = emo_from_eme(
-                right_ascension=north_pole['right_ascension'],
-                declination=north_pole['declination'],
+            positive_pole = bodies[orbit.primary]['positive_pole']
+            positive_pole_ecliptic_longitude, positive_pole_ecliptic_latitude = emo_from_eme(
+                right_ascension=positive_pole['right_ascension'],
+                declination=positive_pole['declination'],
             )
 
             # from http://www.krysstal.com/sphertrig.html
@@ -142,7 +152,7 @@ def get_moons_orbits(bodies: Dict) -> None:
 
             # set known values
             a = orbit.inclination
-            c = pi / 2 - north_pole_ecliptic_latitude
+            c = pi / 2 - positive_pole_ecliptic_latitude
             B = pi - orbit.longitude_of_ascending_node
 
             # From the spherical law of cosines, we get:
@@ -151,9 +161,17 @@ def get_moons_orbits(bodies: Dict) -> None:
             # From the spherical law of sines, we get:
             A = asin(sin(B) * sin(a) / sin(b))
 
+            if orbit.name == 'Charon':
+                from math import degrees
+                print(degrees(positive_pole['right_ascension']))
+                print(degrees(positive_pole['declination']))
+                print(degrees(positive_pole_ecliptic_longitude))
+                print(degrees(positive_pole_ecliptic_latitude))
+                print()
+
             # ecliptic elements
             inclination = b
-            longitude_of_orbital_normal = north_pole_ecliptic_longitude + A
+            longitude_of_orbital_normal = positive_pole_ecliptic_longitude + A
             if orbit.reference_plane == ReferencePlane.LAPLACE:
                 # TODO: this is an approximation
                 longitude_of_ascending_node = longitude_of_orbital_normal + pi / 2
