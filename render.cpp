@@ -567,7 +567,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     glPointSize(5);
 
     // unfocused orbits
-    set_color(1, 1, 1, .2f);
+    set_color(1, 1, 0, .1f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (is_ancestor_of(body, state->focus)) {
