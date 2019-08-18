@@ -269,7 +269,7 @@ static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec
     update_matrices(state);
 }
 
-static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
+static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin, bool lighting=true) {
     // draw sphere textured with cubemap (preferrably), or equirectangular texture
     auto& cubemaps = state->render_state->body_cubemaps;
     auto search = cubemaps.find(body);
@@ -292,7 +292,11 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     } else {
         // equirectangular texture
-        use_program(state, state->render_state->lighting_shader);
+        if (lighting) {
+            use_program(state, state->render_state->lighting_shader);
+        } else {
+            use_program(state, state->render_state->base_shader);
+        }
         set_body_matrices(state, body, scene_origin);
 
         // bind equirectangular texture if it exists
@@ -313,7 +317,8 @@ void render_star(GlobalState* state, const vec3& scene_origin) {
     use_program(state, state->render_state->base_shader);
 
     set_picking_object(state, state->root);
-    render_body(state, state->root, scene_origin);
+    render_body(state, state->root, scene_origin, false);
+
     clear_picking_object(state);
 }
 
