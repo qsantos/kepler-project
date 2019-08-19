@@ -101,7 +101,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     // textures
     render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
-    render_state->rocket_texture = load_texture("data/textures/rocket_on.png");
+    render_state->rocket_texture = load_texture("data/textures/rocket_off.png");
     render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
 
     for (auto key_value_pair : bodies) {
