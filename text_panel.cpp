@@ -15,7 +15,7 @@ TextPanel::TextPanel(float x_, float y_) :
     y{y_},
     current_row{0},
     current_col{0},
-    font{load_texture("data/textures/font.png")}
+    font{load_texture("data/textures/font.png")}  // TODO: avoid loading it several times
 {
     // set up buffer objects
     glGenBuffers(1, &this->vbo);
