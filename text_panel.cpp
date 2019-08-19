@@ -12,6 +12,8 @@ static const int character_height = 19;
 TextPanel::TextPanel(float x_, float y_) :
     x{x_},
     y{y_},
+    current_row{0},
+    current_col{0},
     font{load_texture("data/textures/font.png")}
 {
     // set up buffer objects
