@@ -29,7 +29,7 @@ struct State : vec6 {
 // TODO: Orbiter should be a component of CelestialBody and Rocket
 struct Rocket : CelestialBody {
     State state;
-    double orbit_updated;
+    mat3 orientation;
 };
 
 void rocket_update(Rocket* rocket, double time, double step);

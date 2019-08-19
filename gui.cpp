@@ -289,16 +289,16 @@ int main() {
 
     Orbit orbit;
     state.rocket.name = "Rocket";
-    state.rocket.radius = 100.;
+    state.rocket.radius = 1.;
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;
     state.rocket.state = {
         vec3{6371e3 + 300e3, 0, 0},
         vec3{0, 7660, 0},
     },
-    state.rocket.orbit_updated = 0.f;
     body_append_satellite(state.focus, &state.rocket);
     orbit_from_state(&orbit, state.focus, state.rocket.state, state.time);
+    state.rocket.orientation = mat3::from_euler_angles(0, 0, 0);
 
     state.last_fps_measure = real_clock();
     state.focus = &state.rocket;
@@ -335,6 +335,7 @@ int main() {
             state.real_timewarp = state.target_timewarp;
         }
 
+        state.rocket.orientation = mat3::from_euler_angles(0, 0, state.time);
         render(&state);
 
         glfwSwapBuffers(window);

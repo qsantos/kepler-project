@@ -336,13 +336,22 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
+    const auto& r = state->rocket.orientation;
+    float orientation_values[16] = {
+        (float) r[0][0], (float) r[1][0], (float) r[2][0], 0,
+        (float) r[0][1], (float) r[1][1], (float) r[2][1], 0,
+        (float) r[0][2], (float) r[1][2], (float) r[2][2], 0,
+        0, 0, 0, 1,
+    };
+    glm::mat4 orientation = glm::make_mat4(orientation_values);
+
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(state->rocket.orbit->primary, state->time)
         - scene_origin
         + state->rocket.state.position();
     model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
-    model = glm::rotate(model, M_PIf32/2, glm::vec3(0.f, 1.f, 0.f));
-    model = glm::scale(model, glm::vec3(1e5f));
+    model *= orientation;
+    model = glm::rotate(model, M_PIf32/2, glm::vec3(1.f, 0.f, 0.f));
     state->render_state->model_matrix = model;
     update_matrices(state);
 
