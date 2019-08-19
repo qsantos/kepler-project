@@ -19,6 +19,7 @@ struct GlobalState {
     bool show_wireframe = false;
     bool show_helpers = true;
     bool show_hud = true;
+    bool enable_vsync = true;
 
     std::map<std::string, CelestialBody*> bodies;
     CelestialBody* root;

@@ -19,6 +19,7 @@ w            toggle wireframe mode
 o            toggle orbits and other helpers
 h            toggle this help
 H            toggle HUD
+V            toggle vertical synchronization
 
 Time
 ----

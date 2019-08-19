@@ -81,6 +81,8 @@ void toggle_fullscreen(GLFWwindow* window) {
         // restore windowed state
         glfwSetWindowMonitor(window, NULL, state->windowed_x, state->windowed_y, state->windowed_width, state->windowed_height, 0);
     }
+
+    glfwSwapInterval(state->enable_vsync);
 }
 
 void error_callback(int error, const char* description) {
@@ -109,6 +111,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             state->target_timewarp *= -1.;
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
+        } else if (key == GLFW_KEY_V) {
+            state->enable_vsync = !state->enable_vsync;
         } else if (key == GLFW_KEY_H) {
             if (mods & GLFW_MOD_SHIFT) {
                 state->show_hud = !state->show_hud;
@@ -274,9 +278,6 @@ int main() {
     state.focus = state.bodies.at("Earth");
     state.root = state.bodies.at("Sun");
 
-    // disable vsync
-    // glfwSwapInterval(0);
-
     state.time = 0;
     if (std::string(state.root->name) == "Sun") {
         state.time = (double) (time(NULL) - J2000);
@@ -298,6 +299,8 @@ int main() {
 
     double last = real_clock();
     double unprocessed_time = 0.;
+
+    glfwSwapInterval(state.enable_vsync);
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
