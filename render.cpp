@@ -608,13 +608,22 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     // rocket
     CelestialBody* body = &state->rocket;
 
-    auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
-    state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
-    update_matrices(state);
-
     set_picking_object(state, body);
-    OrbitMesh(body->orbit).draw();
-    OrbitApsesMesh(body->orbit).draw();
+    if (body == state->focus) {
+        auto position = body_global_position_at_time(body, state->time) - scene_origin;
+        state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        update_matrices(state);
+
+        FocusedOrbitMesh(body->orbit, state->time).draw();
+        FocusedOrbitApsesMesh(body->orbit, state->time).draw();
+    } else {
+        auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
+        state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        update_matrices(state);
+
+        OrbitMesh(body->orbit).draw();
+        OrbitApsesMesh(body->orbit).draw();
+    }
     clear_picking_object(state);
 }
 

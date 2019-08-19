@@ -12,6 +12,7 @@
 - Fix seams in Earth texture
 - Fix orbits randomly showing up as white
 - Fix random position markers showing up
+- Fix rocket appearing out of orbit when zoomed on
 
 # v0.3.0 - 2019-08-17
 - Use Moon orbital elements of 2019-08-11
