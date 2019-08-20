@@ -244,9 +244,6 @@ static void render_skybox(GlobalState* state) {
 }
 
 static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(body, state->time) - scene_origin;
     model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
@@ -280,9 +277,6 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         // prepare shader
         use_program(state, state->render_state->cubemap_shader);
         set_body_matrices(state, body, scene_origin);
-
-        GLint program;
-        glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
         // bind cubemap texture
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
@@ -332,9 +326,6 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
         render_body(state, body, scene_origin);
         clear_picking_object(state);
     }
-
-    GLint program;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
     const auto& r = state->rocket.orientation;
     float orientation_values[16] = {
