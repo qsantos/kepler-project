@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "vector.hpp"
+
 // obliquity of the ecliptic = Earth's tilt
 static const double obliquity_of_the_ecliptic = 0.40910517666747087;
 
@@ -43,6 +45,15 @@ struct CelestialCoordinates {
             ecliptic_latitude,
             distance,
         };
+    }
+
+    static CelestialCoordinates from_cartesian(double x, double y, double z) {
+        double r = sqrt(x * x + y * y + z * z);
+        return CelestialCoordinates::from_ecliptic(atan2(y, x), acos(z / r), r);
+    }
+
+    static CelestialCoordinates from_cartesian(vec3 pos) {
+        return CelestialCoordinates::from_cartesian(pos[0], pos[1], pos[2]);
     }
 };
 

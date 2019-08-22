@@ -45,6 +45,7 @@ struct RenderState {
     GLint star_glow_texture;
     GLint lens_flare_texture;
     GLint rocket_texture;
+    GLint navball_texture;
     GLint skybox_texture;
 
     map<CelestialBody*, GLuint> body_textures;
@@ -104,6 +105,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
     render_state->rocket_texture = load_texture("data/textures/rocket_off.png");
+    render_state->navball_texture = load_texture("data/textures/navball.png");
     render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
 
     for (auto key_value_pair : bodies) {
@@ -683,6 +685,87 @@ static void fill_hud(GlobalState* state) {
     state->render_state->hud.print("Version " VERSION "\n");
 }
 
+static void render_navball(GlobalState* state) {
+    // general information
+    float radius = 100.f;
+    float w = (float) state->viewport_width;
+    float h = (float) state->viewport_height;
+
+    // model = view * rocket orientation * surface orientation * primary's tilt
+    auto model = glm::mat4(1.0f);
+
+    // view (bottom center)
+    model = glm::translate(model, glm::vec3(w / 2.f, h - radius, -1e3f));
+    model = glm::scale(model, -glm::vec3(radius));
+
+    // rocket orientation
+    const auto& r = state->rocket.orientation;
+    float orientation_values[16] = {
+        (float) r[0][0], (float) r[1][0], (float) r[2][0], 0,
+        (float) r[0][1], (float) r[1][1], (float) r[2][1], 0,
+        (float) r[0][2], (float) r[1][2], (float) r[2][2], 0,
+        0, 0, 0, 1,
+    };
+    glm::mat4 orientation = glm::make_mat4(orientation_values);
+    model /= orientation;
+
+    // surface orientation
+    model = glm::rotate(model, -M_PIf32 / 2.f, glm::vec3(0.f, 0.f, 1.f));
+    auto dir = CelestialCoordinates::from_cartesian(state->rocket.state.position());
+    model = glm::rotate(model, (float) dir.ecliptic_longitude, glm::vec3(0.f, 0.f, 1.f));
+    model = glm::rotate(model, M_PIf32 - (float) dir.ecliptic_latitude, glm::vec3(1.f, 0.f, 0.f));
+
+    // primary's tilt
+    CelestialBody* body = state->rocket.orbit->primary;
+    if (body->positive_pole != NULL) {
+        // See diagram at the top of http://www.krysstal.com/sphertrig.html
+        // point A = vertical
+        // point B = rocket
+        // point C = pole
+        // we want to find angle B to orientate the navball towards the pole
+        // cos b = cos a cos c + sin a sin c cos B
+        // so:
+        // B = acos((cos b - cos a cos c) / (sin a sin c))
+
+        // A: vertical
+        vec3 vert = {0, 0, body->radius};
+
+        // B: rocket
+        vec3 pos = state->rocket.state.position();
+
+        // C: positive/north pole
+        vec3 pole = {0, 0, body->radius};
+        double x_angle = body->positive_pole->ecliptic_latitude - M_PI / 2.;
+        pole = mat3::from_angle_axis(x_angle, 1., 0., 0.) * pole;
+        double z_angle = body->positive_pole->ecliptic_longitude - M_PI / 2.;
+        pole = mat3::from_angle_axis(z_angle, 0., 0., 1.) * pole;
+
+        // deduce angles a, b, c
+        double a = pos.angle(pole);
+        double b = pole.angle(vert);
+        double c = pos.angle(vert);
+
+        // deduce angle B
+        double B = acos((cos(b) - cos(a)*cos(c)) / (sin(a) * sin(c)));
+
+        // orient angle B
+        if (pos.angle2(pole, vert) < 0) {
+            B = -B;
+        }
+
+        model = glm::rotate(model, (float) B, glm::vec3(0.f, 0.f, 1.f));
+    }
+
+    // setup matrices
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    // draw navball
+    glBindTexture(GL_TEXTURE_2D, state->render_state->navball_texture);
+    state->render_state->uv_sphere.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 static void render_hud(GlobalState* state) {
     if (!state->show_hud) {
         return;
@@ -705,6 +788,8 @@ static void render_hud(GlobalState* state) {
     if (state->show_help) {
         state->render_state->help.draw();
     }
+
+    render_navball(state);
 }
 
 void render(GlobalState* state) {
