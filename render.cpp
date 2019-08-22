@@ -23,6 +23,7 @@ struct RenderState {
 
     // shaders
     GLuint base_shader;
+    GLuint hud_shader;
     GLuint skybox_shader;
     GLuint cubemap_shader;
     GLuint lighting_shader;
@@ -66,6 +67,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     render_state->position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
     render_state->base_shader = make_program(3, "base", "picking", "logz");
+    render_state->hud_shader = make_program(2, "base", "picking");
     render_state->star_glow_shader = make_program(3, "base", "star_glow", "logz");
     render_state->lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
 
@@ -692,11 +694,11 @@ static void render_hud(GlobalState* state) {
     state->render_state->hud.clear();
     fill_hud(state);
 
-    use_program(state, state->render_state->base_shader);
+    use_program(state, state->render_state->hud_shader);
 
     // use orthographic projection
     state->render_state->view_matrix = glm::mat4(1.0f);
-    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -1.f, 1.f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
     update_matrices(state);
 
     state->render_state->hud.draw();
@@ -728,6 +730,7 @@ void render(GlobalState* state) {
     render_star(state, scene_origin);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glClear(GL_DEPTH_BUFFER_BIT);
     render_hud(state);
 }
 
