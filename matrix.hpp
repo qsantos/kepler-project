@@ -90,11 +90,11 @@ struct matrix{
         return ret; \
     }
     UNARY_OP(+)
-        UNARY_OP(-)
+    UNARY_OP(-)
 #undef UNARY_OP
 
 #define SCALAR_OP(OP) \
-        W operator OP(S rhs) const { \
+    W operator OP(S rhs) const { \
         const W& lhs = *this; \
         W ret; \
         for (size_t i = 0; i < N; i += 1) { \
