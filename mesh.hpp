@@ -15,8 +15,8 @@ struct Mesh {
     unsigned vbo;
 };
 
-struct SquareMesh : public Mesh {
-    SquareMesh(double size);
+struct RectMesh : public Mesh {
+    RectMesh(double width, double height);
 };
 
 struct CubeMesh : public Mesh {

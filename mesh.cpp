@@ -70,16 +70,17 @@ void Mesh::draw(void) {
     glDrawArrays(this->mode, 0, this->length);
 }
 
-SquareMesh::SquareMesh(double size) :
+RectMesh::RectMesh(double width, double height) :
     Mesh(GL_TRIANGLE_STRIP, 4, true)
 {
-    float s = (float) size / 2.f;
+    float w = (float) width / 2.f;
+    float h = (float) height / 2.f;
 
     float data[] = {
-        -s, -s, 0, 0, 0, 0, 0, -1,
-        +s, -s, 0, 1, 0, 0, 0, -1,
-        -s, +s, 0, 0, 1, 0, 0, -1,
-        +s, +s, 0, 1, 1, 0, 0, -1,
+        -w, -h, 0, 0, 0, 0, 0, -1,
+        +w, -h, 0, 1, 0, 0, 0, -1,
+        -w, +h, 0, 0, 1, 0, 0, -1,
+        +w, +h, 0, 1, 1, 0, 0, -1,
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);

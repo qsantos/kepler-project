@@ -15,6 +15,9 @@ extern "C" {
 
 using std::map;
 
+static const float NAVBALL_RADIUS = 100.f;
+static const float LEVEL_INDICATOR_WIDTH = 100.f;
+
 struct RenderState {
     // matrices
     glm::mat4 model_matrix;
@@ -37,7 +40,8 @@ struct RenderState {
     // meshes
     CubeMesh cube = CubeMesh(10.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
-    SquareMesh square = SquareMesh(1.);
+    RectMesh square = RectMesh(1, 1);
+    RectMesh level_indicator_mesh = RectMesh(1, .4);
     map<CelestialBody*, OrbitMesh> orbit_meshes;
     map<CelestialBody*, OrbitApsesMesh> apses_meshes;
 
@@ -45,8 +49,9 @@ struct RenderState {
     GLint star_glow_texture;
     GLint lens_flare_texture;
     GLint rocket_texture;
-    GLint navball_texture;
     GLint skybox_texture;
+    GLint navball_texture;
+    GLint level_indicator_texture;
 
     map<CelestialBody*, GLuint> body_textures;
     map<CelestialBody*, GLuint> body_cubemaps;
@@ -105,8 +110,9 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
     render_state->rocket_texture = load_texture("data/textures/rocket_off.png");
-    render_state->navball_texture = load_texture("data/textures/navball.png");
     render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
+    render_state->navball_texture = load_texture("data/textures/navball.png");
+    render_state->level_indicator_texture = load_texture("data/textures/markers/Level_indicator.png");
 
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
@@ -687,16 +693,13 @@ static void fill_hud(GlobalState* state) {
 
 static void render_navball(GlobalState* state) {
     // general information
-    float radius = 100.f;
     float w = (float) state->viewport_width;
     float h = (float) state->viewport_height;
 
-    // model = view * rocket orientation * surface orientation * primary's tilt
-    auto model = glm::mat4(1.0f);
-
     // view (bottom center)
-    model = glm::translate(model, glm::vec3(w / 2.f, h - radius, -1e3f));
-    model = glm::scale(model, -glm::vec3(radius));
+    auto model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    model = glm::scale(model, -glm::vec3(NAVBALL_RADIUS));
 
     // rocket orientation
     const auto& r = state->rocket.orientation;
@@ -766,6 +769,28 @@ static void render_navball(GlobalState* state) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+static void render_level_indicator(GlobalState* state) {
+    // general information
+    float w = (float) state->viewport_width;
+    float h = (float) state->viewport_height;
+
+    // view (bottom center)
+    auto model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    model = glm::scale(model, glm::vec3(LEVEL_INDICATOR_WIDTH, -LEVEL_INDICATOR_WIDTH, LEVEL_INDICATOR_WIDTH));
+
+    // setup matrices
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    // draw level indicator
+    glDisable(GL_DEPTH_TEST);
+    glBindTexture(GL_TEXTURE_2D, state->render_state->level_indicator_texture);
+    state->render_state->level_indicator_mesh.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glEnable(GL_DEPTH_TEST);
+}
+
 static void render_hud(GlobalState* state) {
     if (!state->show_hud) {
         return;
@@ -790,6 +815,7 @@ static void render_hud(GlobalState* state) {
     }
 
     render_navball(state);
+    render_level_indicator(state);
 }
 
 void render(GlobalState* state) {
