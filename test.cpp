@@ -6,6 +6,7 @@
 #include "coordinates.hpp"
 #include "recipes.hpp"
 #include "lambert.hpp"
+#include "rocket.hpp"
 
 extern "C" {
 #include "util.h"
@@ -950,6 +951,35 @@ void test_lambert(void) {
     }
 }
 
+void test_rk4(void) {
+    // dummy object
+    CelestialBody earth = make_dummy_object(6371e3, 3.98601e+14, 0);
+
+    double time = 0;
+    static const double SIMULATION_STEP = 1. / 128.;
+
+    Rocket rocket;
+    rocket.name = "Rocket";
+    rocket.state = {
+        vec3{6371e3 + 300e3, 0, 0},
+        vec3{0, 7660, 0},
+    };
+
+    Orbit orbit;
+    orbit_from_state(&orbit, &earth, rocket.state, time);
+    rocket.orbit = &orbit;
+
+    for (size_t i = 0; i < 1<<20; i += 1) {
+        rocket_update(&rocket, time, SIMULATION_STEP);
+        time += SIMULATION_STEP;
+    }
+
+    auto numint_pos = rocket.state.position();
+    auto kepler_pos = orbit_position_at_time(rocket.orbit, time);
+    auto relative_error = (numint_pos - kepler_pos).norm() / kepler_pos.norm();
+    assertIsClose(relative_error, 0.);
+}
+
 int main(void) {
     test_vector();         printf("."); fflush(stdout);
     test_matrix();         printf("."); fflush(stdout);
@@ -960,5 +990,6 @@ int main(void) {
     test_load();           printf("."); fflush(stdout);
     test_recipes();        printf("."); fflush(stdout);
     test_lambert();        printf("."); fflush(stdout);
+    test_rk4();            printf("."); fflush(stdout);
     printf("\n");
 }

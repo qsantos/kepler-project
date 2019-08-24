@@ -25,7 +25,7 @@ T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
 }
 
 // TODO: do not use global variable
-CelestialBody* primary = NULL;
+static CelestialBody* primary = NULL;
 
 
 State f(double t, State state) {
