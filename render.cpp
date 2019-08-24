@@ -826,7 +826,12 @@ void render(GlobalState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    auto scene_origin = body_global_position_at_time(state->focus, state->time);
+    vec3 scene_origin;
+    if (state->focus == &state->rocket) {
+        scene_origin = state->rocket.state.position() + body_global_position_at_time(state->rocket.orbit->primary, state->time);
+    } else {
+        scene_origin = body_global_position_at_time(state->focus, state->time);
+    }
 
     if (state->show_wireframe) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
