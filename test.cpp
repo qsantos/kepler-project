@@ -917,12 +917,12 @@ void test_lambert(void) {
         double t = 207. * 86400.;
         vec3 v1, v2;
         lambert(v1, v2, mu, r1, r2, t, 0, 0);
-        assert(isclose(v1[0], 28996.23493547104));
-        assert(isclose(v1[1], 15232.684101572762));
-        assert(isclose(v1[2], 1289.1732573653683));
-        assert(isclose(v2[0], -21147.045109982573));
-        assert(isclose(v2[1], 3994.4133718239927));
-        assert(isclose(v2[2], -663.3280036013251));
+        assertIsClose(v1[0], 28996.23493547104);
+        assertIsClose(v1[1], 15232.684101572762);
+        assertIsClose(v1[2], 1289.1732573653683);
+        assertIsClose(v2[0], -21147.045109982573);
+        assertIsClose(v2[1], 3994.4133718239927);
+        assertIsClose(v2[2], -663.3280036013251);
     }
 
     // Fundamentals of Astrodynamics, p236
@@ -934,20 +934,20 @@ void test_lambert(void) {
         vec3 v1, v2;
         // short way
         lambert(v1, v2, mu, r1, r2, t, 0, 0);
-        assert(isclose(v1[0], -0.36163780780789323));
-        assert(isclose(v1[1], 0.7697267599186077));
-        assert(isclose(v1[2], -0.5062929309310507));
-        assert(isclose(v2[0], -0.6018460646440396));
-        assert(isclose(v2[1], -0.02238823863132538));
-        assert(isclose(v2[2], -0.8425844905016555));
+        assertIsClose(v1[0], -0.36163780780789323);
+        assertIsClose(v1[1], 0.7697267599186077);
+        assertIsClose(v1[2], -0.5062929309310507);
+        assertIsClose(v2[0], -0.6018460646440396);
+        assertIsClose(v2[1], -0.02238823863132538);
+        assertIsClose(v2[2], -0.8425844905016555);
         // long way (note the inverted signs)
         lambert(v2, v1, mu, r2, r1, t, 0, 0);
-        assert(isclose(-v1[0], -0.6305417321526077));
-        assert(isclose(-v1[1], -1.1139628156077221));
-        assert(isclose(-v1[2], -0.8827584250136509));
-        assert(isclose(-v2[0], +0.17865636851229638));
-        assert(isclose(-v2[1], +1.5544631609898276));
-        assert(isclose(-v2[2], +0.25011891591721497));  // typo in book
+        assertIsClose(-v1[0], -0.6305417321526077);
+        assertIsClose(-v1[1], -1.1139628156077221);
+        assertIsClose(-v1[2], -0.8827584250136509);
+        assertIsClose(-v2[0], +0.17865636851229638);
+        assertIsClose(-v2[1], +1.5544631609898276);
+        assertIsClose(-v2[2], +0.25011891591721497);  // typo in book
     }
 }
 
