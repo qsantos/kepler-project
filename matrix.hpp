@@ -112,9 +112,18 @@ struct matrix{
     SCALAR_OP(+)
     SCALAR_OP(-)
     SCALAR_OP(*)
-    SCALAR_OP(/)
     SCALAR_OP(%)
     #undef SCALAR_OP
+
+    // division by a scalar
+    W operator /(S rhs) const {
+        const W& lhs = *this;
+        W ret;
+        for (size_t i = 0; i < N; i += 1) {
+            ret[i] = lhs[i] / rhs;
+        }
+        return ret;
+    }
 
     // cppcheck does not like OP##=
     #define WECTOR_INPLACE_OP(OP) \
