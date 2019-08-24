@@ -32,6 +32,6 @@ struct Rocket : CelestialBody {
     mat3 orientation;
 };
 
-void rocket_update(Rocket* rocket, double time, double step);
+void rocket_update(Rocket* rocket, double time, double step, double thrust);
 
 #endif

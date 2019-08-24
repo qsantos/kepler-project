@@ -26,6 +26,7 @@ T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
 
 // TODO: do not use global variable
 static CelestialBody* primary = NULL;
+static vec3 thrust_global;
 
 
 State f(double t, State state) {
@@ -41,12 +42,13 @@ State f(double t, State state) {
     vec3 acceleration = position * (-g / distance);
 
     // propulsion
-    //acceleration += thrust
+    acceleration = acceleration + thrust_global;
 
     return {velocity, acceleration};
 }
 
-void rocket_update(Rocket* rocket, double time, double step) {
+void rocket_update(Rocket* rocket, double time, double step, double thrust) {
     primary = rocket->orbit->primary;
+    thrust_global = rocket->orientation * vec3{0, 0, thrust};
     rocket->state = runge_kutta_4(f, time, rocket->state, step);
 }

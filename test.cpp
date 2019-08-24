@@ -970,7 +970,7 @@ void test_rk4(void) {
     rocket.orbit = &orbit;
 
     for (size_t i = 0; i < 1<<20; i += 1) {
-        rocket_update(&rocket, time, SIMULATION_STEP);
+        rocket_update(&rocket, time, SIMULATION_STEP, 0.);
         time += SIMULATION_STEP;
     }
 

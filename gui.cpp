@@ -308,6 +308,8 @@ int main() {
 
     glfwSwapInterval(state.enable_vsync);
 
+    double throttle = 0;
+
     // main loop
     while (!glfwWindowShouldClose(window)) {
         // update time
@@ -318,11 +320,12 @@ int main() {
 
         size_t steps = 0;
         while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
-            rocket_update(&state.rocket, state.time, SIMULATION_STEP);
+            rocket_update(&state.rocket, state.time, SIMULATION_STEP, throttle * 100);
             unprocessed_time -= SIMULATION_STEP;
             state.time += SIMULATION_STEP;
             steps += 1;
         }
+        orbit_from_state(&orbit, orbit.primary, state.rocket.state, state.time);
 
         if (unprocessed_time >= SIMULATION_STEP) {
             // we had to interrupt the simulation
@@ -340,6 +343,27 @@ int main() {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
+        // throttle
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            throttle += .1;
+            if (throttle > 1.) {
+                throttle = 1;
+            }
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+            throttle -= .1;
+            if (throttle < 0.) {
+                throttle = 0;
+            }
+        }
+        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+            throttle = 1;
+        }
+        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+            throttle = 0;
+        }
+
+        // orientation
         double x = .04;
 
         // X
