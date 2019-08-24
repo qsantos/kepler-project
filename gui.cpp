@@ -368,18 +368,18 @@ int main() {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 1, 0, 0);
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 1, 0, 0);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 1, 0, 0);
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 1, 0, 0);
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 1, 0);
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 1, 0);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 1, 0);
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 1, 0);
         }
 
         // Z

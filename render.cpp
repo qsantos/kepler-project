@@ -699,7 +699,7 @@ static void render_navball(GlobalState* state) {
     // view (bottom center)
     auto model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
-    model = glm::scale(model, -glm::vec3(NAVBALL_RADIUS));
+    model = glm::scale(model, glm::vec3(NAVBALL_RADIUS));
 
     // rocket orientation
     const auto& r = state->rocket.orientation;
