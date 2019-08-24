@@ -102,7 +102,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             glfwSetWindowShouldClose(window, true);
         } else if (key == GLFW_KEY_F11) {
             toggle_fullscreen(window);
-        } else if (key == GLFW_KEY_W) {
+        } else if (key == GLFW_KEY_T) {
             state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
             state->target_timewarp /= 10.;
@@ -335,11 +335,37 @@ int main() {
             state.real_timewarp = state.target_timewarp;
         }
 
-        state.rocket.orientation = mat3::from_euler_angles(0, 0, state.time);
         render(&state);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        double x = .04;
+
+        // X
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 1, 0, 0);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 1, 0, 0);
+        }
+
+        // Y
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 1, 0);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 1, 0);
+        }
+
+        // Z
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 0, 1);
+        }
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 0, 1);
+        }
+
         state.n_frames_since_last += 1;
     }
 

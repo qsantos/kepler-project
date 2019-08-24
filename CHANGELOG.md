@@ -1,4 +1,8 @@
-# v0.4.0 - Unreleased
+# v0.5.0 - Unreleased
+- Changed keybinding for wireframe mode from W to T
+- Added keybindings to effect the orientation of the rocket
+
+# v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]
 - Fix help message randomly not showing up
 - Fix vertical position of help message
