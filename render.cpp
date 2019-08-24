@@ -54,6 +54,7 @@ struct RenderState {
     GLint rocket_texture;
     GLint skybox_texture;
     GLint navball_texture;
+    GLint navball_frame_texture;
     GLint level_indicator_texture;
     GLint prograde_marker_texture;
     GLint retrograde_marker_texture;
@@ -122,6 +123,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->rocket_texture             = load_texture("data/textures/rocket_off.png");
     render_state->skybox_texture             = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
     render_state->navball_texture            = load_texture("data/textures/navball.png");
+    render_state->navball_frame_texture      = load_texture("data/textures/navball-frame.png");
     render_state->level_indicator_texture    = load_texture("data/textures/markers/Level_indicator.png");
     render_state->prograde_marker_texture    = load_texture("data/textures/markers/Prograde.png");
     render_state->retrograde_marker_texture  = load_texture("data/textures/markers/Retrograde.png");
@@ -921,6 +923,36 @@ static void render_level_indicator(GlobalState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
+static void render_navball_frame(GlobalState* state) {
+    use_program(state, state->render_state->hud_shader);
+
+    // use orthographic projection
+    state->render_state->view_matrix = glm::mat4(1.0f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
+    update_matrices(state);
+
+    // general information
+    float w = (float) state->viewport_width;
+    float h = (float) state->viewport_height;
+
+    // view (bottom center)
+    auto model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    model = glm::scale(model, glm::vec3(NAVBALL_RADIUS * 2.5f));
+
+    // setup matrices
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+    glBindTexture(GL_TEXTURE_2D, state->render_state->navball_frame_texture);
+    state->render_state->square.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+}
+
 static void render_hud(GlobalState* state) {
     if (!state->show_hud) {
         return;
@@ -947,6 +979,7 @@ static void render_hud(GlobalState* state) {
     render_navball(state);
     render_navball_markers(state);
     render_level_indicator(state);
+    render_navball_frame(state);
 }
 
 void render(GlobalState* state) {
