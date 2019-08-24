@@ -16,6 +16,7 @@ extern "C" {
 using std::map;
 
 static const float NAVBALL_RADIUS = 100.f;
+static const float NAVBALL_MARKER_SIZE = 50.f;
 static const float LEVEL_INDICATOR_WIDTH = 100.f;
 
 struct RenderState {
@@ -33,6 +34,7 @@ struct RenderState {
     GLuint position_marker_shader;
     GLuint star_glow_shader;
     GLuint lens_flare_shader;
+    GLuint billboard_shader;
 
     // VAOs
     GLuint vao;
@@ -42,6 +44,7 @@ struct RenderState {
     UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
     RectMesh square = RectMesh(1, 1);
     RectMesh level_indicator_mesh = RectMesh(1, .4);
+    RectMesh navball_marker_mesh = RectMesh(NAVBALL_MARKER_SIZE, -NAVBALL_MARKER_SIZE);
     map<CelestialBody*, OrbitMesh> orbit_meshes;
     map<CelestialBody*, OrbitApsesMesh> apses_meshes;
 
@@ -52,6 +55,12 @@ struct RenderState {
     GLint skybox_texture;
     GLint navball_texture;
     GLint level_indicator_texture;
+    GLint prograde_marker_texture;
+    GLint retrograde_marker_texture;
+    GLint normal_marker_texture;
+    GLint anti_normal_marker_texture;
+    GLint radial_in_marker_texture;
+    GLint radial_out_marker_texture;
 
     map<CelestialBody*, GLuint> body_textures;
     map<CelestialBody*, GLuint> body_cubemaps;
@@ -76,6 +85,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->hud_shader = make_program(2, "base", "picking");
     render_state->star_glow_shader = make_program(3, "base", "star_glow", "logz");
     render_state->lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
+    render_state->billboard_shader = make_program(2, "base", "billboard");
 
     // fix orientation of cubemap (e.g. Y up → Z up)
     glUseProgram(render_state->cubemap_shader);
@@ -107,12 +117,18 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     }
 
     // textures
-    render_state->star_glow_texture = load_texture("data/textures/star_glow.png");
-    render_state->lens_flare_texture = load_texture("data/textures/lens_flares.png");
-    render_state->rocket_texture = load_texture("data/textures/rocket_off.png");
-    render_state->skybox_texture = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
-    render_state->navball_texture = load_texture("data/textures/navball.png");
-    render_state->level_indicator_texture = load_texture("data/textures/markers/Level_indicator.png");
+    render_state->star_glow_texture          = load_texture("data/textures/star_glow.png");
+    render_state->lens_flare_texture         = load_texture("data/textures/lens_flares.png");
+    render_state->rocket_texture             = load_texture("data/textures/rocket_off.png");
+    render_state->skybox_texture             = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
+    render_state->navball_texture            = load_texture("data/textures/navball.png");
+    render_state->level_indicator_texture    = load_texture("data/textures/markers/Level_indicator.png");
+    render_state->prograde_marker_texture    = load_texture("data/textures/markers/Prograde.png");
+    render_state->retrograde_marker_texture  = load_texture("data/textures/markers/Retrograde.png");
+    render_state->normal_marker_texture      = load_texture("data/textures/markers/Normal.png");
+    render_state->anti_normal_marker_texture = load_texture("data/textures/markers/Anti-normal.png");
+    render_state->radial_in_marker_texture   = load_texture("data/textures/markers/Radial-in.png");
+    render_state->radial_out_marker_texture  = load_texture("data/textures/markers/Radial-out.png");
 
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
@@ -194,6 +210,12 @@ void update_matrices(GlobalState* state) {
     GLint var = glGetUniformLocation(program, "model_view_matrix");
     if (var >= 0) {
         glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(model_view));
+    }
+
+    auto proj = state->render_state->projection_matrix;
+    var = glGetUniformLocation(program, "projection_matrix");
+    if (var >= 0) {
+        glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(proj));
     }
 
     auto model_view_projection = state->render_state->projection_matrix * model_view;
@@ -769,6 +791,114 @@ static void render_navball(GlobalState* state) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+static void render_navball_markers(GlobalState* state) {
+    use_program(state, state->render_state->billboard_shader);
+
+    // use orthographic projection
+    state->render_state->view_matrix = glm::mat4(1.0f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
+
+    // general information
+    float w = (float) state->viewport_width;
+    float h = (float) state->viewport_height;
+
+    // view (bottom center)
+    auto model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+
+    // view (bottom center)
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    // rocket orientation
+    const auto& r = state->rocket.orientation;
+    float orientation_values[9] = {
+        (float) r[0][0], (float) r[1][0], (float) r[2][0],
+        (float) r[0][1], (float) r[1][1], (float) r[2][1],
+        (float) r[0][2], (float) r[1][2], (float) r[2][2],
+    };
+    glm::mat3 orientation = glm::make_mat3(orientation_values);
+
+    auto position = state->rocket.state.position();
+    auto velocity = state->rocket.state.velocity();
+
+    auto prograde = velocity / velocity.norm() * NAVBALL_RADIUS * 1.01;
+    auto normal = position.cross(velocity);
+    normal = normal / normal.norm() * NAVBALL_RADIUS * 1.01;
+    auto radial = prograde.cross(normal);
+    radial = radial / radial.norm() * NAVBALL_RADIUS * 1.01;
+
+    auto prograde2 = glm::vec3{(float) prograde[0], (float) prograde[1], (float) prograde[2]};
+    auto normal2 = glm::vec3{(float) normal[0], (float) normal[1], (float) normal[2]};
+    auto radial2 = glm::vec3{(float) radial[0], (float) radial[1], (float) radial[2]};
+
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+
+    // draw prograde marker
+    auto prograde3 = glm::inverse(orientation) * glm::vec3{-prograde2[0], -prograde2[1], -prograde2[2]};
+    if (prograde3[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, prograde3);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->prograde_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // draw retrograde marker
+    auto retrograde = glm::inverse(orientation) * glm::vec3{prograde2[0], prograde2[1], prograde2[2]};
+    if (retrograde[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, retrograde);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->retrograde_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // draw normal marker
+    auto normal3 = glm::inverse(orientation) * glm::vec3{-normal2[0], -normal2[1], -normal2[2]};
+    if (normal3[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, normal3);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->normal_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // draw anti-normal marker
+    auto anti_normal = glm::inverse(orientation) * glm::vec3{normal2[0], normal2[1], normal2[2]};
+    if (anti_normal[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, anti_normal);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->anti_normal_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // draw radial-in marker
+    auto radial_in = glm::inverse(orientation) * glm::vec3{radial2[0], radial2[1], radial2[2]};
+    if (radial_in[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, radial_in);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->radial_in_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    // draw radial-out marker
+    auto radial_out = glm::inverse(orientation) * glm::vec3{-radial2[0], -radial2[1], -radial2[2]};
+    if (radial_out[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, radial_out);
+        update_matrices(state);
+        glBindTexture(GL_TEXTURE_2D, state->render_state->radial_out_marker_texture);
+        state->render_state->navball_marker_mesh.draw();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+}
+
 static void render_level_indicator(GlobalState* state) {
     // general information
     float w = (float) state->viewport_width;
@@ -815,6 +945,7 @@ static void render_hud(GlobalState* state) {
     }
 
     render_navball(state);
+    render_navball_markers(state);
     render_level_indicator(state);
 }
 

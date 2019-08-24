@@ -3,6 +3,7 @@
 - Added keybindings to effect the orientation of the rocket
 - Added keybindings to effect the throttle of the rocket
 - Add level indicator to navball
+- Add velocity markers to navball
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]
