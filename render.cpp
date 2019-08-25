@@ -53,21 +53,21 @@ struct RenderState {
     map<CelestialBody*, OrbitApsesMesh> apses_meshes;
 
     // textures
-    GLint star_glow_texture;
-    GLint lens_flare_texture;
-    GLint rocket_texture_on;
-    GLint rocket_texture_off;
-    GLint skybox_texture;
-    GLint navball_texture;
-    GLint navball_frame_texture;
-    GLint level_indicator_texture;
-    GLint prograde_marker_texture;
-    GLint retrograde_marker_texture;
-    GLint normal_marker_texture;
-    GLint anti_normal_marker_texture;
-    GLint radial_in_marker_texture;
-    GLint radial_out_marker_texture;
-    GLint throttle_needle_texture;
+    GLuint star_glow_texture;
+    GLuint lens_flare_texture;
+    GLuint rocket_texture_on;
+    GLuint rocket_texture_off;
+    GLuint skybox_texture;
+    GLuint navball_texture;
+    GLuint navball_frame_texture;
+    GLuint level_indicator_texture;
+    GLuint prograde_marker_texture;
+    GLuint retrograde_marker_texture;
+    GLuint normal_marker_texture;
+    GLuint anti_normal_marker_texture;
+    GLuint radial_in_marker_texture;
+    GLuint radial_out_marker_texture;
+    GLuint throttle_needle_texture;
 
     map<CelestialBody*, GLuint> body_textures;
     map<CelestialBody*, GLuint> body_cubemaps;
