@@ -281,10 +281,10 @@ int main() {
 
     state.render_state = make_render_state(state.bodies);
 
-    reset_matrices(&state);
-
     state.focus = state.bodies.at("Earth");
     state.root = state.bodies.at("Sun");
+
+    reset_matrices(&state);
 
     state.time = 0;
     if (std::string(state.root->name) == "Sun") {
