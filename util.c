@@ -92,7 +92,7 @@ char* human_quantity(double value, const char* unit) {
         // handle single comma
         double thousands = floor(v / 1e3);
         double ones = v - 1e3 * thousands;
-        s += snprintf(ret, n, "%.0f,%.0f %s%s", thousands, ones, prefix, unit);
+        s += snprintf(ret, n, "%.0f,%03.0f %s%s", thousands, ones, prefix, unit);
     }
     else if (v > 1e2) { s += snprintf(ret, n, "%.1f %s%s", v, prefix, unit); }
     else if (v > 1e1) { s += snprintf(ret, n, "%.2f %s%s", v, prefix, unit); }
