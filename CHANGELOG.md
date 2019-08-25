@@ -9,6 +9,7 @@
 - Fix missing zeros in altitude and distance indicators
 - Only show real time-warp
 - More stable FPS measurement
+- Add support for rendering of hyperbolic and parabolic orbits
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]

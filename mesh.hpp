@@ -36,11 +36,11 @@ struct IcoSphereMesh : public Mesh {
 };
 
 struct OrbitMesh : public Mesh {
-    OrbitMesh(Orbit* orbit);
+    OrbitMesh(Orbit* orbit, double time=0.);
 };
 
 struct OrbitApsesMesh : public Mesh {
-    OrbitApsesMesh(Orbit* orbit);
+    OrbitApsesMesh(Orbit* orbit, double time=0.);
 };
 
 struct FocusedOrbitMesh : public Mesh {
