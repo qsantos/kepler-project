@@ -26,6 +26,7 @@ struct GlobalState {
     CelestialBody* focus;
     Rocket rocket;
 
+    double fps = 60.;
     double last_fps_measure;
     size_t n_frames_since_last = 0;
 

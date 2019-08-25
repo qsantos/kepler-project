@@ -709,11 +709,11 @@ static void fill_hud(GlobalState* state) {
 
     // FPS
     double now = real_clock();
-    double fps = (double) state->n_frames_since_last / (now - state->last_fps_measure);
-    state->render_state->hud.print("%.0f FPS\n", fps);
+    state->render_state->hud.print("%.0f FPS\n", state->fps);
 
     // update FPS measure every second
     if (now - state->last_fps_measure > 1.) {
+        state->fps = (double) state->n_frames_since_last / (now - state->last_fps_measure);
         state->n_frames_since_last = 0;
         state->last_fps_measure = now;
     }
