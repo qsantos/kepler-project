@@ -55,7 +55,8 @@ struct RenderState {
     // textures
     GLint star_glow_texture;
     GLint lens_flare_texture;
-    GLint rocket_texture;
+    GLint rocket_texture_on;
+    GLint rocket_texture_off;
     GLint skybox_texture;
     GLint navball_texture;
     GLint navball_frame_texture;
@@ -125,7 +126,8 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     // textures
     render_state->star_glow_texture          = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture         = load_texture("data/textures/lens_flares.png");
-    render_state->rocket_texture             = load_texture("data/textures/rocket_off.png");
+    render_state->rocket_texture_on          = load_texture("data/textures/rocket_on.png");
+    render_state->rocket_texture_off         = load_texture("data/textures/rocket_off.png");
     render_state->skybox_texture             = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
     render_state->navball_texture            = load_texture("data/textures/navball.png");
     render_state->navball_frame_texture      = load_texture("data/textures/navball-frame.png");
@@ -389,7 +391,11 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
 
     set_picking_object(state, &state->rocket);
     glDisable(GL_CULL_FACE);
-    glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture);
+    if (state->rocket.throttle == 0.) {
+        glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture_off);
+    } else {
+        glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture_on);
+    }
     state->render_state->square.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
     glEnable(GL_CULL_FACE);
