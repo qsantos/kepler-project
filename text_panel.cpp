@@ -38,14 +38,25 @@ void append_vertex(TextPanel* self, int font_row, int font_col, int drow, int dc
 void TextPanel::print(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    size_t n = vsnprintf(NULL, 0, format, args) + 1;
+    int n = vsnprintf(NULL, 0, format, args);
     va_end(args);
 
-    char* buffer = (char*) MALLOC(n);
+    if (n < 0) {
+        perror("TextPanel::print:vsnprintf(NULL, 0, format, args)");
+        exit(EXIT_FAILURE);
+    }
+
+    char* buffer = (char*) MALLOC((size_t) n + 1);
 
     va_start(args, format);
-    n = vsnprintf(buffer, n, format, args);
+    n = vsnprintf(buffer, (size_t) n + 1, format, args);
     va_end(args);
+
+    if (n < 0) {
+        free(buffer);
+        perror("TextPanel::print:vsnprintf(buffer, n + 1, format, args)");
+        exit(EXIT_FAILURE);
+    }
 
     int initial_col = this->current_col;
 
