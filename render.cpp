@@ -647,7 +647,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
         update_matrices(state);
 
         set_picking_object(state, body);
-        FocusedOrbitMesh(body->orbit, state->time).draw();
+        OrbitMesh(body->orbit, state->time, true).draw();
         OrbitApsesMesh(body->orbit, state->time, true).draw();
         clear_picking_object(state);
     }
@@ -661,7 +661,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
         state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
         update_matrices(state);
 
-        FocusedOrbitMesh(body->orbit, state->time).draw();
+        OrbitMesh(body->orbit, state->time, true).draw();
         OrbitApsesMesh(body->orbit, state->time, true).draw();
     } else {
         auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;

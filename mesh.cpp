@@ -361,9 +361,22 @@ IcoSphereMesh::IcoSphereMesh(float radius, int lod) :
     this->length = (int) data.size() / 8;
 }
 
-OrbitMesh::OrbitMesh(Orbit* orbit, double time) :
+OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
     Mesh(orbit->eccentricity >= 1 ? GL_LINE_STRIP : GL_LINE_LOOP, 0, false)
 {
+    // issues when drawing the orbit of a focused body:
+    // 1. moving to system center and back close to camera induces
+    //    loss of significance and produces jitter
+    // 2. drawing the orbit as segments may put the body visibly out
+    //    of the line when zooming in
+    // 3. line breaks may be visible close to the camera
+
+    // draw the orbit from the body rather than from the orbit focus (1.)
+    vec3 offset_from_focus{0, 0, 0};
+    if (focused) {
+        offset_from_focus = orbit_position_at_time(orbit, time);
+    }
+
     std::vector<float> data;
 
     if (orbit->eccentricity > 1.) {  // open orbit
@@ -387,34 +400,47 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time) :
             double t = (double) i / (double) n_points;
             double true_anomaly = lerp(object_true_anomaly, escape_true_anomaly, t * t);
 
-            auto pos = orbit_position_at_true_anomaly(orbit, true_anomaly);
+            auto pos = orbit_position_at_true_anomaly(orbit, true_anomaly) - offset_from_focus;
             data.push_back((float) pos[0]);
             data.push_back((float) pos[1]);
             data.push_back((float) pos[2]);
         }
     } else {  // closed orbit
+        double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
+        double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
+
         auto transform = glm::mat4(1.0f);
         transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
         transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
         transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
-        transform = glm::translate(transform, glm::vec3(-orbit->focus, 0.f, 0.f));
+        if (!focused) {
+            transform = glm::translate(transform, glm::vec3(-orbit->focus, 0.f, 0.f));
+        }
         transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
+        if (focused) {
+            transform = glm::rotate(transform, float(eccentric_anomaly - M_PI), glm::vec3(0.f, 0.f, 1.f));
+        }
 
         size_t n_points = 256;
         for (size_t j = 0; j < n_points; j += 1) {
             glm::vec4 v;
-            if (orbit->eccentricity >= 1.) {  // open orbit
-                float theta = M_PIf32 * (2.f * float(j) / float(n_points - 1) - 1.f);
-                v = glm::vec4(coshf(theta), sinhf(theta), 0.f, 1.f);
-            } else {  // closed orbit
+            if (focused) {
+                // the first point of circle_through_origin is (0,0) (2.)
+                // more points are located near the origin (3.)
+                float x = 2.f * float(j) / float(n_points) - 1.f;
+                float theta = M_PIf32 * powf(x, 3.f);
+                v = glm::vec4(1.f - cosf(theta), sinf(theta), 0.f, 0.f);
+            } else {
                 float theta = M_PIf32 * (2.f * float(j) / float(n_points) - 1.f);
                 v = glm::vec4{cosf(theta), sinf(theta), 0.f, 1.f};
             }
+
             v = transform * v;
             data.push_back(v[0]);
             data.push_back(v[1]);
             data.push_back(v[2]);
         }
+
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
@@ -457,83 +483,6 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
         data.push_back((float) apoapsis[0]);
         data.push_back((float) apoapsis[1]);
         data.push_back((float) apoapsis[2]);
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    this->length = (int) data.size() / 3;
-}
-
-FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
-    // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
-    Mesh(orbit->eccentricity >= 1 ? GL_LINE_STRIP : GL_LINE_LOOP, 0, false)
-{
-    std::vector<float> data;
-
-    // issues when drawing the orbit of a focused body:
-    // 1. moving to system center and back close to camera induces
-    //    loss of significance and produces jitter
-    // 2. drawing the orbit as segments may put the body visibly out
-    //    of the line when zooming in
-    // 3. line breaks may be visible close to the camera
-
-    // draw the orbit from the body rather than from the orbit focus (1.)
-    if (orbit->eccentricity >= 1.) {  // open orbits
-        double object_mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
-        double object_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, object_mean_anomaly);
-        double object_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, object_eccentric_anomaly);
-
-        // stop drawing at SoI
-        // TODO: handle no sphere of influence
-        double escape_time = orbit_time_at_escape(orbit);
-        double escape_mean_anomaly = orbit_mean_anomaly_at_time(orbit, escape_time);
-        double escape_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, escape_mean_anomaly);
-        double escape_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, escape_eccentric_anomaly);
-
-        auto focus_offset = orbit_position_at_time(orbit, time);
-
-        // ensure the body will be on the line (2.)
-        // more points close to the camera (3.)
-        size_t n_points = 64;
-        for (size_t i = 0; i <= n_points; i += 1) {
-            double t = (double) i / (double) n_points;
-            double true_anomaly = lerp(object_true_anomaly, escape_true_anomaly, t * t);
-
-            auto pos = orbit_position_at_true_anomaly(orbit, true_anomaly) - focus_offset;
-            data.push_back((float) pos[0]);
-            data.push_back((float) pos[1]);
-            data.push_back((float) pos[2]);
-        }
-    } else {  // closed orbits
-        // TODO: use circle symetry hack to avoid regenerating the mesh
-        // TODO: can the hack be adapted for parabolic and hyperbolic orbits?
-
-        // make tilted ellipse from a circle; and rotate at current anomaly
-        double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
-        double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
-
-        auto transform = glm::mat4(1.0f);
-        transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
-        transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
-        transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
-        // NOTE: do not translate
-        transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
-        transform = glm::rotate(transform, float(eccentric_anomaly - M_PI), glm::vec3(0.f, 0.f, 1.f));
-
-        // the first point of circle_through_origin is (0,0) (2.)
-        // more points are located near the origin (3.)
-        size_t n_points = 256;
-        for (size_t point = 0; point < n_points; point += 1) {
-            // TODO: use lerp
-            float x = 2.f * float(point) / float(n_points) - 1.f;
-            float theta = M_PIf32 * powf(x, 3.f);
-            glm::vec3 pos = transform * glm::vec4(1.f - cosf(theta), sinf(theta), 0.f, 0.f);
-            data.push_back(pos[0]);
-            data.push_back(pos[1]);
-            data.push_back(pos[2]);
-        }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);

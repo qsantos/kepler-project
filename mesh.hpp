@@ -36,15 +36,11 @@ struct IcoSphereMesh : public Mesh {
 };
 
 struct OrbitMesh : public Mesh {
-    OrbitMesh(Orbit* orbit, double time=0.);
+    OrbitMesh(Orbit* orbit, double time=0., bool focused=false);
 };
 
 struct OrbitApsesMesh : public Mesh {
     OrbitApsesMesh(Orbit* orbit, double time=0., bool focused=false);
-};
-
-struct FocusedOrbitMesh : public Mesh {
-    FocusedOrbitMesh(Orbit* orbit, double time);
 };
 
 struct OrbitSystem : public Mesh {
