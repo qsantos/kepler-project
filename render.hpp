@@ -12,9 +12,6 @@ RenderState* make_render_state(const std::map<std::string, CelestialBody*>& bodi
 void delete_render_state(RenderState* render_state);
 
 struct GlobalState {
-    double time = 0.;
-    double target_timewarp = 1.;
-    double real_timewarp = 1.;
     bool show_help = false;
     bool show_wireframe = false;
     bool show_helpers = true;
@@ -29,6 +26,12 @@ struct GlobalState {
     double fps = 60.;
     double last_fps_measure;
     size_t n_frames_since_last = 0;
+
+    double time = 0.;
+    double target_timewarp = 1.;
+    double real_timewarp = 1.;
+    double last_timewarp_measure;
+    size_t n_steps_since_last = 0;
 
     bool drag_active = false;
     double cursor_x;

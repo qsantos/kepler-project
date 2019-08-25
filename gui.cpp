@@ -305,6 +305,7 @@ int main() {
     state.rocket.orientation = mat3::from_euler_angles(0, 0, 0);
 
     state.last_fps_measure = real_clock();
+    state.last_timewarp_measure = real_clock();
     state.focus = &state.rocket;
 
     double last = real_clock();
@@ -320,23 +321,25 @@ int main() {
         unprocessed_time += elapsed * state.target_timewarp;
         last = now;
 
-        size_t steps = 0;
         while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
             rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
             unprocessed_time -= SIMULATION_STEP;
             state.time += SIMULATION_STEP;
-            steps += 1;
+            state.n_steps_since_last += 1;
         }
         orbit_from_state(&orbit, orbit.primary, state.rocket.state, state.time);
 
-        if (unprocessed_time >= SIMULATION_STEP) {
-            // we had to interrupt the simulation
-            state.real_timewarp = (double) steps * SIMULATION_STEP / elapsed;
+        if (unprocessed_time >= SIMULATION_STEP) {  // we had to interrupt the simulation
+            // update time-warp measure every second
+            if (now - state.last_timewarp_measure > 1.) {
+                state.real_timewarp = (double) state.n_steps_since_last * SIMULATION_STEP / (now - state.last_timewarp_measure);
+                state.n_steps_since_last = 0;
+                state.last_timewarp_measure = now;
+            }
             // avoid accumulating unprocessed time that will have to be
             // processed even after the player has reduced time warp
             unprocessed_time = 0.;
-        } else {
-            // we simulated all the steps
+        } else {  // we simulated all the steps
             state.real_timewarp = state.target_timewarp;
         }
 
