@@ -40,15 +40,11 @@ struct OrbitMesh : public Mesh {
 };
 
 struct OrbitApsesMesh : public Mesh {
-    OrbitApsesMesh(Orbit* orbit, double time=0.);
+    OrbitApsesMesh(Orbit* orbit, double time=0., bool focused=false);
 };
 
 struct FocusedOrbitMesh : public Mesh {
     FocusedOrbitMesh(Orbit* orbit, double time);
-};
-
-struct FocusedOrbitApsesMesh : public Mesh {
-    FocusedOrbitApsesMesh(Orbit* orbit, double time);
 };
 
 struct OrbitSystem : public Mesh {

@@ -424,18 +424,17 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time) :
     this->length = (int) data.size() / 3;
 }
 
-OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time) :
+OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
     Mesh(GL_POINTS, 0, false)
 {
-    auto transform = glm::mat4(1.0f);
-    transform = glm::rotate(transform, float(orbit->longitude_of_ascending_node), glm::vec3(0.f, 0.f, 1.f));
-    transform = glm::rotate(transform, float(orbit->inclination),                 glm::vec3(1.f, 0.f, 0.f));
-    transform = glm::rotate(transform, float(orbit->argument_of_periapsis),       glm::vec3(0.f, 0.f, 1.f));
-    transform = glm::translate(transform, glm::vec3(-orbit->focus, 0.f, 0.f));
-    transform = glm::scale(transform, glm::vec3(orbit->semi_major_axis, orbit->semi_minor_axis, 1.0f));
+    auto periapsis = orbit_position_at_true_anomaly(orbit, 0.);
+    auto apoapsis  = orbit_position_at_true_anomaly(orbit, M_PI);
 
-    auto periapsis = transform * glm::vec4(+1.f, 0.f, 0.f, 1.f);
-    auto apoapsis  = transform * glm::vec4(-1.f, 0.f, 0.f, 1.f);
+    if (focused) {
+        auto offset_from_focus = orbit_position_at_time(orbit, time);
+        periapsis = periapsis - offset_from_focus;
+        apoapsis = apoapsis - offset_from_focus;
+    }
 
     std::vector<float> data;
 
@@ -535,44 +534,6 @@ FocusedOrbitMesh::FocusedOrbitMesh(Orbit* orbit, double time) :
             data.push_back(pos[1]);
             data.push_back(pos[2]);
         }
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    this->length = (int) data.size() / 3;
-}
-
-FocusedOrbitApsesMesh::FocusedOrbitApsesMesh(Orbit* orbit, double time) :
-    Mesh(GL_POINTS, 0, false)
-{
-    auto focus_offset = orbit_position_at_time(orbit, time);
-    auto periapsis = orbit_position_at_true_anomaly(orbit, 0.) - focus_offset;
-    auto apoapsis  = orbit_position_at_true_anomaly(orbit, M_PI) - focus_offset;
-
-    std::vector<float> data;
-
-
-    if (orbit->eccentricity >= 1.) {  // open orbit
-        double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
-        double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
-        double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
-
-        // only show periapsis if not reached yet
-        if (true_anomaly < 0.) {
-            data.push_back((float) periapsis[0]);
-            data.push_back((float) periapsis[1]);
-            data.push_back((float) periapsis[2]);
-        }
-    } else {
-        data.push_back((float) periapsis[0]);
-        data.push_back((float) periapsis[1]);
-        data.push_back((float) periapsis[2]);
-
-        data.push_back((float) apoapsis[0]);
-        data.push_back((float) apoapsis[1]);
-        data.push_back((float) apoapsis[2]);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
