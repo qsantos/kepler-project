@@ -1109,9 +1109,9 @@ CelestialBody* pick(GlobalState* state) {
     for (int y = 0; y < h; y += 1) {
         for (int x = 0; x < w; x += 1) {
             size_t candidate_name = 0;
-            candidate_name |= components[(y*w + x)*4 + 0] << 16;
-            candidate_name |= components[(y*w + x)*4 + 1] <<  8;
-            candidate_name |= components[(y*w + x)*4 + 2] <<  0;
+            candidate_name |= ((size_t) components[(y*w + x)*4 + 0]) << 16;
+            candidate_name |= ((size_t) components[(y*w + x)*4 + 1]) <<  8;
+            candidate_name |= ((size_t) components[(y*w + x)*4 + 2]) <<  0;
             if (candidate_name == 0) {
                 continue;
             }
