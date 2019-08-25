@@ -4,12 +4,12 @@
 #include "orbit.hpp"
 
 struct Mesh {
-    Mesh(int mode, int length, bool is_3d);
+    Mesh(unsigned mode, int length, bool is_3d);
     ~Mesh(void);
     void bind(void);
     void draw(void);
 
-    int mode;
+    unsigned mode;
     int length;
     bool is_3d;
     unsigned vbo;

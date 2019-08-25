@@ -13,7 +13,7 @@ extern "C" {
 #include <cmath>
 #include <vector>
 
-Mesh::Mesh(int mode_, int length_, bool is_3d_) :
+Mesh::Mesh(unsigned mode_, int length_, bool is_3d_) :
     mode{mode_},
     length{length_},
     is_3d{is_3d_}
