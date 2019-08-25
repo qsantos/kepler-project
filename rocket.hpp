@@ -30,6 +30,7 @@ struct State : vec6 {
 struct Rocket : CelestialBody {
     State state;
     mat3 orientation;
+    double throttle = 0.;
 };
 
 void rocket_update(Rocket* rocket, double time, double step, double thrust);
