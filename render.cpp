@@ -834,7 +834,6 @@ static void render_navball_markers(GlobalState* state) {
     auto normal2 = glm::vec3{(float) normal[0], (float) normal[1], (float) normal[2]};
     auto radial2 = glm::vec3{(float) radial[0], (float) radial[1], (float) radial[2]};
 
-    glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
 
     // draw prograde marker
@@ -898,7 +897,6 @@ static void render_navball_markers(GlobalState* state) {
     }
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
 }
 
 static void render_level_indicator(GlobalState* state) {
