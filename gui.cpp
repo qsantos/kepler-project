@@ -263,7 +263,7 @@ void init_ogl(void) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 }
 
-int main() {
+int main(void) {
     setlocale(LC_ALL, "");
 
     GLFWwindow* window = init_glfw();
