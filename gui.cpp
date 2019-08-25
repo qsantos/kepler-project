@@ -109,7 +109,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_COMMA) {
             state->target_timewarp /= 10.;
         } else if (key == GLFW_KEY_PERIOD) {
-            state->target_timewarp *= 10.;
+            if (state->real_timewarp == state->target_timewarp) {
+                state->target_timewarp *= 10.;
+            }
         } else if (key == GLFW_KEY_SLASH) {
             state->target_timewarp = 1.;
         } else if (key == GLFW_KEY_I) {

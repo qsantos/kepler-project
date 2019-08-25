@@ -680,9 +680,9 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
 static void fill_hud(GlobalState* state) {
     // time warp
     if (state->real_timewarp < state->target_timewarp) {
-        state->render_state->hud.print("Time x%g (actual: x%g)\n", state->target_timewarp, state->real_timewarp);
+        state->render_state->hud.print("Time x%g (CPU-bound)\n", state->real_timewarp);
     } else {
-        state->render_state->hud.print("Time x%g\n", state->target_timewarp);
+        state->render_state->hud.print("Time x%g\n", state->real_timewarp);
     }
 
     // local time

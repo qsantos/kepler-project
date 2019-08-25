@@ -7,6 +7,7 @@
 - Add frame around navball
 - Add throttle indicator
 - Fix missing zeros in altitude and distance indicators
+- Only show real time-warp
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]
