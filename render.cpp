@@ -18,6 +18,10 @@ using std::map;
 static const float NAVBALL_RADIUS = 100.f;
 static const float NAVBALL_MARKER_SIZE = 50.f;
 static const float LEVEL_INDICATOR_WIDTH = 100.f;
+static const float NAVBALL_FRAME_RADIUS = NAVBALL_RADIUS * 1.25;
+static const float NEELDLE_LENGTH = NAVBALL_FRAME_RADIUS - NAVBALL_RADIUS;
+static const float NEELDLE_MIN_ANGLE = (float) radians(-135.);
+static const float NEELDLE_MAX_ANGLE = (float) radians(-45.);
 
 struct RenderState {
     // matrices
@@ -62,6 +66,7 @@ struct RenderState {
     GLint anti_normal_marker_texture;
     GLint radial_in_marker_texture;
     GLint radial_out_marker_texture;
+    GLint throttle_needle_texture;
 
     map<CelestialBody*, GLuint> body_textures;
     map<CelestialBody*, GLuint> body_cubemaps;
@@ -131,6 +136,8 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->anti_normal_marker_texture = load_texture("data/textures/markers/Anti-normal.png");
     render_state->radial_in_marker_texture   = load_texture("data/textures/markers/Radial-in.png");
     render_state->radial_out_marker_texture  = load_texture("data/textures/markers/Radial-out.png");
+    render_state->throttle_needle_texture    = load_texture("data/textures/needle.png");
+
 
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
@@ -936,7 +943,7 @@ static void render_navball_frame(GlobalState* state) {
     // view (bottom center)
     auto model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
-    model = glm::scale(model, glm::vec3(NAVBALL_RADIUS * 2.5f));
+    model = glm::scale(model, glm::vec3(2 * NAVBALL_FRAME_RADIUS));
 
     // setup matrices
     state->render_state->model_matrix = model;
@@ -944,9 +951,32 @@ static void render_navball_frame(GlobalState* state) {
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+
+    // render frame
     glBindTexture(GL_TEXTURE_2D, state->render_state->navball_frame_texture);
     state->render_state->square.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    float angle = (float) lerp(NEELDLE_MIN_ANGLE, NEELDLE_MAX_ANGLE, state->rocket.throttle);
+
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    model = glm::rotate(model, angle, glm::vec3(0.f, 0.f, 1.f));
+    model = glm::translate(model, glm::vec3(0.f, - NAVBALL_RADIUS - NEELDLE_LENGTH / 2.f, 0.f));
+    model = glm::scale(model, glm::vec3(NEELDLE_LENGTH));
+
+    // TODO: seriously
+    model = glm::scale(model, glm::vec3(1.f, -1.f, 1.f));
+
+    // setup matrices
+    state->render_state->model_matrix = model;
+    update_matrices(state);
+
+    // render throttle needle
+    glBindTexture(GL_TEXTURE_2D, state->render_state->throttle_needle_texture);
+    state->render_state->square.draw();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 }

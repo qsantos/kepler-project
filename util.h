@@ -44,6 +44,10 @@ inline int isclose(double a, double b) {
     return fabs(a-b) <= fmax(rel_tol * fmax(fabs(a), fabs(b)), abs_tol);
 }
 
+inline double lerp(double a, double b, double t) {
+    return a + (b - a) * t;
+}
+
 void* _malloc(size_t s, const char* filename, int line, const char* funcname);
 void* _realloc(void* p, size_t s, const char* filename, int line, const char* funcname);
 
