@@ -11,6 +11,7 @@
 - More stable FPS measurement
 - Add support for rendering of hyperbolic and parabolic orbits
 - Turn rocket engine on and throttle is non-zero
+- Disable window minimization on loss of focus
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]
