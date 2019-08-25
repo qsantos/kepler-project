@@ -12,6 +12,8 @@ extern "C" {
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
+static const double THROTTLE_SPEED = .5;
+
 
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
@@ -343,13 +345,13 @@ int main() {
 
         // throttle
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-            state.rocket.throttle += .1;
+            state.rocket.throttle += elapsed * THROTTLE_SPEED;
             if (state.rocket.throttle > 1.) {
                 state.rocket.throttle = 1;
             }
         }
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-            state.rocket.throttle -= .1;
+            state.rocket.throttle -= elapsed * THROTTLE_SPEED;
             if (state.rocket.throttle < 0.) {
                 state.rocket.throttle = 0;
             }
