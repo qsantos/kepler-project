@@ -263,6 +263,44 @@ void init_ogl(void) {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
 }
 
+void update_rocket_soi(GlobalState* state) {
+    auto rocket = &state->rocket;
+    auto primary = rocket->orbit->primary;
+    auto pos = rocket->state.position();
+    auto vel = rocket->state.velocity();
+
+    // switch to primary's parents SoI
+    while (pos.norm() > primary->sphere_of_influence) {
+        // change reference frame
+        pos = pos + orbit_position_at_time(primary->orbit, state->time);
+        vel = vel + orbit_velocity_at_time(primary->orbit, state->time);
+        rocket->state = State(pos, vel);
+
+        primary = primary->orbit->primary;
+    }
+
+    // switch to satellite's SoI
+    for (size_t i = 0; i < primary->n_satellites; i += 1) {
+        auto satellite = primary->satellites[i];
+        auto sat_pos = orbit_position_at_time(satellite->orbit, state->time);
+
+        if ((pos - sat_pos).norm() < satellite->sphere_of_influence) {
+            auto sat_vel = orbit_velocity_at_time(satellite->orbit, state->time);
+
+            // change reference frame
+            pos = pos - sat_pos;
+            vel = vel - sat_vel;
+            rocket->state = State(pos, vel);
+
+            primary = satellite;
+            break;
+        }
+    }
+
+    // update rocket orbit
+    orbit_from_state(rocket->orbit, primary, rocket->state, state->time);
+}
+
 int main(void) {
     setlocale(LC_ALL, "");
 
@@ -339,41 +377,7 @@ int main(void) {
             }
         }
 
-        // (next three blocks) update rocket's primary
-        auto primary = state.rocket.orbit->primary;
-        auto pos = state.rocket.state.position();
-        auto vel = state.rocket.state.velocity();
-
-        // switch to primary's parents SoI
-        while (pos.norm() > primary->sphere_of_influence) {
-            // change reference frame
-            pos = pos + orbit_position_at_time(primary->orbit, state.time);
-            vel = vel + orbit_velocity_at_time(primary->orbit, state.time);
-            state.rocket.state = State(pos, vel);
-
-            primary = primary->orbit->primary;
-        }
-
-        // switch to satellite's SoI
-        for (size_t i = 0; i < primary->n_satellites; i += 1) {
-            auto satellite = primary->satellites[i];
-            auto sat_pos = orbit_position_at_time(satellite->orbit, state.time);
-
-            if ((pos - sat_pos).norm() < satellite->sphere_of_influence) {
-                auto sat_vel = orbit_velocity_at_time(satellite->orbit, state.time);
-
-                // change reference frame
-                pos = pos - sat_pos;
-                vel = vel - sat_vel;
-                state.rocket.state = State(pos, vel);
-
-                primary = satellite;
-                break;
-            }
-        }
-
-        // update rocket orbit
-        orbit_from_state(&orbit, primary, state.rocket.state, state.time);
+        update_rocket_soi(&state);
 
         if (unprocessed_time >= SIMULATION_STEP) {  // we had to interrupt the simulation
             // update time-warp measure every second
