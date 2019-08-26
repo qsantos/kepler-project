@@ -13,6 +13,7 @@
 - Turn rocket engine on and throttle is non-zero
 - Disable window minimization on loss of focus
 - Rocket can now change from one sphere of influence to another
+- Disable numerical integration when rocket engine is off
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]

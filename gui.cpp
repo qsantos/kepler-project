@@ -323,11 +323,20 @@ int main(void) {
         last = now;
 
         // update rocket state
-        while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
-            rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
-            unprocessed_time -= SIMULATION_STEP;
-            state.time += SIMULATION_STEP;
-            state.n_steps_since_last += 1;
+        if (state.rocket.throttle == 0.) {
+            double n_steps = floor(unprocessed_time / SIMULATION_STEP);
+            unprocessed_time -= n_steps * SIMULATION_STEP;
+            state.time += n_steps * SIMULATION_STEP;
+            state.n_steps_since_last += (size_t) n_steps;
+
+            state.rocket.state = orbit_state_at_time(state.rocket.orbit, state.time);
+        } else {
+            while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
+                rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
+                unprocessed_time -= SIMULATION_STEP;
+                state.time += SIMULATION_STEP;
+                state.n_steps_since_last += 1;
+            }
         }
 
         // (next three blocks) update rocket's primary
