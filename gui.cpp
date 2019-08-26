@@ -322,13 +322,49 @@ int main(void) {
         unprocessed_time += elapsed * state.target_timewarp;
         last = now;
 
+        // update rocket state
         while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
             rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
             unprocessed_time -= SIMULATION_STEP;
             state.time += SIMULATION_STEP;
             state.n_steps_since_last += 1;
         }
-        orbit_from_state(&orbit, orbit.primary, state.rocket.state, state.time);
+
+        // (next three blocks) update rocket's primary
+        auto primary = state.rocket.orbit->primary;
+        auto pos = state.rocket.state.position();
+        auto vel = state.rocket.state.velocity();
+
+        // switch to primary's parents SoI
+        while (pos.norm() > primary->sphere_of_influence) {
+            // change reference frame
+            pos = pos + orbit_position_at_time(primary->orbit, state.time);
+            vel = vel + orbit_velocity_at_time(primary->orbit, state.time);
+            state.rocket.state = State(pos, vel);
+
+            primary = primary->orbit->primary;
+        }
+
+        // switch to satellite's SoI
+        for (size_t i = 0; i < primary->n_satellites; i += 1) {
+            auto satellite = primary->satellites[i];
+            auto sat_pos = orbit_position_at_time(satellite->orbit, state.time);
+
+            if ((pos - sat_pos).norm() < satellite->sphere_of_influence) {
+                auto sat_vel = orbit_velocity_at_time(satellite->orbit, state.time);
+
+                // change reference frame
+                pos = pos - sat_pos;
+                vel = vel - sat_vel;
+                state.rocket.state = State(pos, vel);
+
+                primary = satellite;
+                break;
+            }
+        }
+
+        // update rocket orbit
+        orbit_from_state(&orbit, primary, state.rocket.state, state.time);
 
         if (unprocessed_time >= SIMULATION_STEP) {  // we had to interrupt the simulation
             // update time-warp measure every second

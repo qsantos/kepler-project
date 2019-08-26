@@ -12,6 +12,7 @@
 - Add support for rendering of hyperbolic and parabolic orbits
 - Turn rocket engine on and throttle is non-zero
 - Disable window minimization on loss of focus
+- Rocket can now change from one sphere of influence to another
 
 # v0.4.0 - 2019-08-24
 - Clamp camera altitude to [1 mm, 1 Tm]
