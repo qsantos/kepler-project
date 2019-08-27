@@ -276,6 +276,7 @@ void update_rocket_soi(GlobalState* state) {
         vel = vel + orbit_velocity_at_time(primary->orbit, state->time);
         rocket->state = State(pos, vel);
 
+        fprintf(stderr, "%s exited SoI from %s to %s\n", rocket->name, primary->name, primary->orbit->primary->name);
         primary = primary->orbit->primary;
     }
 
@@ -292,6 +293,7 @@ void update_rocket_soi(GlobalState* state) {
             vel = vel - sat_vel;
             rocket->state = State(pos, vel);
 
+            fprintf(stderr, "%s entered SoI of %s from %s\n", rocket->name, satellite->name, primary->name);
             primary = satellite;
             break;
         }
@@ -333,6 +335,7 @@ int main(void) {
     Orbit orbit;
     state.rocket.name = "Rocket";
     state.rocket.radius = 1.;
+    state.rocket.sphere_of_influence = 0.;
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;
     state.rocket.state = {

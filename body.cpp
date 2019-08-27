@@ -183,6 +183,10 @@ vec3 body_global_position_at_time(CelestialBody* body, double time) {
     if (body->orbit == NULL) {
         return {0, 0, 0};
     }
+    if (body->orbit->primary == body) {
+        fprintf(stderr, "%s is its own primary!\n", body->name);
+        exit(EXIT_FAILURE);
+    }
     vec3 primary_position = body_global_position_at_time(body->orbit->primary, time);
     vec3 relative_position = orbit_position_at_time(body->orbit, time);
     return primary_position + relative_position;
