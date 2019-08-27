@@ -1,8 +1,9 @@
-#version 110
+#version 330 core
 
 uniform vec3 lighting_source;
-varying vec3 lighting_vertex;
-varying vec3 lighting_normal;
+
+in vec3 lighting_vertex;
+in vec3 lighting_normal;
 
 // lighting
 const vec4 light_ambient = vec4(1., 1., 1., 1.);

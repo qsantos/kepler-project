@@ -1,9 +1,11 @@
+#version 330 core
+
 uniform float visibility;
 uniform vec3 camera_right;
 uniform vec3 camera_up;
 uniform float unNoiseZ;
 
-varying vec2 f_position;
+in vec2 f_position;
 
 float snoise(vec3 v);
 

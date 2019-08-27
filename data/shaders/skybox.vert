@@ -1,8 +1,8 @@
-#version 110
+#version 330 core
 
-attribute vec3 v_position;
+in vec3 v_position;
 
-varying vec3 cubemap_dir;
+out vec3 cubemap_dir;
 
 void skybox() {
     cubemap_dir = normalize(v_position);

@@ -1,4 +1,4 @@
-#version 120 // needed for gl_PointCoord
+#version 330 core
 
 void position_marker() {
     // draw a circle around center

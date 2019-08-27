@@ -1,4 +1,6 @@
-varying float flogz;
+#version 330 core
+
+in float flogz;
 
 void logz(void) {
     // fix for depth buffer using logarithmic scale

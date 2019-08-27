@@ -1,4 +1,4 @@
-#version 150 core
+#version 330 core
 
 // Uniforms
 uniform mat4 model_view_projection_matrix;
@@ -11,8 +11,8 @@ in vec3 v_position;
 in float v_offset;
 
 // Output
-varying vec3 f_position;
-varying float f_intensity;
+out vec3 f_position;
+out float f_intensity;
 
 void lens_flare() {
     f_position = v_position;

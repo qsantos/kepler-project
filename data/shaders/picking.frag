@@ -1,4 +1,4 @@
-#version 110
+#version 330 core
 
 uniform bool picking_active;
 uniform vec3 picking_name;
