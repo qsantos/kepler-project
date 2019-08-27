@@ -1,28 +1,28 @@
-=== HELP ===
+# Controls
 
-Key bindings
-============
+w/a/s/d/q/e  rocket orientation
+Left Shift   throttle up
+Left Ctrl    throttle down
+w            full throttle
+x            cut throttle
 
-Navigation
-----------
+# Navigation
 
 Escape       exit
 Left click   switch focus to celestial body
 Right click  drag and drop to move the view
 Mouse wheel  zoom in and out
 
-Display
--------
+# Display
 
 F11          toggle fullscreen
-w            toggle wireframe mode
+t            toggle wireframe mode
 o            toggle orbits and other helpers
 h            toggle this help
 H            toggle HUD
 V            toggle vertical synchronization
 
-Time
-----
+# Time
 
 , (comma)    slow down
 . (period)   speed up

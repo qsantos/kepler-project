@@ -1,5 +1,6 @@
 # v0.6.0 - Unreleased
 - Fix execution on Nvidia GPUs
+- Update help message
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data
