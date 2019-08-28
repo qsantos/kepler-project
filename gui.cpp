@@ -22,6 +22,10 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
     (void) length;
     (void) userParam;
 
+    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
+        return;
+    }
+
     const char* source_str;
     switch (source) {
         case GL_DEBUG_SOURCE_API:             source_str = "API"; break;
