@@ -261,10 +261,21 @@ void init_ogl(void) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
-    // fill default texture with white for convenience
-    glBindTexture(GL_TEXTURE_2D, 0);
+    // fill default textures with white for convenience
     float white_pixel[] = {1.f, 1.f, 1.f, 1.f};
+
+    // default 2D texture
+    glBindTexture(GL_TEXTURE_2D, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel);
+
+    // default cubemap texture
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    for (int i = 0; i < 6; i += 1) {
+        glTexImage2D(
+            GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+            0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel
+        );
+    }
 }
 
 void update_rocket_soi(GlobalState* state) {

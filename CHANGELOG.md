@@ -2,6 +2,7 @@
 - Fix execution on Nvidia GPUs
 - Update help message
 - Reduce useless noise in console on Nvidia GPUs
+- Fix shader compilation error on Nvidia GPUs
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data
