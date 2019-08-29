@@ -364,7 +364,7 @@ IcoSphereMesh::IcoSphereMesh(float radius, int lod) :
 }
 
 OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
-    Mesh(orbit->eccentricity >= 1 ? GL_LINE_STRIP : GL_LINE_LOOP, 0, false)
+    Mesh(GL_LINE_STRIP, 0, false)
 {
     // issues when drawing the orbit of a focused body:
     // 1. moving to system center and back close to camera induces
@@ -381,7 +381,7 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
 
     std::vector<float> data;
 
-    if (orbit->eccentricity > 1.) {  // open orbit
+    if (orbit->apoapsis > orbit->primary->sphere_of_influence || orbit->eccentricity > 1.) {  // escaping orbit
         double object_mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
         double object_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, object_mean_anomaly);
         double object_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, object_eccentric_anomaly);
@@ -404,7 +404,7 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
         size_t n_points = 64;
         for (size_t i = 1; i < n_points; i += 1) {
             double t = (double) i / (double) n_points;
-            double true_anomaly = lerp(object_true_anomaly, escape_true_anomaly, t * t);
+            double true_anomaly = lerp(object_true_anomaly, escape_true_anomaly, t);
 
             auto pos = orbit_position_at_true_anomaly(orbit, true_anomaly) - offset_from_focus;
             data.push_back((float) pos[0]);
@@ -419,7 +419,9 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
             data.push_back((float) pos[1]);
             data.push_back((float) pos[2]);
         }
-    } else {  // closed orbit
+
+        this->mode = GL_LINE_STRIP;
+    } else {  // non-escaping closed orbit
         double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
         double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
 
@@ -455,6 +457,7 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
             data.push_back(v[2]);
         }
 
+        this->mode = GL_LINE_LOOP;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
@@ -478,7 +481,7 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
 
     std::vector<float> data;
 
-    if (orbit->eccentricity >= 1.) {  // open orbit
+    if (orbit->apoapsis > orbit->primary->sphere_of_influence || orbit->eccentricity > 1.) {  // escaping orbit
         double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
         double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
         double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
@@ -489,7 +492,7 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
             data.push_back((float) periapsis[1]);
             data.push_back((float) periapsis[2]);
         }
-    } else {
+    } else {  // non-escaping closed orbit
         data.push_back((float) periapsis[0]);
         data.push_back((float) periapsis[1]);
         data.push_back((float) periapsis[2]);
