@@ -5,6 +5,8 @@ uniform vec3 lighting_source;
 in vec3 lighting_vertex;
 in vec3 lighting_normal;
 
+out vec4 o_color;
+
 // lighting
 const vec4 light_ambient = vec4(1., 1., 1., 1.);
 const vec4 light_diffuse = vec4(3., 3., 3., 1.);
@@ -39,6 +41,6 @@ void lighting() {
     light_diffuse = clamp(light_diffuse, 0.0, 1.0);
     light_specular = clamp(light_specular, 0.0, 1.0);
 
-    gl_FragColor *= light_ambient + light_diffuse;
-    gl_FragColor += light_specular;
+    o_color *= light_ambient + light_diffuse;
+    o_color += light_specular;
 }

@@ -5,9 +5,11 @@ uniform vec4 u_color;
 
 in vec2 f_texcoord;
 
+out vec4 o_color;
+
 void base(void) {
-    gl_FragColor = u_color * texture2D(Texture0, f_texcoord);
-    if (gl_FragColor.a == 0.) {
+    o_color = u_color * texture2D(Texture0, f_texcoord);
+    if (o_color.a == 0.) {
         discard;
     }
 }

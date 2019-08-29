@@ -7,6 +7,8 @@ uniform float unNoiseZ;
 
 in vec2 f_position;
 
+out vec4 o_color;
+
 float snoise(vec3 v);
 
 void star_glow(void) {
@@ -19,9 +21,9 @@ void star_glow(void) {
     float spikeBrightness = ((1.0 / pow(dist + 0.15, 0.5)) - 1.0);
     spikeBrightness = spikeBrightness * 0.02 * spikeVal;
 
-    //gl_FragColor.rgb += spikeBrightness;
-    gl_FragColor.a += spikeBrightness;
-    gl_FragColor *= visibility;
+    //o_color.rgb += spikeBrightness;
+    o_color.a += spikeBrightness;
+    o_color *= visibility;
 }
 
 

@@ -2,6 +2,8 @@
 
 in float f_intensity;
 
+out vec4 o_color;
+
 void lens_flare() {
-    gl_FragColor *= f_intensity;
+    o_color *= f_intensity;
 }

@@ -5,6 +5,8 @@ uniform samplerCube cubemap_texture;
 
 in vec3 f_cubemap_position;
 
+out vec4 o_color;
+
 void cubemap() {
-    gl_FragColor = u_color * texture(cubemap_texture, f_cubemap_position);
+    o_color = u_color * texture(cubemap_texture, f_cubemap_position);
 }
