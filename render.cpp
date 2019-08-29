@@ -104,9 +104,9 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
 
     // TODO
     glUseProgram(render_state->skybox_shader);
-    glUniform1i(glGetUniformLocation(render_state->skybox_shader, "skybox_texture"), 0);
+    glUniform1i(glGetUniformLocation(render_state->skybox_shader, "skybox_texture"), 1);
     glUseProgram(render_state->cubemap_shader);
-    glUniform1i(glGetUniformLocation(render_state->cubemap_shader, "cubemap_texture"), 0);
+    glUniform1i(glGetUniformLocation(render_state->cubemap_shader, "cubemap_texture"), 1);
 
     // VAOs
     glGenVertexArrays(1, &render_state->vao);
@@ -279,11 +279,13 @@ static void render_skybox(GlobalState* state) {
 
     use_program(state, state->render_state->skybox_shader, false);
 
+    glActiveTexture(GL_TEXTURE1);
     glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->skybox_texture);
     state->render_state->cube.draw();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     glEnable(GL_DEPTH_TEST);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
@@ -322,11 +324,15 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         set_body_matrices(state, body, scene_origin);
 
         // bind cubemap texture
+        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
 
         // draw
         state->render_state->uv_sphere.draw();
+
+        // unbind
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+        glActiveTexture(GL_TEXTURE0);
     } else {
         // equirectangular texture
         if (lighting) {
@@ -346,6 +352,8 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
 
         // draw
         state->render_state->uv_sphere.draw();
+
+        // unbind
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
