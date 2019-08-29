@@ -1,4 +1,7 @@
-# v0.5.0 - Unreleased
+# v0.5.1 - 2019-08-28
+- Fix crash on Windows due to uninitialized data
+
+# v0.5.0 - 2019-08-27
 - Changed keybinding for wireframe mode from W to T
 - Added keybindings to effect the orientation of the rocket
 - Added keybindings to effect the throttle of the rocket
