@@ -84,8 +84,8 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     auto render_state = new RenderState;
 
     // shaders
-    render_state->skybox_shader = make_program(3, "base", "skybox", "logz");
-    render_state->cubemap_shader = make_program(5, "base", "cubemap", "lighting", "picking", "logz");
+    render_state->skybox_shader = make_program(2, "skybox", "logz");
+    render_state->cubemap_shader = make_program(4, "cubemap", "lighting", "picking", "logz");
     render_state->lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
     render_state->position_marker_shader = make_program(4, "base", "position_marker", "picking", "logz");
     render_state->base_shader = make_program(3, "base", "picking", "logz");
@@ -101,12 +101,6 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     cubemap_matrix = glm::rotate(cubemap_matrix, M_PIf32/2.f, glm::vec3(0.f, 0.f, 1.f));
     GLint var = glGetUniformLocation(render_state->cubemap_shader, "cubemap_matrix");
     glUniformMatrix4fv(var, 1, GL_FALSE, glm::value_ptr(cubemap_matrix));
-
-    // TODO
-    glUseProgram(render_state->skybox_shader);
-    glUniform1i(glGetUniformLocation(render_state->skybox_shader, "skybox_texture"), 1);
-    glUseProgram(render_state->cubemap_shader);
-    glUniform1i(glGetUniformLocation(render_state->cubemap_shader, "cubemap_texture"), 1);
 
     // VAOs
     glGenVertexArrays(1, &render_state->vao);
@@ -279,13 +273,11 @@ static void render_skybox(GlobalState* state) {
 
     use_program(state, state->render_state->skybox_shader, false);
 
-    glActiveTexture(GL_TEXTURE1);
     glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP, state->render_state->skybox_texture);
     state->render_state->cube.draw();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     glEnable(GL_DEPTH_TEST);
-    glActiveTexture(GL_TEXTURE0);
 }
 
 static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
@@ -324,7 +316,6 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
         set_body_matrices(state, body, scene_origin);
 
         // bind cubemap texture
-        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
 
         // draw
@@ -332,7 +323,6 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
 
         // unbind
         glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-        glActiveTexture(GL_TEXTURE0);
     } else {
         // equirectangular texture
         if (lighting) {
