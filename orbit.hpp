@@ -64,10 +64,15 @@ vec3 orbit_position_at_time        (Orbit* o, double time);
 vec3 orbit_velocity_at_time        (Orbit* o, double time);
 vec6 orbit_state_at_time           (Orbit* o, double time);
 
+// more accuracy at edge of sphere of influence (especially for open orbits)
+double orbit_true_anomaly_at_escape(Orbit* o);
+double orbit_time_at_escape        (Orbit* o);
+vec3   orbit_position_at_escape    (Orbit* o);
+vec3   orbit_velocity_at_escape    (Orbit* o);
+
 // shortcuts
 double orbit_distance_at_time(Orbit* o, double time);
 double orbit_time_at_distance(Orbit* o, double distance);
-double orbit_time_at_escape  (Orbit* o);  // time at sphere of influence
 double orbit_excess_velocity (Orbit* o);  // speed at infinity
 double orbit_ejection_angle  (Orbit* o);  // true anomaly at infinity
 

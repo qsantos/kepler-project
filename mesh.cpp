@@ -382,27 +382,39 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
     std::vector<float> data;
 
     if (orbit->eccentricity > 1.) {  // open orbit
-        // just give up on optimizing and use the focused version
-
         double object_mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
         double object_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, object_mean_anomaly);
         double object_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, object_eccentric_anomaly);
 
         // stop drawing at SoI
         // TODO: handle no sphere of influence
-        double escape_time = orbit_time_at_escape(orbit);
-        double escape_mean_anomaly = orbit_mean_anomaly_at_time(orbit, escape_time);
-        double escape_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, escape_mean_anomaly);
-        double escape_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, escape_eccentric_anomaly);
+        double escape_true_anomaly = orbit_true_anomaly_at_escape(orbit);
+
+        // point at object
+        {
+            // TODO: we can probably do better precision-wise
+            auto pos = orbit_position_at_true_anomaly(orbit, object_true_anomaly) - offset_from_focus;
+            data.push_back((float) pos[0]);
+            data.push_back((float) pos[1]);
+            data.push_back((float) pos[2]);
+        }
 
         // ensure the body will be on the line (2.)
         // more points close to the camera (3.)
         size_t n_points = 64;
-        for (size_t i = 0; i <= n_points; i += 1) {
+        for (size_t i = 1; i < n_points; i += 1) {
             double t = (double) i / (double) n_points;
             double true_anomaly = lerp(object_true_anomaly, escape_true_anomaly, t * t);
 
             auto pos = orbit_position_at_true_anomaly(orbit, true_anomaly) - offset_from_focus;
+            data.push_back((float) pos[0]);
+            data.push_back((float) pos[1]);
+            data.push_back((float) pos[2]);
+        }
+
+        // point at escape
+        {
+            auto pos = orbit_position_at_escape(orbit) - offset_from_focus;
             data.push_back((float) pos[0]);
             data.push_back((float) pos[1]);
             data.push_back((float) pos[2]);

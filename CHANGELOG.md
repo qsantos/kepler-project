@@ -4,6 +4,7 @@
 - Reduce useless noise in console on Nvidia GPUs
 - Fix shader compilation error on Nvidia GPUs
 - Fix cubemap textures on Nvidia GPUs
+- Fix truncation of open orbits at escape
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data

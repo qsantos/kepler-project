@@ -342,15 +342,13 @@ double orbit_speed_at_distance(Orbit* o, double distance) {
     return sqrt(mu * (2./distance - 1./o->semi_major_axis));
 }
 
-vec3 orbit_position_at_true_anomaly(Orbit* o, double true_anomaly) {
-    double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
+static vec3 _position_from_distance_true_anomaly(Orbit* o, double distance, double true_anomaly) {
     double c = cos(true_anomaly);
     double s = sin(true_anomaly);
     return o->orientation * vec3{distance*c, distance*s, 0.};
 }
 
-vec3 orbit_velocity_at_true_anomaly(Orbit* o, double true_anomaly) {
-    double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
+static vec3 _velocity_from_distance_true_anomaly(Orbit* o, double distance, double true_anomaly) {
     double c = cos(true_anomaly);
     double s = sin(true_anomaly);
     double e = o->eccentricity;
@@ -363,6 +361,16 @@ vec3 orbit_velocity_at_true_anomaly(Orbit* o, double true_anomaly) {
 
     vec3 velocity = velocity_direction * (speed / velocity_direction.norm());
     return o->orientation * velocity;
+}
+
+vec3 orbit_position_at_true_anomaly(Orbit* o, double true_anomaly) {
+    double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
+    return _position_from_distance_true_anomaly(o, distance, true_anomaly);
+}
+
+vec3 orbit_velocity_at_true_anomaly(Orbit* o, double true_anomaly) {
+    double distance = orbit_distance_at_true_anomaly(o, true_anomaly);
+    return _velocity_from_distance_true_anomaly(o, distance, true_anomaly);
 }
 
 vec3 orbit_position_at_time(Orbit* o, double time) {
@@ -391,6 +399,26 @@ vec6 orbit_state_at_time(Orbit* o, double time) {
     };
 }
 
+double orbit_true_anomaly_at_escape(Orbit* o) {
+    return orbit_true_anomaly_at_distance(o, o->primary->sphere_of_influence);
+}
+
+double orbit_time_at_escape(Orbit* o) {
+    return orbit_time_at_distance(o, o->primary->sphere_of_influence);
+}
+
+vec3 orbit_position_at_escape(Orbit* o) {
+    double distance = o->primary->sphere_of_influence;
+    double true_anomaly = orbit_true_anomaly_at_escape(o);
+    return _position_from_distance_true_anomaly(o, distance, true_anomaly);
+}
+
+vec3 orbit_velocity_at_escape(Orbit* o) {
+    double distance = o->primary->sphere_of_influence;
+    double true_anomaly = orbit_true_anomaly_at_escape(o);
+    return _velocity_from_distance_true_anomaly(o, distance, true_anomaly);
+}
+
 double orbit_distance_at_time(Orbit* o, double time) {
     double M = orbit_mean_anomaly_at_time(o, time);
     double E = orbit_eccentric_anomaly_at_mean_anomaly(o, M);
@@ -403,10 +431,6 @@ double orbit_time_at_distance(Orbit* o, double distance) {
     double E = orbit_eccentric_anomaly_at_true_anomaly(o, f);
     double M = orbit_mean_anomaly_at_eccentric_anomaly(o, E);
     return orbit_time_at_mean_anomaly(o, M);
-}
-
-double orbit_time_at_escape(Orbit* o) {
-    return orbit_time_at_distance(o, o->primary->sphere_of_influence);
 }
 
 double orbit_excess_velocity(Orbit* o) {
