@@ -11,14 +11,29 @@ void attach_shader(GLuint program, GLenum shader_type, const char* source, const
     glShaderSource(shader, 1, &source, NULL);
     glCompileShader(shader);
 
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        fprintf(stderr, "ERROR: compilation of %s failed\n%s", filename, infoLog);
+    // check status and info log
+    GLint compile_status;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);
+    GLint info_log_length;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_log_length);
+    GLchar* info_log = MALLOC((size_t) info_log_length);
+    glGetShaderInfoLog(shader, info_log_length, &info_log_length, info_log);
+    if (compile_status) {
+        if (info_log_length == 0) {
+            // OK
+        } else {
+            fprintf(stderr, "WARNING: compilation of %s generated warnings\n%s", filename, info_log);
+        }
+    } else {
+        if (info_log_length == 0) {
+            fprintf(stderr, "ERROR: compilation of %s failed (no info log)\n", filename);
+        } else {
+            fprintf(stderr, "ERROR: compilation of %s failed\n%s", filename, info_log);
+        }
+        free(info_log);
         exit(EXIT_FAILURE);
     }
+    free(info_log);
 
     glAttachShader(program, shader);
     glDeleteShader(shader);
@@ -124,13 +139,30 @@ GLuint make_program(size_t n_shaders, ...) {
 
     glLinkProgram(program);
 
-    GLint success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
-        fprintf(stderr, "ERROR::SHADER::LINKING_FAILED\n%s", infoLog);
+    // check status and info log
+    GLint link_status;
+    glGetProgramiv(program, GL_LINK_STATUS, &link_status);
+    GLint info_log_length;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &info_log_length);
+    GLchar* info_log = MALLOC((size_t) info_log_length);
+    glGetProgramInfoLog(program, info_log_length, &info_log_length, info_log);
+    if (link_status) {
+        if (info_log_length == 0) {
+            // OK
+        } else {
+            fprintf(stderr, "WARNING: linking of program generated warnings\n%s", info_log);
+        }
+    } else {
+        if (info_log_length == 0) {
+            fprintf(stderr, "ERROR: linking of program failed (no info log)\n");
+        } else {
+            fprintf(stderr, "ERROR: linking of program failed\n%s", info_log);
+        }
+        free(info_log);
         exit(EXIT_FAILURE);
     }
+    free(info_log);
+
+
     return program;
 }
