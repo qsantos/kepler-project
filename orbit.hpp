@@ -51,6 +51,7 @@ double orbit_true_anomaly_at_eccentric_anomaly(Orbit* o, double eccentric_anomal
 double orbit_eccentric_anomaly_at_true_anomaly(Orbit* o, double true_anomaly);
 double orbit_mean_anomaly_at_eccentric_anomaly(Orbit* o, double eccentric_anomaly);
 double orbit_time_at_mean_anomaly             (Orbit* o, double mean_anomaly);
+double orbit_time_at_true_anomaly             (Orbit* o, double true_anomaly);
 
 // state (distance and speed)
 double orbit_distance_at_true_anomaly(Orbit* o, double true_anomaly);

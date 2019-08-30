@@ -6,6 +6,7 @@
 - Fix cubemap textures on Nvidia GPUs
 - Fix truncation of open orbits at escape
 - Truncate escaping closed orbit
+- Show orbital and state information
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data

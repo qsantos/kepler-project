@@ -73,8 +73,9 @@ struct RenderState {
     map<CelestialBody*, GLuint> body_cubemaps;
 
     // models
-    TextPanel hud = TextPanel(5.f, 5.f);
+    TextPanel general_info = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 157.f);
+    TextPanel orbital_info = TextPanel(5.f, 5.f);
 
     bool picking_active = false;
     std::vector<CelestialBody*> picking_objects;
@@ -681,12 +682,12 @@ static void render_helpers(GlobalState* state, const vec3& scene_origin) {
     render_orbits(state, scene_origin);
 }
 
-static void fill_hud(GlobalState* state) {
+static void print_general_info(GlobalState* state, TextPanel* out) {
     // time warp
     if (state->real_timewarp < state->target_timewarp) {
-        state->render_state->hud.print("Time x%g (CPU-bound)\n", state->real_timewarp);
+        out->print("Time x%g (CPU-bound)\n", state->real_timewarp);
     } else {
-        state->render_state->hud.print("Time x%g\n", state->real_timewarp);
+        out->print("Time x%g\n", state->real_timewarp);
     }
 
     // local time
@@ -695,25 +696,25 @@ static void fill_hud(GlobalState* state) {
         struct tm* t = localtime(&simulation_time);
         char buffer[512];
         strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S %z", t);
-        state->render_state->hud.print("Date: %s\n", buffer);
+        out->print("Date: %s\n", buffer);
     }
 
     // focus
-    state->render_state->hud.print("Focus: %s\n", state->focus->name);
+    out->print("Focus: %s\n", state->focus->name);
 
     // distance
     char* s = human_quantity(state->view_altitude + state->focus->radius, "m");
-    state->render_state->hud.print("Distance: %s\n", s);
+    out->print("Distance: %s\n", s);
     free(s);
 
     // altitude
     s = human_quantity(state->view_altitude, "m");
-    state->render_state->hud.print("Altitude: %s\n", s);
+    out->print("Altitude: %s\n", s);
     free(s);
 
     // FPS
     double now = real_clock();
-    state->render_state->hud.print("%.0f FPS\n", state->fps);
+    out->print("%.0f FPS\n", state->fps);
 
     // update FPS measure every second
     if (now - state->last_fps_measure > 1.) {
@@ -723,7 +724,62 @@ static void fill_hud(GlobalState* state) {
     }
 
     // version
-    state->render_state->hud.print("Version " VERSION "\n");
+    out->print("Version " VERSION "\n");
+}
+
+static void print_orbital_info(GlobalState* state, TextPanel* out) {
+    auto orbit = state->rocket.orbit;
+
+    // orbit
+    out->print("Orbit\n");
+    out->print("\n");
+    out->print("Primary %s\n", orbit->primary->name);
+    out->print("Periapsis         %14.1f m\n", orbit->periapsis);
+    out->print("Apoapsis          %14.1f m\n", orbit->apoapsis);
+    out->print("Semi-major axis   %14.1f m\n", orbit->semi_major_axis);
+    out->print("Semi-minor axis   %14.1f m\n", orbit->semi_minor_axis);
+    out->print("Semi-latus rectum %14.1f m\n", orbit->semi_latus_rectum);
+    out->print("Eccentricity      %16.3f\n", orbit->eccentricity);
+    out->print("Longitude of AN          %5.1f deg\n", degrees(orbit->longitude_of_ascending_node));
+    out->print("Inclination              %5.1f deg\n", degrees(orbit->inclination));
+    out->print("Argument of periapsis    %5.1f deg\n", degrees(orbit->argument_of_periapsis));
+    out->print("Period            %14.1f s\n", orbit->period);
+
+    out->print("\n");
+    out->print("\n");
+
+    // current state
+    double mean_anomaly = orbit_mean_anomaly_at_time(orbit, state->time);
+    if (mean_anomaly < 0.) { mean_anomaly += 2 * M_PI; }
+    double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
+    double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
+    auto pos = orbit_position_at_time(orbit, state->time);
+    auto vel = orbit_velocity_at_time(orbit, state->time);
+    out->print("Current State\n");
+    out->print("\n");
+    out->print("Altitude          %14.1f m\n", pos.norm() - orbit->primary->radius);
+    out->print("Distance          %14.1f m\n", pos.norm());
+    out->print("Mean anomaly             %5.1f deg\n", degrees(mean_anomaly));
+    out->print("Eccentric anomaly        %5.1f deg\n", degrees(eccentric_anomaly));
+    out->print("True anomaly             %5.1f deg\n", degrees(true_anomaly));
+    out->print("Orbital speed     %12.1f m/s\n", vel.norm());
+
+    out->print("\n");
+    out->print("\n");
+
+    out->print("Timers\n");
+    out->print("\n");
+    double time_to_periapsis = orbit_time_at_true_anomaly(orbit, 0.) - state->time;
+    double time_to_apospsis = orbit_time_at_true_anomaly(orbit, M_PI) - state->time;
+    double time_to_ascending_node = orbit_time_at_true_anomaly(orbit, 2 * M_PI - orbit->argument_of_periapsis) - state->time;
+    double time_to_descending_node = orbit_time_at_true_anomaly(orbit, M_PI - orbit->argument_of_periapsis) - state->time;
+    if (time_to_periapsis < 0.) { time_to_periapsis += orbit->period; }
+    if (time_to_ascending_node < 0.) { time_to_ascending_node += orbit->period; }
+    if (time_to_descending_node < 0.) { time_to_descending_node += orbit->period; }
+    out->print("Time to periapsis %14.1f s\n", time_to_periapsis);
+    out->print("Time to apoapsis  %14.1f s\n", time_to_apospsis);
+    out->print("Time to AN        %14.1f s\n", time_to_ascending_node);
+    out->print("Time to DN        %14.1f s\n", time_to_descending_node);
 }
 
 static void render_navball(GlobalState* state) {
@@ -993,9 +1049,6 @@ static void render_hud(GlobalState* state) {
         return;
     }
 
-    state->render_state->hud.clear();
-    fill_hud(state);
-
     use_program(state, state->render_state->hud_shader);
 
     // use orthographic projection
@@ -1003,7 +1056,15 @@ static void render_hud(GlobalState* state) {
     state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
     update_matrices(state);
 
-    state->render_state->hud.draw();
+    state->render_state->general_info.clear();
+    print_general_info(state, &state->render_state->general_info);
+    state->render_state->general_info.draw();
+
+    state->render_state->orbital_info.clear();
+    state->render_state->orbital_info.x = (float) state->viewport_width - 19.f * 20.f;
+    print_orbital_info(state, &state->render_state->orbital_info);
+    state->render_state->orbital_info.draw();
+
     if (state->show_help) {
         state->render_state->help.draw();
     }

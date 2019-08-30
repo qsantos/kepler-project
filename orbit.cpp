@@ -312,6 +312,12 @@ double orbit_time_at_mean_anomaly(Orbit* o, double mean_anomaly) {
     return o->epoch + (mean_anomaly - o->mean_anomaly_at_epoch) / o->mean_motion;
 }
 
+double orbit_time_at_true_anomaly(Orbit* o, double true_anomaly) {
+    double eccentric_anomaly = orbit_eccentric_anomaly_at_true_anomaly(o, true_anomaly);
+    double mean_anomaly = orbit_mean_anomaly_at_eccentric_anomaly(o, eccentric_anomaly);
+    return orbit_time_at_mean_anomaly(o, mean_anomaly);
+}
+
 double orbit_distance_at_true_anomaly(Orbit* o, double true_anomaly) {
     return o->semi_latus_rectum / (1. + o->eccentricity*cos(true_anomaly));
 }
