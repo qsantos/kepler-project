@@ -287,8 +287,8 @@ void update_rocket_soi(GlobalState* state) {
     // switch to primary's parents SoI
     while (pos.norm() > primary->sphere_of_influence) {
         // change reference frame
-        pos = pos + orbit_position_at_time(primary->orbit, state->time);
-        vel = vel + orbit_velocity_at_time(primary->orbit, state->time);
+        pos += orbit_position_at_time(primary->orbit, state->time);
+        vel += orbit_velocity_at_time(primary->orbit, state->time);
         rocket->state = State(pos, vel);
 
         fprintf(stderr, "%s exited SoI from %s to %s\n", rocket->name, primary->name, primary->orbit->primary->name);
@@ -304,8 +304,8 @@ void update_rocket_soi(GlobalState* state) {
             auto sat_vel = orbit_velocity_at_time(satellite->orbit, state->time);
 
             // change reference frame
-            pos = pos - sat_pos;
-            vel = vel - sat_vel;
+            pos -= sat_pos;
+            vel -= sat_vel;
             rocket->state = State(pos, vel);
 
             fprintf(stderr, "%s entered SoI of %s from %s\n", rocket->name, satellite->name, primary->name);

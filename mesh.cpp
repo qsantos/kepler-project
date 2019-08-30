@@ -475,8 +475,8 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
 
     if (focused) {
         auto offset_from_focus = orbit_position_at_time(orbit, time);
-        periapsis = periapsis - offset_from_focus;
-        apoapsis = apoapsis - offset_from_focus;
+        periapsis -= offset_from_focus;
+        apoapsis -= offset_from_focus;
     }
 
     std::vector<float> data;

@@ -29,11 +29,10 @@ struct vector {
     }
 
     #define UNARY_OP(OP) \
-    V operator OP() const { \
-        const V& self = *this; \
+    V operator OP() const & { \
         V ret; \
         for (size_t i = 0; i < N; i += 1) { \
-            ret[i] = OP self[i]; \
+            ret[i] = OP (*this)[i]; \
         } \
         return ret; \
     }
@@ -42,13 +41,11 @@ struct vector {
     #undef UNARY_OP
 
     #define SCALAR_INPLACE_OP(OP) \
-    V operator OP(S rhs) { \
-        V& self = *this; \
-        V ret; \
+    V& operator OP(S rhs) & { \
         for (size_t i = 0; i < N; i += 1) { \
-            self[i] OP rhs; \
+            (*this)[i] OP rhs; \
         } \
-        return ret; \
+        return *this; \
     }
     SCALAR_INPLACE_OP(+=)
     SCALAR_INPLACE_OP(-=)
@@ -82,10 +79,9 @@ struct vector {
 
     // cppcheck does not like OP##=
     #define VECTOR_INPLACE_OP(OP) \
-    V& operator OP(const V& rhs) { \
-        const V& lhs = *this; \
+    V& operator OP(const V& rhs) & { \
         for (size_t i = 0; i < N; i += 1) { \
-            lhs[i] OP rhs[i]; \
+            (*this)[i] OP rhs[i]; \
         } \
         return *this; \
     }

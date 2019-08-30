@@ -42,7 +42,7 @@ State f(double t, State state) {
     vec3 acceleration = position * (-g / distance);
 
     // propulsion
-    acceleration = acceleration + thrust_global;
+    acceleration += thrust_global;
 
     return {velocity, acceleration};
 }
