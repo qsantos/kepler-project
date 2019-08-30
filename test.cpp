@@ -691,7 +691,14 @@ static void test_orbit(Orbit* o) {
             assertIsClose(orbit_distance_at_time(o, t), o->apoapsis);
         }
     }
+
+    // escape
     assertIsClose(orbit_time_at_distance(o, o->primary->sphere_of_influence), orbit_time_at_escape(o));
+    double time_at_escape = orbit_time_at_escape(o);
+    if (!isnan(time_at_escape)) {
+        assertIsClose((orbit_position_at_escape(o) - orbit_position_at_time(o, time_at_escape)).norm(), 0.f);
+        assertIsClose((orbit_velocity_at_escape(o) - orbit_velocity_at_time(o, time_at_escape)).norm(), 0.f);
+    }
 }
 
 static void test_orbits(void) {

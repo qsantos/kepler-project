@@ -40,7 +40,7 @@ inline double random_uniform(double a, double b) {
 
 inline int isclose(double a, double b) {
     double rel_tol=1e-9;
-    double abs_tol=1e-9;
+    double abs_tol=1e-6;
     return fabs(a-b) <= fmax(rel_tol * fmax(fabs(a), fabs(b)), abs_tol);
 }
 
