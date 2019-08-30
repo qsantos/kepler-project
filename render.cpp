@@ -773,6 +773,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     double time_to_apospsis = orbit_time_at_true_anomaly(orbit, M_PI) - state->time;
     double time_to_ascending_node = orbit_time_at_true_anomaly(orbit, 2 * M_PI - orbit->argument_of_periapsis) - state->time;
     double time_to_descending_node = orbit_time_at_true_anomaly(orbit, M_PI - orbit->argument_of_periapsis) - state->time;
+    double time_to_escape = orbit_time_at_escape(orbit) - state->time;
     if (time_to_periapsis < 0.) { time_to_periapsis += orbit->period; }
     if (time_to_ascending_node < 0.) { time_to_ascending_node += orbit->period; }
     if (time_to_descending_node < 0.) { time_to_descending_node += orbit->period; }
@@ -780,6 +781,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Time to apoapsis  %14.1f s\n", time_to_apospsis);
     out->print("Time to AN        %14.1f s\n", time_to_ascending_node);
     out->print("Time to DN        %14.1f s\n", time_to_descending_node);
+    out->print("Time to escape    %14.1f s\n", time_to_escape);
 }
 
 static void render_navball(GlobalState* state) {
