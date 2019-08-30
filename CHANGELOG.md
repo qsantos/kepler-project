@@ -7,6 +7,7 @@
 - Fix truncation of open orbits at escape
 - Truncate escaping closed orbit
 - Show orbital and state information
+- Use 2 as time-warp base multiplier
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data
