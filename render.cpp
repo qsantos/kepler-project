@@ -895,9 +895,9 @@ static void render_navball_markers(GlobalState* state) {
 
     auto prograde = velocity / velocity.norm() * NAVBALL_RADIUS * 1.01;
     auto normal = position.cross(velocity);
-    normal = normal / normal.norm() * NAVBALL_RADIUS * 1.01;
+    normal *= NAVBALL_RADIUS * 1.01 / normal.norm();
     auto radial = prograde.cross(normal);
-    radial = radial / radial.norm() * NAVBALL_RADIUS * 1.01;
+    radial *= NAVBALL_RADIUS * 1.01 / radial.norm();
 
     auto prograde2 = glm::vec3{(float) prograde[0], (float) prograde[1], (float) prograde[2]};
     auto normal2 = glm::vec3{(float) normal[0], (float) normal[1], (float) normal[2]};
