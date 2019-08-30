@@ -1,35 +1,35 @@
 #ifndef ROCKET_HPP
 #define ROCKET_HPP
 
-#include "vector.hpp"
 #include "orbit.hpp"
 
-struct State : vec6 {
-    State() {}
-    State(const vec6& values) : vec6{values} {}
-    State(const vec3& position, const vec3& velocity) :
-        vec6{
-            position[0], position[1], position[2],
-            velocity[0], velocity[1], velocity[2],
-        }
-    {
+#include <glm/glm.hpp>
+
+struct State {
+    glm::dvec3 position;
+    glm::dvec3 velocity;
+
+    State operator*(double k) {
+        State ret{
+            position * k,
+            velocity * k,
+        };
+        return ret;
     }
 
-    vec3 position() const {
-        const State& self = *this;
-        return {self[0], self[1], self[2]};
-    }
-
-    vec3 velocity() const {
-        const State& self = *this;
-        return {self[3], self[4], self[5]};
+    State operator+(State rhs) {
+        State ret{
+            position + rhs.position,
+            velocity + rhs.velocity,
+        };
+        return ret;
     }
 };
 
 // TODO: Orbiter should be a component of CelestialBody and Rocket
 struct Rocket : CelestialBody {
     State state;
-    mat3 orientation;
+    glm::dmat3 orientation;
     double throttle = 0.;
 };
 

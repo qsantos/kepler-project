@@ -1,5 +1,3 @@
-#include "vector.hpp"
-#include "matrix.hpp"
 #include "body.hpp"
 #include "orbit.hpp"
 #include "load.hpp"
@@ -169,250 +167,6 @@ Orbit make_dummy_orbit_with_period(double period) {
     };
 }
 
-static void test_vector(void) {
-    // easily verified
-    {  // dot-product
-        vec3 u{1., 0., 0.};
-        vec3 v{0., 1., 1.};
-        assertIsClose(u.dot(v), 0.);
-    }
-    {  // norm
-        vec3 u{8., 9., 12.};
-        assertIsClose(u.norm(), 17.);
-    }
-    {  // distance
-        vec3 u{10., 7., 24.};
-        vec3 v{2., -2., 12.};
-        assertIsClose(u.dist(v), 17.);
-    }
-    {  // cross-product
-        vec3 u{0., 1., 0.};
-        vec3 v{1., 0., 0.};
-        vec3 w{0., 0., -1.};
-        assertIsClose(u.cross(v).udist(w), 0.);
-    }
-    {  // angle
-        vec3 u{0., 1., 0.};
-        vec3 v{1., 0., 0.};
-        assertIsClose(u.angle(v), M_PI / 2.);
-    }
-    {  // oriented angle
-        vec3 u{0., 1., 0.};
-        vec3 v{1., 0., 0.};
-        assertIsClose(u.angle2(v), -M_PI / 2.);
-    }
-    {  // addition
-        vec3 u{4., 2., 1.};
-        vec3 v{5., 3., 6.};
-        vec3 check{9., 5., 7.};
-        assertIsClose((u + v).udist(check), 0.);
-    }
-    {  // subtraction
-        vec3 u{1., 2., 0.};
-        vec3 v{2., 1., 2.};
-        vec3 check{-1., 1., -2.};
-        assertIsClose((u - v).udist(check), 0.);
-    }
-    {  // scale
-        vec3 u{5., 6., 8.};
-        vec3 check{50., 60., 80.};
-        assertIsClose((u * 10.).udist(check), 0.);
-    }
-
-    // initial results
-    {  // dot-product
-        vec3 u{1., 4., 7.};
-        vec3 v{2., 5., 8.};
-        assertIsClose(u.dot(v), 78.);
-    }
-    {  // norm
-        vec3 u{4., 5., 6.};
-        assertIsClose(u.norm(), 8.774964387392123);
-    }
-    {  // distance
-        vec3 u{6., 2., 3.};
-        vec3 v{2., 4., 9.};
-        assertIsClose(u.dist(v), 7.483314773547883);
-    }
-    {  // cross-product
-        vec3 u{9., 8., 7.};
-        vec3 v{2., 3., 1.};
-        vec3 w{-13., 5., 11.};
-        assertIsClose(u.cross(v).udist(w), 0.);
-    }
-    {  // angles
-        double a = 0.3861364787976416;
-        {
-            vec3 u{4., 7., 5.};
-            vec3 v{3., 5., 8.};
-            assertIsClose(u.angle(v), a);
-            assertIsClose(v.angle(u), a);
-            assertIsClose(u.angle2(v), -a);
-        }
-        {
-            vec3 u{4., 5., 7.};
-            vec3 v{3., 8., 5.};
-            assertIsClose(u.angle2(v), +a);
-        }
-    }
-    {  // addition
-        vec3 u{45., 65., 10.};
-        vec3 v{78., 89., 98.};
-        vec3 check{123., 154., 108.};
-        assertIsClose((u + v).udist(check), 0.);
-    }
-    {  // subtraction
-        vec3 u{41., 47., 74.};
-        vec3 v{85., 10., 25.};
-        vec3 check{-44., 37., 49.};
-        assertIsClose((u - v).udist(check), 0.);
-    }
-    {  // scale
-        vec3 u{74.2, 1.21, 4.05};
-        vec3 check{5796.726600000001, 94.52883, 316.39815};
-        assertIsClose((u * 78.123).udist(check), 0.);
-    }
-}
-
-static void test_matrix(void) {
-    // easily verified
-    {  // addition
-        mat3 a{
-            {9., 8., 7.},
-            {6., 5., 4.},
-            {3., 2., 1.},
-        };
-        mat3 b{
-            {1., 3., 6.},
-            {10., 15., 21.},
-            {28., 36., 45.},
-        };
-        mat3 check{
-            {10., 11., 13.},
-            {16., 20., 25.},
-            {31., 38., 46.},
-        };
-        assertIsClose((a + b).udist(check), 0.);
-    }
-    {  // matrix-vector product
-        mat3 a{
-            {1., 0., 0.},
-            {0., 1., 0.},
-            {0., 0., 1.},
-        };
-        vec3 u{1., 2., 3.};
-        vec3 check{1., 2., 3.};
-        assertIsClose((a * u).udist(check), 0.);
-    }
-    {  // matrix-vector product
-        mat3 a{
-            {2., 0., 0.},
-            {0., 2., 0.},
-            {0., 0., 2.},
-        };
-        vec3 u{1., 2., 3.};
-        vec3 check{2., 4., 6.};
-        assertIsClose((a * u).udist(check), 0.);
-    }
-    { // matrix-matrix product
-        mat3 a{
-            {1., 0., 0.},
-            {0., 1., 0.},
-            {0., 0., 1.},
-        };
-        mat3 check{
-            {1., 0., 0.},
-            {0., 1., 0.},
-            {0., 0., 1.},
-        };
-        assertIsClose((a * a).udist(check), 0.);
-    }
-    {  // matrix-matrix product
-        mat3 a{
-            {1., 0., 0.},
-            {0., 2., 0.},
-            {0., 0., 3.},
-        };
-        mat3 b{
-            {9., 8., 7.},
-            {6., 5., 4.},
-            {3., 2., 1.},
-        };
-        mat3 check{
-            {9., 8., 7.},
-            {12., 10., 8.},
-            {9., 6., 3.},
-        };
-        assertIsClose((a * b).udist(check), 0.);
-    }
-    {  // rotation matrix (angle and axis)
-        mat3 m = mat3::from_angle_axis(M_PI/2., 1., 0., 0.);
-        mat3 check{
-            {1., 0., 0.},
-            {0., 0., -1.},
-            {0., 1., 0.},
-        };
-        assertIsClose(m.udist(check), 0.);
-    }
-
-    // initial results
-    {  // matrix-matrix multiplication
-        mat3 a{
-            {1., 2., 3.},
-            {4., 5., 6.},
-            {7., 8., 9.},
-        };
-        mat3 b{
-            {3., 2., 1.},
-            {6., 5., 4.},
-            {9., 8., 7.},
-        };
-        {
-            mat3 check{
-                {42., 36., 30.},
-                {96., 81., 66.},
-                {150., 126., 102.},
-            };
-            assertIsClose((a * b).udist(check), 0.);
-        }
-        {
-            mat3 check{
-                {18., 24., 30.},
-                {54., 69., 84.},
-                {90., 114., 138.},
-            };
-            assertIsClose((b * a).udist(check), 0.);
-        }
-    }
-    // rotations (angle and axis)
-    for (int i = 0; i < 10; i += 1) {
-        double a = random_uniform(0., M_PI);
-        double x = random_uniform(0., 1.);
-        double y = random_uniform(0., 1.);
-        mat3 r = mat3::from_angle_axis(a, 0., 0., 1.);
-        vec3 u{x, y, 0.};
-        assertIsClose(a, u.angle(r * u));
-    }
-    {
-        mat3 res = mat3::from_angle_axis(5., 1., 2., 3.);
-        mat3 check{
-            {0.33482917221585295, 0.8711838511445769, -0.3590656248350022},
-            {-0.66651590413407, 0.4883301324737331, 0.5632852130622015},
-            {0.6660675453507625, 0.050718627969319086, 0.7441650662368666},
-        };
-        assertIsClose(res.udist(check), 0.);
-    }
-    {  // rotation matrix (Euler angles)
-        mat3 res = mat3::from_euler_angles(1., 2., 3.);
-        mat3 check{
-            {-0.4854784609636683, -0.42291857174254777, 0.7651474012342926},
-            {-0.864780102737098, 0.1038465651516682, -0.49129549643388193},
-            {0.12832006020245673, -0.9001976297355174, -0.4161468365471424},
-        };
-        assertIsClose(res.udist(check), 0.);
-    }
-}
-
 static void test_coordinates(void) {
 
     // use known values and check consistency
@@ -549,9 +303,9 @@ static void test_body(void) {
     // global position
     {
         // now, we can check that the body is actually moving
-        vec3 pos0 = body_global_position_at_time(&b, 0.);
-        vec3 pos1 = body_global_position_at_time(&b, 1.);
-        assert(pos0.dist(pos1) != 0.);
+        glm::dvec3 pos0 = body_global_position_at_time(&b, 0.);
+        glm::dvec3 pos1 = body_global_position_at_time(&b, 1.);
+        assert(glm::distance(pos0, pos1) != 0.);
     }
 
     // satellite management
@@ -628,26 +382,18 @@ static void test_orbit(Orbit* o) {
     // re-generate from state point at arbitrary time
     {
         double time = 1e4;
-        vec6 state = orbit_state_at_time(o, time);
-        orbit_from_state(p, o->primary, state, time);
+        glm::dvec3 position = orbit_position_at_time(o, time);
+        glm::dvec3 velocity = orbit_velocity_at_time(o, time);
+        orbit_from_state(p, o->primary, position, velocity, time);
         assertIsCloseOrbit(o, p);
-
-        // while we are at it, check consistency between
-        // orbit_{position,velocity,state}_at_time()
-        vec3 position{state[0], state[1], state[2]};
-        vec3 velocity{state[3], state[4], state[5]};
-        vec3 res = orbit_position_at_time(o, time);
-        assertIsClose(position.udist(res), 0.);
-        res = orbit_velocity_at_time(o, time);
-        assertIsClose(velocity.dist(res), 0.);
 
         // since we have the position and velocity vectors, we can also check
         // orbit_distance_at_*() and orbit_speed_at_*()
         double M = orbit_mean_anomaly_at_time(o, time);
         double E = orbit_eccentric_anomaly_at_mean_anomaly(o, M);
         double f = orbit_true_anomaly_at_eccentric_anomaly(o, E);
-        double distance = position.norm();
-        double speed = velocity.norm();
+        double distance = glm::length(position);
+        double speed = glm::length(velocity);
         assertIsClose(orbit_distance_at_time(o, time), distance);
         assertIsClose(orbit_distance_at_true_anomaly(o, f), distance);
         assertIsClose(orbit_speed_at_distance(o, distance), speed);
@@ -696,8 +442,8 @@ static void test_orbit(Orbit* o) {
     assertIsClose(orbit_time_at_distance(o, o->primary->sphere_of_influence), orbit_time_at_escape(o));
     double time_at_escape = orbit_time_at_escape(o);
     if (!isnan(time_at_escape)) {
-        assertIsClose((orbit_position_at_escape(o) - orbit_position_at_time(o, time_at_escape)).norm(), 0.f);
-        assertIsClose((orbit_velocity_at_escape(o) - orbit_velocity_at_time(o, time_at_escape)).norm(), 0.f);
+        assertIsClose(glm::distance(orbit_position_at_escape(o), orbit_position_at_time(o, time_at_escape)), 0.f);
+        assertIsClose(glm::distance(orbit_velocity_at_escape(o), orbit_velocity_at_time(o, time_at_escape)), 0.f);
     }
 }
 
@@ -706,9 +452,9 @@ static void test_orbits(void) {
         Orbit orbit;
         orbit_from_periapsis(&orbit, &primary, 1e6, .5);
         orbit_orientate(&orbit, 0., 0., 0., 0., 0.);
-        //vec3 pos;
+        //glm::dvec3 pos;
         //orbit_position_at_time(pos, &orbit, 0.);
-        //assert(vec3_norm(pos) != 0.);
+        //assert(glm::dvec3_norm(pos) != 0.);
     }
 
     double periapses[] = {1e9, 1e13};
@@ -918,11 +664,11 @@ void test_lambert(void) {
     // <http://www.braeunig.us/space/problem.htm#5.4>
     {
         const double au = 1.4959787e+11;  // astronomical unit
-        vec3 r1{0.473265*au, -0.899215*au, 0.};
-        vec3 r2{0.066842*au, 1.561256*au, 0.030948*au};
+        glm::dvec3 r1{0.473265*au, -0.899215*au, 0.};
+        glm::dvec3 r2{0.066842*au, 1.561256*au, 0.030948*au};
         double mu = 1.327124e20;
         double t = 207. * 86400.;
-        vec3 v1, v2;
+        glm::dvec3 v1, v2;
         lambert(v1, v2, mu, r1, r2, t, 0, 0);
         assertIsClose(v1[0], 28996.23493547104);
         assertIsClose(v1[1], 15232.684101572762);
@@ -934,11 +680,11 @@ void test_lambert(void) {
 
     // Fundamentals of Astrodynamics, p236
     {
-        vec3 r1{.5, .6, .7};
-        vec3 r2{0., 1., 0.};
+        glm::dvec3 r1{.5, .6, .7};
+        glm::dvec3 r2{0., 1., 0.};
         double mu = 1.;
         double t = (445. - 432.) / 13.44686457;  // see appendix A
-        vec3 v1, v2;
+        glm::dvec3 v1, v2;
         // short way
         lambert(v1, v2, mu, r1, r2, t, 0, 0);
         assertIsClose(v1[0], -0.36163780780789323);
@@ -968,12 +714,12 @@ void test_rk4(void) {
     Rocket rocket;
     rocket.name = "Rocket";
     rocket.state = {
-        vec3{6371e3 + 300e3, 0, 0},
-        vec3{0, 7660, 0},
+        glm::dvec3{6371e3 + 300e3, 0, 0},
+        glm::dvec3{0, 7660, 0},
     };
 
     Orbit orbit;
-    orbit_from_state(&orbit, &earth, rocket.state, time);
+    orbit_from_state(&orbit, &earth, rocket.state.position, rocket.state.velocity, time);
     rocket.orbit = &orbit;
 
     for (size_t i = 0; i < 1<<20; i += 1) {
@@ -981,15 +727,13 @@ void test_rk4(void) {
         time += SIMULATION_STEP;
     }
 
-    auto numint_pos = rocket.state.position();
+    auto numint_pos = rocket.state.position;
     auto kepler_pos = orbit_position_at_time(rocket.orbit, time);
-    auto relative_error = (numint_pos - kepler_pos).norm() / kepler_pos.norm();
+    auto relative_error = glm::distance(numint_pos, kepler_pos) / glm::length(kepler_pos);
     assertIsClose(relative_error, 0.);
 }
 
 int main(void) {
-    test_vector();         printf("."); fflush(stdout);
-    test_matrix();         printf("."); fflush(stdout);
     test_coordinates();    printf("."); fflush(stdout);
     test_body();           printf("."); fflush(stdout);
     test_orbits();         printf("."); fflush(stdout);

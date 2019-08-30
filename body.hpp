@@ -3,7 +3,6 @@
 
 struct CelestialBody;
 
-#include "vector.hpp"
 #include "coordinates.hpp"
 #include "orbit.hpp"
 
@@ -51,6 +50,6 @@ double body_angular_diameter(CelestialBody* body, double distance);
 void body_append_satellite(CelestialBody* body, CelestialBody* satellite);
 void body_remove_satellite(CelestialBody* body, CelestialBody* satellite);
 
-vec3 body_global_position_at_time(CelestialBody* body, double time);
+glm::dvec3 body_global_position_at_time(CelestialBody* body, double time);
 
 #endif

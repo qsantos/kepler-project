@@ -9,6 +9,7 @@ extern "C" {
 #endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/ext/matrix_transform.hpp>
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
@@ -281,15 +282,15 @@ void init_ogl(void) {
 void update_rocket_soi(GlobalState* state) {
     auto rocket = &state->rocket;
     auto primary = rocket->orbit->primary;
-    auto pos = rocket->state.position();
-    auto vel = rocket->state.velocity();
+    auto pos = rocket->state.position;
+    auto vel = rocket->state.velocity;
 
     // switch to primary's parents SoI
-    while (pos.norm() > primary->sphere_of_influence) {
+    while (glm::length(pos) > primary->sphere_of_influence) {
         // change reference frame
         pos += orbit_position_at_time(primary->orbit, state->time);
         vel += orbit_velocity_at_time(primary->orbit, state->time);
-        rocket->state = State(pos, vel);
+        rocket->state = State{pos, vel};
 
         fprintf(stderr, "%s exited SoI from %s to %s\n", rocket->name, primary->name, primary->orbit->primary->name);
         primary = primary->orbit->primary;
@@ -300,13 +301,13 @@ void update_rocket_soi(GlobalState* state) {
         auto satellite = primary->satellites[i];
         auto sat_pos = orbit_position_at_time(satellite->orbit, state->time);
 
-        if ((pos - sat_pos).norm() < satellite->sphere_of_influence) {
+        if (glm::distance(pos, sat_pos) < satellite->sphere_of_influence) {
             auto sat_vel = orbit_velocity_at_time(satellite->orbit, state->time);
 
             // change reference frame
             pos -= sat_pos;
             vel -= sat_vel;
-            rocket->state = State(pos, vel);
+            rocket->state = State{pos, vel};
 
             fprintf(stderr, "%s entered SoI of %s from %s\n", rocket->name, satellite->name, primary->name);
             primary = satellite;
@@ -315,7 +316,7 @@ void update_rocket_soi(GlobalState* state) {
     }
 
     // update rocket orbit
-    orbit_from_state(rocket->orbit, primary, rocket->state, state->time);
+    orbit_from_state(rocket->orbit, primary, rocket->state.position, rocket->state.velocity, state->time);
 }
 
 int main(void) {
@@ -354,12 +355,12 @@ int main(void) {
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;
     state.rocket.state = {
-        vec3{6371e3 + 300e3, 0, 0},
-        vec3{0, 7660, 0},
+        glm::dvec3{6371e3 + 300e3, 0, 0},
+        glm::dvec3{0, 7660, 0},
     },
     body_append_satellite(state.focus, &state.rocket);
-    orbit_from_state(&orbit, state.focus, state.rocket.state, state.time);
-    state.rocket.orientation = mat3::from_euler_angles(0, 0, 0);
+    orbit_from_state(&orbit, state.focus, state.rocket.state.position, state.rocket.state.velocity, state.time);
+    state.rocket.orientation = glm::dmat4(1.f);
 
     state.last_fps_measure = real_clock();
     state.last_timewarp_measure = real_clock();
@@ -385,7 +386,8 @@ int main(void) {
             state.time += n_steps * SIMULATION_STEP;
             state.n_steps_since_last += (size_t) n_steps;
 
-            state.rocket.state = orbit_state_at_time(state.rocket.orbit, state.time);
+            state.rocket.state.position = orbit_position_at_time(state.rocket.orbit, state.time);
+            state.rocket.state.velocity = orbit_velocity_at_time(state.rocket.orbit, state.time);
         } else {
             while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
                 rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
@@ -441,26 +443,26 @@ int main(void) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(+x, 1, 0, 0);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(1, 0, 0)));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(-x, 1, 0, 0);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(1, 0, 0)));
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(+x, 0, 1, 0);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(0, 1, 0)));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(-x, 0, 1, 0);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(0, 1, 0)));
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(-x, 0, 0, 1);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(0, 0, 1)));
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.orientation *= mat3::from_angle_axis(+x, 0, 0, 1);
+            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(0, 0, 1)));
         }
 
         state.n_frames_since_last += 1;

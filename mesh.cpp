@@ -374,7 +374,7 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
     // 3. line breaks may be visible close to the camera
 
     // draw the orbit from the body rather than from the orbit focus (1.)
-    vec3 offset_from_focus{0, 0, 0};
+    glm::dvec3 offset_from_focus{0, 0, 0};
     if (focused) {
         offset_from_focus = orbit_position_at_time(orbit, time);
     }
@@ -515,7 +515,7 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
     this->length = (int) data.size() / 3;
 }
 
-static void append_object_and_children_coordinates(std::vector<float>& positions, const vec3& scene_origin, double time, CelestialBody* body) {
+static void append_object_and_children_coordinates(std::vector<float>& positions, const glm::dvec3& scene_origin, double time, CelestialBody* body) {
     auto pos = body_global_position_at_time(body, time) - scene_origin;
     positions.push_back((float) pos[0]);
     positions.push_back((float) pos[1]);
@@ -529,7 +529,7 @@ static void append_object_and_children_coordinates(std::vector<float>& positions
     }
 }
 
-OrbitSystem::OrbitSystem(CelestialBody* root, const vec3& scene_origin, double time) :
+OrbitSystem::OrbitSystem(CelestialBody* root, const glm::dvec3& scene_origin, double time) :
     // TODO: mode = GL_LINE_LOOP if orbit.eccentricity < 1. else GL_LINE_STRIP
     Mesh(GL_POINTS, 0, false)
 {

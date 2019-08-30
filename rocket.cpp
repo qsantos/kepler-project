@@ -1,7 +1,5 @@
 #include "rocket.hpp"
 
-#include "matrix.hpp"
-
 #include <chrono>
 #include <iostream>
 
@@ -26,20 +24,20 @@ T runge_kutta_4(T(*f)(double, T), double t, T y, double h) {
 
 // TODO: do not use global variable
 static CelestialBody* primary = NULL;
-static vec3 thrust_global;
+static glm::dvec3 thrust_global;
 
 
 State f(double t, State state) {
     (void) t;
 
-    vec3 position = {state[0], state[1], state[2]};
-    vec3 velocity = {state[3], state[4], state[5]};
+    glm::dvec3 position = state.position;
+    glm::dvec3 velocity = state.velocity;
 
     // gravity
-    vec3 primary_position{0, 0, 0};  // TODO
-    double distance = position.dist(primary_position);
+    glm::dvec3 primary_position{0, 0, 0};  // TODO
+    double distance = glm::distance(position, primary_position);
     double g = primary->gravitational_parameter / (distance * distance);
-    vec3 acceleration = position * (-g / distance);
+    glm::dvec3 acceleration = position * (-g / distance);
 
     // propulsion
     acceleration += thrust_global;
@@ -49,6 +47,6 @@ State f(double t, State state) {
 
 void rocket_update(Rocket* rocket, double time, double step, double thrust) {
     primary = rocket->orbit->primary;
-    thrust_global = rocket->orientation * vec3{0, 0, thrust};
+    thrust_global = rocket->orientation * glm::dvec3{0, 0, thrust};
     rocket->state = runge_kutta_4(f, time, rocket->state, step);
 }

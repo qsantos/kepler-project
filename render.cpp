@@ -10,6 +10,8 @@ extern "C" {
 #include "mesh.hpp"
 #include "text_panel.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/vector_angle.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
@@ -281,10 +283,10 @@ static void render_skybox(GlobalState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
-static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec3& scene_origin) {
+static void set_body_matrices(GlobalState* state, CelestialBody* body, const glm::dvec3& scene_origin) {
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(body, state->time) - scene_origin;
-    model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
+    model = glm::translate(model, glm::vec3(position));
     model = glm::scale(model, glm::vec3(float(body->radius)));
 
     // axial tilt
@@ -304,7 +306,7 @@ static void set_body_matrices(GlobalState* state, CelestialBody* body, const vec
     update_matrices(state);
 }
 
-static void render_body(GlobalState* state, CelestialBody* body, const vec3& scene_origin, bool lighting=true) {
+static void render_body(GlobalState* state, CelestialBody* body, const glm::dvec3& scene_origin, bool lighting=true) {
     // draw sphere textured with cubemap (preferrably), or equirectangular texture
     auto& cubemaps = state->render_state->body_cubemaps;
     auto search = cubemaps.find(body);
@@ -349,7 +351,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     }
 }
 
-static void render_star(GlobalState* state, const vec3& scene_origin) {
+static void render_star(GlobalState* state, const glm::dvec3& scene_origin) {
     use_program(state, state->render_state->base_shader);
 
     set_picking_object(state, state->root);
@@ -358,7 +360,7 @@ static void render_star(GlobalState* state, const vec3& scene_origin) {
     clear_picking_object(state);
 }
 
-static void render_bodies(GlobalState* state, const vec3& scene_origin) {
+static void render_bodies(GlobalState* state, const glm::dvec3& scene_origin) {
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (body == state->root) {
@@ -369,21 +371,12 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
         clear_picking_object(state);
     }
 
-    const auto& r = state->rocket.orientation;
-    float orientation_values[16] = {
-        (float) r[0][0], (float) r[1][0], (float) r[2][0], 0,
-        (float) r[0][1], (float) r[1][1], (float) r[2][1], 0,
-        (float) r[0][2], (float) r[1][2], (float) r[2][2], 0,
-        0, 0, 0, 1,
-    };
-    glm::mat4 orientation = glm::make_mat4(orientation_values);
-
     auto model = glm::mat4(1.f);
     auto position = body_global_position_at_time(state->rocket.orbit->primary, state->time)
         - scene_origin
-        + state->rocket.state.position();
-    model = glm::translate(model, glm::vec3(position[0], position[1], position[2]));
-    model *= orientation;
+        + state->rocket.state.position;
+    model = glm::translate(model, glm::vec3(position));
+    model *= glm::mat4(state->rocket.orientation);
     model = glm::rotate(model, M_PIf32/2, glm::vec3(1.f, 0.f, 0.f));
     state->render_state->model_matrix = model;
     update_matrices(state);
@@ -468,14 +461,14 @@ static GLuint init_lens_flare(void) {
     return vbo;
 }
 
-static void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visibility) {
+static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin, float visibility) {
     static GLuint lens_flare_vbo = 0;
     if (lens_flare_vbo == 0) {
         lens_flare_vbo = init_lens_flare();
     }
 
     auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
-    glm::vec3 light_source = {position[0], position[1], position[2]};
+    glm::vec3 light_source = position;
 
     float size = .1f;
     float aspect = float(state->viewport_width) / float(state->viewport_height);
@@ -517,7 +510,7 @@ static void render_lens_flare(GlobalState* state, const vec3& scene_origin, floa
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void render_star_glow(GlobalState* state, const vec3& scene_origin) {
+static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin) {
     if (state->render_state->picking_active) {
         return;
     }
@@ -541,7 +534,7 @@ static void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     }
 
     auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
-    glm::vec3 star_glow_position = {position[0], position[1], position[2]};
+    glm::vec3 star_glow_position = position;
     glm::mat4 view = state->render_state->view_matrix;
     glm::vec3 camera_right = {view[0][0], view[1][0], view[2][0]};
     glm::vec3 camera_up = {view[0][1], view[1][1], view[2][1]};
@@ -599,7 +592,7 @@ static void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     render_lens_flare(state, scene_origin, visibility);
 }
 
-static void render_position_markers(GlobalState* state, const vec3& scene_origin) {
+static void render_position_markers(GlobalState* state, const glm::dvec3& scene_origin) {
     // draw circles around celestial bodies when from far away
     glPointSize(20);
     use_program(state, state->render_state->position_marker_shader);
@@ -607,7 +600,7 @@ static void render_position_markers(GlobalState* state, const vec3& scene_origin
     OrbitSystem(state->root, scene_origin, state->time).draw();
 }
 
-static void render_orbits(GlobalState* state, const vec3& scene_origin) {
+static void render_orbits(GlobalState* state, const glm::dvec3& scene_origin) {
     use_program(state, state->render_state->base_shader);
 
     glPointSize(5);
@@ -624,7 +617,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
         }
 
         auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
-        state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
+        state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position));
         update_matrices(state);
 
         set_picking_object(state, body);
@@ -673,7 +666,7 @@ static void render_orbits(GlobalState* state, const vec3& scene_origin) {
     clear_picking_object(state);
 }
 
-static void render_helpers(GlobalState* state, const vec3& scene_origin) {
+static void render_helpers(GlobalState* state, const glm::dvec3& scene_origin) {
     if (!state->show_helpers) {
         return;
     }
@@ -757,12 +750,12 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     auto vel = orbit_velocity_at_time(orbit, state->time);
     out->print("Current State\n");
     out->print("\n");
-    out->print("Altitude          %14.1f m\n", pos.norm() - orbit->primary->radius);
-    out->print("Distance          %14.1f m\n", pos.norm());
+    out->print("Altitude          %14.1f m\n", glm::length(pos) - orbit->primary->radius);
+    out->print("Distance          %14.1f m\n", glm::length(pos));
     out->print("Mean anomaly             %5.1f deg\n", degrees(mean_anomaly));
     out->print("Eccentric anomaly        %5.1f deg\n", degrees(eccentric_anomaly));
     out->print("True anomaly             %5.1f deg\n", degrees(true_anomaly));
-    out->print("Orbital speed     %12.1f m/s\n", vel.norm());
+    out->print("Orbital speed     %12.1f m/s\n", glm::length(vel));
 
     out->print("\n");
     out->print("\n");
@@ -795,19 +788,11 @@ static void render_navball_sphere(GlobalState* state) {
     model = glm::scale(model, glm::vec3(NAVBALL_RADIUS));
 
     // rocket orientation
-    const auto& r = state->rocket.orientation;
-    float orientation_values[16] = {
-        (float) r[0][0], (float) r[1][0], (float) r[2][0], 0,
-        (float) r[0][1], (float) r[1][1], (float) r[2][1], 0,
-        (float) r[0][2], (float) r[1][2], (float) r[2][2], 0,
-        0, 0, 0, 1,
-    };
-    glm::mat4 orientation = glm::make_mat4(orientation_values);
-    model /= orientation;
+    model /= glm::mat4(state->rocket.orientation);
 
     // surface orientation
     model = glm::rotate(model, -M_PIf32 / 2.f, glm::vec3(0.f, 0.f, 1.f));
-    auto dir = CelestialCoordinates::from_cartesian(state->rocket.state.position());
+    auto dir = CelestialCoordinates::from_cartesian(state->rocket.state.position);
     model = glm::rotate(model, (float) dir.ecliptic_longitude, glm::vec3(0.f, 0.f, 1.f));
     model = glm::rotate(model, M_PIf32 - (float) dir.ecliptic_latitude, glm::vec3(1.f, 0.f, 0.f));
 
@@ -824,28 +809,28 @@ static void render_navball_sphere(GlobalState* state) {
         // B = acos((cos b - cos a cos c) / (sin a sin c))
 
         // A: vertical
-        vec3 vert = {0, 0, body->radius};
+        glm::dvec3 vert = {0, 0, body->radius};
 
         // B: rocket
-        vec3 pos = state->rocket.state.position();
+        glm::dvec3 pos = state->rocket.state.position;
 
         // C: positive/north pole
-        vec3 pole = {0, 0, body->radius};
+        glm::dvec3 pole = {0, 0, body->radius};
         double x_angle = body->positive_pole->ecliptic_latitude - M_PI / 2.;
-        pole = mat3::from_angle_axis(x_angle, 1., 0., 0.) * pole;
+        pole = glm::dmat3(glm::rotate(glm::dmat4(1), x_angle, glm::dvec3(1., 0., 0.))) * pole;
         double z_angle = body->positive_pole->ecliptic_longitude - M_PI / 2.;
-        pole = mat3::from_angle_axis(z_angle, 0., 0., 1.) * pole;
+        pole = glm::dmat3(glm::rotate(glm::dmat4(1), z_angle, glm::dvec3(0., 0., 1.))) * pole;
 
         // deduce angles a, b, c
-        double a = pos.angle(pole);
-        double b = pole.angle(vert);
-        double c = pos.angle(vert);
+        double a = glm::angle(glm::normalize(pos),  glm::normalize(pole));
+        double b = glm::angle(glm::normalize(pole), glm::normalize(vert));
+        double c = glm::angle(glm::normalize(pos),  glm::normalize(vert));
 
         // deduce angle B
         double B = acos((cos(b) - cos(a)*cos(c)) / (sin(a) * sin(c)));
 
         // orient angle B
-        if (pos.angle2(pole, vert) < 0) {
+        if (glm::orientedAngle(glm::normalize(pos), glm::normalize(pole), glm::normalize(vert)) < 0) {
             B = -B;
         }
 
@@ -882,22 +867,16 @@ static void render_navball_markers(GlobalState* state) {
     update_matrices(state);
 
     // rocket orientation
-    const auto& r = state->rocket.orientation;
-    float orientation_values[9] = {
-        (float) r[0][0], (float) r[1][0], (float) r[2][0],
-        (float) r[0][1], (float) r[1][1], (float) r[2][1],
-        (float) r[0][2], (float) r[1][2], (float) r[2][2],
-    };
-    glm::mat3 orientation = glm::make_mat3(orientation_values);
+    glm::mat3 orientation = glm::mat3(state->rocket.orientation);
 
-    auto position = state->rocket.state.position();
-    auto velocity = state->rocket.state.velocity();
+    auto position = state->rocket.state.position;
+    auto velocity = state->rocket.state.velocity;
 
-    auto prograde = velocity / velocity.norm() * NAVBALL_RADIUS * 1.01;
-    auto normal = position.cross(velocity);
-    normal *= NAVBALL_RADIUS * 1.01 / normal.norm();
-    auto radial = prograde.cross(normal);
-    radial *= NAVBALL_RADIUS * 1.01 / radial.norm();
+    auto prograde = velocity / glm::length(velocity) * (double) NAVBALL_RADIUS * 1.01;
+    auto normal = glm::cross(position, velocity);
+    normal *= NAVBALL_RADIUS * 1.01 / glm::length(normal);
+    auto radial = glm::cross(prograde, normal);
+    radial *= NAVBALL_RADIUS * 1.01 / glm::length(radial);
 
     auto prograde2 = glm::vec3{(float) prograde[0], (float) prograde[1], (float) prograde[2]};
     auto normal2 = glm::vec3{(float) normal[0], (float) normal[1], (float) normal[2]};
@@ -1105,9 +1084,9 @@ void render(GlobalState* state) {
     glClearColor(0.f, 0.f, 0.f, .0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    vec3 scene_origin;
+    glm::dvec3 scene_origin;
     if (state->focus == &state->rocket) {
-        scene_origin = state->rocket.state.position() + body_global_position_at_time(state->rocket.orbit->primary, state->time);
+        scene_origin = state->rocket.state.position + body_global_position_at_time(state->rocket.orbit->primary, state->time);
     } else {
         scene_origin = body_global_position_at_time(state->focus, state->time);
     }

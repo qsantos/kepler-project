@@ -179,7 +179,7 @@ void body_remove_satellite(CelestialBody* body, CelestialBody* satellite) {
     }
 }
 
-vec3 body_global_position_at_time(CelestialBody* body, double time) {
+glm::dvec3 body_global_position_at_time(CelestialBody* body, double time) {
     if (body->orbit == NULL) {
         return {0, 0, 0};
     }
@@ -187,7 +187,7 @@ vec3 body_global_position_at_time(CelestialBody* body, double time) {
         fprintf(stderr, "%s is its own primary!\n", body->name);
         exit(EXIT_FAILURE);
     }
-    vec3 primary_position = body_global_position_at_time(body->orbit->primary, time);
-    vec3 relative_position = orbit_position_at_time(body->orbit, time);
+    glm::dvec3 primary_position = body_global_position_at_time(body->orbit->primary, time);
+    glm::dvec3 relative_position = orbit_position_at_time(body->orbit, time);
     return primary_position + relative_position;
 }

@@ -101,28 +101,28 @@ static double _householder(double lambda, double Tstar, double M, double x_0) {
     return x;
 }
 
-void lambert(vec3& v1, vec3& v2, double mu, const vec3& r1, const vec3& r2, double t, int M, int right_branch) {
+void lambert(glm::dvec3& v1, glm::dvec3& v2, double mu, const glm::dvec3& r1, const glm::dvec3& r2, double t, int M, int right_branch) {
     // TODO: compute M_max and check M
 
     // some scalars
-    double r1_norm = r1.norm();
-    double r2_norm = r2.norm();
-    double distance = r1.dist(r2);
+    double r1_norm = glm::length(r1);
+    double r2_norm = glm::length(r2);
+    double distance = glm::distance(r1, r2);
     double s = .5 * (r1_norm + r2_norm + distance);
     double lambda = sqrt(1. - distance/s);
 
     // various unit vectors
-    vec3 i_r1 = r1 / r1_norm;
-    vec3 i_r2 = r2 / r2_norm;
-    vec3 i_h = i_r1.cross(i_r2);
-    i_h /= i_h.norm();  // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L67>
+    glm::dvec3 i_r1 = r1 / r1_norm;
+    glm::dvec3 i_r2 = r2 / r2_norm;
+    glm::dvec3 i_h = glm::cross(i_r1, i_r2);
+    i_h /= glm::length(i_h);  // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L67>
     // <https://github.com/poliastro/poliastro/blob/master/src/poliastro/iod/izzo.py#L72-L76>
     if (i_h[2] < 0.) {
         lambda = -lambda;
         i_h = -i_h;
     }
-    vec3 i_t1 = i_h.cross(i_r1);
-    vec3 i_t2 = i_h.cross(i_r2);
+    glm::dvec3 i_t1 = glm::cross(i_h, i_r1);
+    glm::dvec3 i_t2 = glm::cross(i_h, i_r2);
 
     // make t unitless
     double T = t * sqrt(2.*mu / (s*s*s));

@@ -44,7 +44,7 @@ struct OrbitApsesMesh : public Mesh {
 };
 
 struct OrbitSystem : public Mesh {
-    OrbitSystem(CelestialBody* root, const vec3& scene_origin, double time);
+    OrbitSystem(CelestialBody* root, const glm::dvec3& scene_origin, double time);
 };
 
 #endif

@@ -3,6 +3,8 @@
 #include "recipes.hpp"
 #include "lambert.hpp"
 
+#include <glm/ext/matrix_transform.hpp>
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -44,7 +46,7 @@ double injection_prograde_at_escape_angle(CelestialBody* origin, double r0, doub
     return theta0 + theta1;
 }
 
-double injection_orbit_inclination_from_vsoi(CelestialBody* origin, double r0, vec3 v_soi) {
+double injection_orbit_inclination_from_vsoi(CelestialBody* origin, double r0, glm::dvec3 v_soi) {
     /* Determine the inclination required to reach a specific escape velocity
      *
      * Parameters:
@@ -54,35 +56,35 @@ double injection_orbit_inclination_from_vsoi(CelestialBody* origin, double r0, v
      */
 
     // determine the periapsis of the injection orbit by rotating the velocity at escape
-    double theta = injection_prograde_at_escape_angle(origin, r0, v_soi.norm());
+    double theta = injection_prograde_at_escape_angle(origin, r0, glm::length(v_soi));
     // rotate v_soi around z by -theta and project on xy
     double c = cos(-theta);
     double s = sin(-theta);
-    vec3 p{
+    glm::dvec3 p{
         v_soi[0]*c - v_soi[1]*s,
         v_soi[0]*s + v_soi[1]*c,
         0.,
     };
 
     // normal of injection orbital plane
-    vec3 n = p.cross(v_soi);
+    glm::dvec3 n = glm::cross(p, v_soi);
 
     // angle between normals of injection orbital plane and of ecliptic plane
-    n /= n.norm();
+    n /= glm::length(n);
     return acos(n[2]);
 }
 
-double injection_cost(CelestialBody* origin, double parking_radius, vec3 v_escape) {
+double injection_cost(CelestialBody* origin, double parking_radius, glm::dvec3 v_escape) {
     /* Return the Δv required to escape from an origin body and reach a specific
      * relative velocity at escape
      */
 
     // inclination of the in-SoI transfer orbit
     double injection_inclination = injection_orbit_inclination_from_vsoi(origin, parking_radius, v_escape);
-    return maneuver_orbit_to_escape_cost(origin, parking_radius, parking_radius, v_escape.norm(), injection_inclination);
+    return maneuver_orbit_to_escape_cost(origin, parking_radius, parking_radius, glm::length(v_escape), injection_inclination);
 }
 
-double insertion_cost(CelestialBody* target, double apsis1, double apsis2, vec3 v_encounter) {
+double insertion_cost(CelestialBody* target, double apsis1, double apsis2, glm::dvec3 v_encounter) {
     /* Return the Δv required to insert into an orbit around a target body from
      * a given relative velocity at encounter
      *
@@ -91,7 +93,7 @@ double insertion_cost(CelestialBody* target, double apsis1, double apsis2, vec3 
      *     r0           radius of parking orbit
      *     v_encounter  velocity re. target at encounter
      */
-    return maneuver_orbit_to_escape_cost(target, apsis1, apsis2, v_encounter.norm(), 0.);
+    return maneuver_orbit_to_escape_cost(target, apsis1, apsis2, glm::length(v_encounter), 0.);
 }
 
 double rendez_vous_cost(CelestialBody* origin, CelestialBody* target, double time_at_departure, double transfer_duration, double parking_radius, double apsis1, double apsis2) {
@@ -102,26 +104,24 @@ double rendez_vous_cost(CelestialBody* origin, CelestialBody* target, double tim
     double time_at_arrival = time_at_departure + transfer_duration;
 
     // state of origin at departure
-    vec6 origin_state_at_departure = orbit_state_at_time(origin->orbit, time_at_departure);
-    vec3 origin_position_at_departure{origin_state_at_departure[0], origin_state_at_departure[1], origin_state_at_departure[2]};
-    vec3 origin_velocity_at_departure{origin_state_at_departure[3], origin_state_at_departure[4], origin_state_at_departure[5]};
+    glm::dvec3 origin_position_at_departure = orbit_position_at_time(origin->orbit, time_at_departure);
+    glm::dvec3 origin_velocity_at_departure = orbit_velocity_at_time(origin->orbit, time_at_departure);
 
     // state of target at arrival
-    vec6 target_state_at_arrival = orbit_state_at_time(target->orbit, time_at_arrival);
-    vec3 target_position_at_arrival{target_state_at_arrival[0], target_state_at_arrival[1], target_state_at_arrival[2]};
-    vec3 target_velocity_at_arrival{target_state_at_arrival[3], target_state_at_arrival[4], target_state_at_arrival[5]};
+    glm::dvec3 target_position_at_arrival = orbit_position_at_time(target->orbit, time_at_arrival);
+    glm::dvec3 target_velocity_at_arrival = orbit_velocity_at_time(target->orbit, time_at_arrival);
 
     // determine transfer orbit
-    vec3 transfer_velocity_at_escape, transfer_velocity_at_arrival;
+    glm::dvec3 transfer_velocity_at_escape, transfer_velocity_at_arrival;
     double mu = origin->orbit->primary->gravitational_parameter;
     lambert(transfer_velocity_at_escape, transfer_velocity_at_arrival, mu, origin_position_at_departure, target_position_at_arrival, transfer_duration, 0, 0);
 
     // cost of injection into transfer orbit
-    vec3 v_escape = transfer_velocity_at_escape - origin_velocity_at_departure;
+    glm::dvec3 v_escape = transfer_velocity_at_escape - origin_velocity_at_departure;
     double injection_dv = injection_cost(origin, parking_radius, v_escape);
 
     // cost of insertion into target orbit
-    vec3 v_encounter = transfer_velocity_at_arrival - target_velocity_at_arrival;
+    glm::dvec3 v_encounter = transfer_velocity_at_arrival - target_velocity_at_arrival;
     double insertion_dv = insertion_cost(target, apsis1, apsis2, v_encounter);
 
     return injection_dv + insertion_dv;
@@ -140,38 +140,33 @@ double rendez_vous_cost2(CelestialBody* origin, CelestialBody* target, double ti
     double time_at_arrival = time_at_departure + transfer_duration;
 
     // state of origin at departure
-    vec6 origin_state_at_departure = orbit_state_at_time(origin->orbit, time_at_departure);
-    vec3 origin_position_at_departure{origin_state_at_departure[0], origin_state_at_departure[1], origin_state_at_departure[2]};
-    vec3 origin_velocity_at_departure{origin_state_at_departure[3], origin_state_at_departure[4], origin_state_at_departure[5]};
+    glm::dvec3 origin_position_at_departure = orbit_position_at_time(origin->orbit, time_at_departure);
+    glm::dvec3 origin_velocity_at_departure = orbit_velocity_at_time(origin->orbit, time_at_departure);
 
     // state of target at arrival
-    vec6 target_state_at_arrival = orbit_state_at_time(target->orbit, time_at_arrival);
-    vec3 target_position_at_arrival{target_state_at_arrival[0], target_state_at_arrival[1], target_state_at_arrival[2]};
-    vec3 target_velocity_at_arrival{target_state_at_arrival[3], target_state_at_arrival[4], origin_state_at_departure[5]};
+    glm::dvec3 target_position_at_arrival = orbit_position_at_time(target->orbit, time_at_arrival);
+    glm::dvec3 target_velocity_at_arrival = orbit_velocity_at_time(target->orbit, time_at_arrival);
 
     // determine rotation to bring target on origin's orbital plane
-    vec3 n = origin->orbit->orientation * vec3{0, 0, 1};
+    glm::dvec3 n = origin->orbit->orientation * glm::dvec3{0, 0, 1};
     // angle between target_position_at_arrival and n
-    double relative_inclination = asin(target_position_at_arrival.dot(n) / target_position_at_arrival.norm());
-    vec3 rotation_axis = target_position_at_arrival.cross(n);
-    mat3 plane_change_rotation = mat3::from_angle_axis(-relative_inclination, rotation_axis[0], rotation_axis[1], rotation_axis[2]);
+    // TODO: just use glm::angle
+    double relative_inclination = asin(glm::dot(target_position_at_arrival, n) / glm::length(target_position_at_arrival));
+    glm::dvec3 rotation_axis = glm::cross(target_position_at_arrival, n);
+    glm::dmat3 plane_change_rotation = glm::rotate(glm::dmat4(1), -relative_inclination, rotation_axis);
 
     // BEGIN BLOCK A
     // use plane_change_rotation to rotate target_position_at_arrival in origin's orbital plane
-    vec3 target_position_at_arrival_projected_on_origin_plane = plane_change_rotation * target_position_at_arrival;
+    glm::dvec3 target_position_at_arrival_projected_on_origin_plane = plane_change_rotation * target_position_at_arrival;
     // determine transfer velocities
-    vec3 transfer_velocity_at_escape, transfer_velocity_at_arrival;
+    glm::dvec3 transfer_velocity_at_escape, transfer_velocity_at_arrival;
     double mu = origin->orbit->primary->gravitational_parameter;
     lambert(transfer_velocity_at_escape, transfer_velocity_at_arrival, mu, origin_position_at_departure, target_position_at_arrival_projected_on_origin_plane, transfer_duration, 0, 0);
     // first part of transfer
     Orbit trajectory_at_escape;
-    vec6 state{
-        origin_position_at_departure[0], origin_position_at_departure[1], origin_position_at_departure[2],
-        transfer_velocity_at_escape[0], transfer_velocity_at_escape[1], transfer_velocity_at_escape[2],
-    };
-    orbit_from_state(&trajectory_at_escape, origin->orbit->primary, state, time_at_departure);
+    orbit_from_state(&trajectory_at_escape, origin->orbit->primary, origin_position_at_departure, transfer_velocity_at_escape, time_at_departure);
     // find most efficient time to change plane
-    double true_anomaly_at_intercept = orbit_true_anomaly_at_distance(&trajectory_at_escape, target_position_at_arrival.norm());  // same as projected
+    double true_anomaly_at_intercept = orbit_true_anomaly_at_distance(&trajectory_at_escape, glm::length(target_position_at_arrival));  // same as projected
     // Golden Section search
     double a = 0.;  // TODO
     double b = M_PI;  // TODO
@@ -214,11 +209,11 @@ double rendez_vous_cost2(CelestialBody* origin, CelestialBody* target, double ti
     // TODO: rotate transfer_velocity_at_arrival
 
     // cost of injection into transfer orbit
-    vec3 v_escape = transfer_velocity_at_escape - origin_velocity_at_departure;
+    glm::dvec3 v_escape = transfer_velocity_at_escape - origin_velocity_at_departure;
     double injection_dv = injection_cost(origin, parking_radius, v_escape);
 
     // cost of insertion into target orbit
-    vec3 v_encounter = transfer_velocity_at_arrival - target_velocity_at_arrival;
+    glm::dvec3 v_encounter = transfer_velocity_at_arrival - target_velocity_at_arrival;
     double insertion_dv = insertion_cost(target, apsis1, apsis2, v_encounter);
 
     return injection_dv + plane_change_dv + insertion_dv;
