@@ -784,7 +784,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Time to escape    %14.1f s\n", time_to_escape);
 }
 
-static void render_navball(GlobalState* state) {
+static void render_navball_sphere(GlobalState* state) {
     // general information
     float w = (float) state->viewport_width;
     float h = (float) state->viewport_height;
@@ -1043,6 +1043,30 @@ static void render_navball_frame(GlobalState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
+static void render_navball(GlobalState* state) {
+    // enable write to stencil buffer
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilMask(0xFF);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    render_navball_sphere(state);
+
+    // enable read of stencil buffer
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilMask(0x00);
+
+    render_navball_markers(state);
+
+    // disable stencil buffer
+    glDisable(GL_STENCIL_TEST);
+
+    glDisable(GL_STENCIL_TEST);
+    render_level_indicator(state);
+    render_navball_frame(state);
+}
+
 static void render_hud(GlobalState* state) {
     if (!state->show_hud) {
         return;
@@ -1070,11 +1094,7 @@ static void render_hud(GlobalState* state) {
     if (state->show_help) {
         state->render_state->help.draw();
     }
-
     render_navball(state);
-    render_navball_markers(state);
-    render_level_indicator(state);
-    render_navball_frame(state);
 }
 
 void render(GlobalState* state) {
