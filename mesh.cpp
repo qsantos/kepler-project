@@ -386,6 +386,12 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
         double object_eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, object_mean_anomaly);
         double object_true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, object_eccentric_anomaly);
 
+        // bring to [-PI, PI]
+        object_true_anomaly = fmod2(object_true_anomaly, 2 * M_PI);
+        if (object_true_anomaly > M_PI) {
+            object_true_anomaly -= 2 * M_PI;
+        }
+
         // stop drawing at SoI
         // TODO: handle no sphere of influence
         double escape_true_anomaly = orbit_true_anomaly_at_escape(orbit);
