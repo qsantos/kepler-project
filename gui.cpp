@@ -441,26 +441,26 @@ int main(void) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 1, 0, 0);
+            state.rocket.orientation *= mat3::from_angle_axis(+x, 1, 0, 0);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 1, 0, 0);
+            state.rocket.orientation *= mat3::from_angle_axis(-x, 1, 0, 0);
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 1, 0);
+            state.rocket.orientation *= mat3::from_angle_axis(+x, 0, 1, 0);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 1, 0);
+            state.rocket.orientation *= mat3::from_angle_axis(-x, 0, 1, 0);
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(-x, 0, 0, 1);
+            state.rocket.orientation *= mat3::from_angle_axis(-x, 0, 0, 1);
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.orientation = state.rocket.orientation * mat3::from_angle_axis(+x, 0, 0, 1);
+            state.rocket.orientation *= mat3::from_angle_axis(+x, 0, 0, 1);
         }
 
         state.n_frames_since_last += 1;

@@ -179,7 +179,7 @@ struct matrix{
 };
 
 template<class S, size_t N, size_t M, size_t K>
-matrix<S, N, M> operator*(matrix<S, N, K> lhs, matrix<S, K, M> rhs) {
+matrix<S, N, M> operator*(const matrix<S, N, K>& lhs, const matrix<S, K, M>& rhs) {
     matrix<S, N, M> ret;
     for (size_t i = 0; i < N; i += 1) {
         for (size_t j = 0; j < M; j += 1) {
@@ -194,12 +194,28 @@ matrix<S, N, M> operator*(matrix<S, N, K> lhs, matrix<S, K, M> rhs) {
 }
 
 template<class S, size_t N, size_t M>
-vector<S, M> operator*(matrix<S, N, M> lhs, vector<S, N> rhs) {
+vector<S, M> operator*(const matrix<S, N, M>& lhs, const vector<S, N>& rhs) {
     vector<S, N> ret;
     for (size_t i = 0; i < N; i += 1) {
         ret[i] = lhs[i].dot(rhs);
     }
     return ret;
+}
+
+template<class S, size_t N, size_t M, size_t K>
+matrix<S, N, M>& operator*=(matrix<S, N, K>& lhs, const matrix<S, K, M>& rhs) {
+    matrix<S, N, M> ret;
+    for (size_t i = 0; i < N; i += 1) {
+        for (size_t j = 0; j < M; j += 1) {
+            S sum = 0;
+            for (size_t k = 0; k < K; k += 1) {
+                sum += lhs[i][k] * rhs[k][j];
+            }
+            ret[i][j] = sum;
+        }
+    }
+    lhs = ret;
+    return lhs;
 }
 
 using mat3 = matrix<double, 3, 3>;
