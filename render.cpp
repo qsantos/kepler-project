@@ -174,7 +174,7 @@ void delete_render_state(RenderState* render_state) {
 
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
-void set_color(float red, float green, float blue, float alpha=1.f) {
+static void set_color(float red, float green, float blue, float alpha=1.f) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -184,7 +184,7 @@ void set_color(float red, float green, float blue, float alpha=1.f) {
     }
 }
 
-void use_program(GlobalState* state, GLuint program, bool zoom=true) {
+static void use_program(GlobalState* state, GLuint program, bool zoom=true) {
     glUseProgram(program);
     reset_matrices(state, zoom);
     set_color(1, 1, 1);
@@ -208,7 +208,7 @@ void use_program(GlobalState* state, GLuint program, bool zoom=true) {
     }
 }
 
-void update_matrices(GlobalState* state) {
+static void update_matrices(GlobalState* state) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -349,7 +349,7 @@ static void render_body(GlobalState* state, CelestialBody* body, const vec3& sce
     }
 }
 
-void render_star(GlobalState* state, const vec3& scene_origin) {
+static void render_star(GlobalState* state, const vec3& scene_origin) {
     use_program(state, state->render_state->base_shader);
 
     set_picking_object(state, state->root);
@@ -401,7 +401,7 @@ static void render_bodies(GlobalState* state, const vec3& scene_origin) {
     clear_picking_object(state);
 }
 
-double glow_size(double radius, double temperature, double distance) {
+static double glow_size(double radius, double temperature, double distance) {
     // from https://www.seedofandromeda.com/blogs/51-procedural-star-rendering
     static const double sun_radius = 696e6;
     static const double sun_surface_temperature = 5778.0;
@@ -410,7 +410,7 @@ double glow_size(double radius, double temperature, double distance) {
     return 1e17 * pow(luminosity, 0.25) / pow(distance, 0.5);
 }
 
-GLuint init_lens_flare(void) {
+static GLuint init_lens_flare(void) {
     struct Sprite {
         float offset;
         float size;
@@ -468,7 +468,7 @@ GLuint init_lens_flare(void) {
     return vbo;
 }
 
-void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visibility) {
+static void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visibility) {
     static GLuint lens_flare_vbo = 0;
     if (lens_flare_vbo == 0) {
         lens_flare_vbo = init_lens_flare();
@@ -517,7 +517,7 @@ void render_lens_flare(GlobalState* state, const vec3& scene_origin, float visib
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void render_star_glow(GlobalState* state, const vec3& scene_origin) {
+static void render_star_glow(GlobalState* state, const vec3& scene_origin) {
     if (state->render_state->picking_active) {
         return;
     }
