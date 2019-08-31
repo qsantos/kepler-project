@@ -34,10 +34,6 @@ inline double tan_(double x) {
     return sin(x) / cos(x);
 }
 
-inline double random_uniform(double a, double b) {
-    return a + (double)rand() / RAND_MAX * (b -  a);
-}
-
 inline int isclose(double a, double b) {
     double rel_tol=1e-9;
     double abs_tol=1e-6;

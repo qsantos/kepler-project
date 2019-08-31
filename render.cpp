@@ -438,18 +438,6 @@ static GLuint init_lens_flare(void) {
         data[k++] = +s; data[k++] = +s; data[k++] = 0.f; data[k++] = l + 0.5f; data[k++] = 1.f; data[k++] = o;
     }
 
-    /*
-    for (size_t i = 0; i < n / sizeof(float); ) {
-        for (size_t x = 0; x < 6; x += 1) {
-            for (size_t j = 0; j < 6; j += 1) {
-                printf("%20.9g", data[i++]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-    */
-
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
