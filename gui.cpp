@@ -9,21 +9,65 @@ extern "C" {
 #endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
 static const double THROTTLE_SPEED = .5;
 
-// NOTE: quaternion angle is computed as acos(quat.w), causing dramatic
-// cancellation for small angles (w close to 1.); so we must keep this hack
-// well under 2**24
-static const double HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION = pow(2., 10.);
-
+static const double HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION = pow(2., 100.);
 
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
+
+// Fix for loss of precision of GLM with quaternions of small angles
+template<typename T>
+T angle(glm::qua<T> const& x) {
+    if (x.w > .5) {
+        return asin(sqrt(x.x * x.x + x.y * x.y + x.z * x.z)) * static_cast<T>(2);
+    } else {
+        return acos(x.w) * static_cast<T>(2);
+    }
+}
+template<typename T>
+glm::qua<T> pow(glm::qua<T> const& x, T y) {
+    //Raising to the power of 0 should yield 1
+    //Needed to prevent a division by 0 error later on
+    if(y > -glm::epsilon<T>() && y < glm::epsilon<T>())
+        return glm::qua<T>(1,0,0,0);
+
+    //To deal with non-unit quaternions
+    T magnitude = sqrt(x.x * x.x + x.y * x.y + x.z * x.z + x.w *x.w);
+
+    if (x.w / magnitude == static_cast<T>(1)) {
+    }
+
+    if(abs(x.w / magnitude) > static_cast<T>(.5)) {
+        //Scalar component is close to 1; using it to recover angle would lose precision
+        //Instead, we use the non-scalar components since sin() is accurate around 0
+
+        //Prevent a division by 0 error later on
+        T VectorMagnitude = x.x * x.x + x.y * x.y + x.z * x.z;
+        if (VectorMagnitude == 0) {
+            //Equivalent to raising a real number to a power
+            return glm::qua<T>(glm::pow(x.w, y), 0, 0, 0);
+        }
+
+        T SinAngle = sqrt(VectorMagnitude) / magnitude;
+        T Angle = asin(SinAngle);
+        T NewAngle = Angle * y;
+        T Div = sin(NewAngle) / SinAngle;
+        T Mag = glm::pow(magnitude, y - static_cast<T>(1));
+        return glm::qua<T>(cos(NewAngle) * magnitude * Mag, x.x * Div * Mag, x.y * Div * Mag, x.z * Div * Mag);
+    } else {
+        //Scalar component is small, shouldn't cause loss of precision
+        T Angle = acos(x.w / magnitude);
+        T NewAngle = Angle * y;
+        T Div = sin(NewAngle) / sin(Angle);
+        T Mag = glm::pow(magnitude, y - static_cast<T>(1));
+        return glm::qua<T>(cos(NewAngle) * magnitude * Mag, x.x * Div * Mag, x.y * Div * Mag, x.z * Div * Mag);
+    }
+}
+
 
 void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     (void) length;
@@ -407,7 +451,7 @@ int main(void) {
         state.n_steps_since_last += n_steps;
 
         double k = SIMULATION_STEP * (double) n_steps * HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
-        state.rocket.orientation *= glm::pow(state.rocket.angular_velocity, k);
+        state.rocket.orientation *= pow(state.rocket.angular_velocity, k);
 
         update_rocket_soi(&state);
 
@@ -486,7 +530,7 @@ int main(void) {
 
         // SAS
         if (state.rocket.sas_enabled && !user_input) {
-            double l = glm::angle(state.rocket.angular_velocity);
+            double l = angle(state.rocket.angular_velocity);
             double sas_torque = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
             if (sas_torque > l) {
                 state.rocket.angular_velocity = glm::identity<glm::dquat>();
