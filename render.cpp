@@ -743,6 +743,9 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Mean anomaly             %5.1f deg\n", degrees(mean_anomaly));
     out->print("Eccentric anomaly        %5.1f deg\n", degrees(eccentric_anomaly));
     out->print("True anomaly             %5.1f deg\n", degrees(true_anomaly));
+    out->print("Pitch:                   %5.1f deg\n", degrees(glm::pitch(state->rocket.orientation)));
+    out->print("Yaw:                     %5.1f deg\n", degrees(glm::yaw(state->rocket.orientation)));
+    out->print("Roll:                    %5.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
     out->print("Orbital speed     %12.1f m/s\n", glm::length(vel));
 
     out->print("\n");
