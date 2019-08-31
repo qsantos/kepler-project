@@ -33,6 +33,7 @@ struct Rocket : CelestialBody {
     glm::dquat orientation = glm::identity<glm::dquat>();
     glm::dquat angular_velocity = glm::identity<glm::dquat>();
     double throttle = 0.;
+    bool sas_enabled = true;
 };
 
 void rocket_update(Rocket* rocket, double time, double step, double thrust);

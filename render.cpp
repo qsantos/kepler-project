@@ -705,6 +705,9 @@ static void print_general_info(GlobalState* state, TextPanel* out) {
     }
 
     // version
+    out->print("SAS: %s\n", state->rocket.sas_enabled ? "ON" : "OFF");
+
+    // version
     out->print("Version " VERSION "\n");
 }
 

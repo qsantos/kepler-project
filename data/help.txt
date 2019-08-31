@@ -5,6 +5,7 @@ Left Shift   throttle up
 Left Ctrl    throttle down
 w            full throttle
 x            cut throttle
+t            toggle SAS
 
 # Navigation
 
@@ -16,7 +17,7 @@ Mouse wheel  zoom in and out
 # Display
 
 F11          toggle fullscreen
-t            toggle wireframe mode
+y            toggle wireframe mode
 o            toggle orbits and other helpers
 h            toggle this help
 H            toggle HUD

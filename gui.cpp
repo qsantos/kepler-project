@@ -116,6 +116,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_F11) {
             toggle_fullscreen(window);
         } else if (key == GLFW_KEY_T) {
+            state->rocket.sas_enabled = !state->rocket.sas_enabled;
+        } else if (key == GLFW_KEY_Y) {
             state->show_wireframe = !state->show_wireframe;
         } else if (key == GLFW_KEY_COMMA) {
             state->target_timewarp /= 2.;
@@ -450,29 +452,47 @@ int main(void) {
 
         // orientation
         double x = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
+        bool user_input = false;
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(+x, 0, 0));
+            user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(-x, 0, 0));
+            user_input = true;
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, +x, 0));
+            user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, -x, 0));
+            user_input = true;
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, -x));
+            user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
             state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, +x));
+            user_input = true;
+        }
+
+        // SAS
+        if (state.rocket.sas_enabled && !user_input) {
+            double l = glm::angle(state.rocket.angular_velocity);
+            double sas_torque = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
+            if (sas_torque > l) {
+                state.rocket.angular_velocity = glm::identity<glm::dquat>();
+            } else {
+                state.rocket.angular_velocity = pow(state.rocket.angular_velocity, 1. - sas_torque / l);
+            }
         }
 
         state.n_frames_since_last += 1;
