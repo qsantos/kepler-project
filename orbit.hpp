@@ -6,6 +6,7 @@ struct Orbit;
 #include "body.hpp"
 
 #include <glm/glm.hpp>
+#include <glm/ext/quaternion_double.hpp>
 
 struct Orbit {
     // the celestial body being orbited
@@ -30,7 +31,7 @@ struct Orbit {
     double period;  // aka. sidereal period
 
     // cached transform matrix
-    glm::dmat3 orientation;  // NOTE: only use after orbit_orientate() has been called
+    glm::dquat orientation;  // NOTE: only use after orbit_orientate() has been called
 };
 
 // orbit determination

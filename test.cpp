@@ -159,11 +159,7 @@ Orbit make_dummy_orbit_with_period(double period) {
         0,  // focus
         0,  // mean_motion
         period,  // period
-        {
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0}, // orientation
-        },
+        glm::identity<glm::dquat>(),  // orientation
     };
 }
 
