@@ -16,6 +16,11 @@ extern "C" {
 static const double SIMULATION_STEP = 1. / 128.;
 static const double THROTTLE_SPEED = .5;
 
+// NOTE: quaternion angle is computed as acos(quat.w), causing dramatic
+// cancellation for small angles (w close to 1.); so we must keep this hack
+// well under 2**24
+static const double HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION = pow(2., 10.);
+
 
 // TODO
 static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
@@ -399,7 +404,8 @@ int main(void) {
         }
         state.n_steps_since_last += n_steps;
 
-        state.rocket.orientation *= glm::pow(state.rocket.angular_velocity, SIMULATION_STEP * (double) n_steps);
+        double k = SIMULATION_STEP * (double) n_steps * HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
+        state.rocket.orientation *= glm::pow(state.rocket.angular_velocity, k);
 
         update_rocket_soi(&state);
 
@@ -443,7 +449,7 @@ int main(void) {
         }
 
         // orientation
-        double x = .04;
+        double x = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
