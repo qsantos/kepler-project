@@ -9,7 +9,6 @@ extern "C" {
 #endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/ext/quaternion_trigonometric.hpp>
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
@@ -443,26 +442,26 @@ int main(void) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(1, 0, 0));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(+x, 0, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(1, 0, 0));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(-x, 0, 0));
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(0, 1, 0));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(0, +x, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(0, 1, 0));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(0, -x, 0));
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(0, 0, 1));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(0, 0, -x));
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(0, 0, 1));
+            state.rocket.orientation *= glm::dquat(glm::dvec3(0, 0, +x));
         }
 
         state.n_frames_since_last += 1;
