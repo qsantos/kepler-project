@@ -766,13 +766,12 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
 }
 
 static void render_navball_sphere(GlobalState* state) {
-    // general information
+    // view (bottom center)
     float w = (float) state->viewport_width;
     float h = (float) state->viewport_height;
+    auto model = glm::translate(glm::mat4(1.0f), glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
 
-    // view (bottom center)
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    // set size
     model = glm::scale(model, glm::vec3(NAVBALL_RADIUS));
 
     // rocket orientation
@@ -842,96 +841,58 @@ static void render_navball_markers(GlobalState* state) {
     state->render_state->view_matrix = glm::mat4(1.0f);
     state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
 
-    // general information
+    // bottom center
     float w = (float) state->viewport_width;
     float h = (float) state->viewport_height;
+    auto model = glm::translate(glm::mat4(1.0f), glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
 
-    // view (bottom center)
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
+    // convert state rocket to single precision
+    glm::quat orientation = glm::inverse(state->rocket.orientation);
+    glm::vec3 position = state->rocket.state.position;
+    glm::vec3 velocity = state->rocket.state.velocity;
 
-    // view (bottom center)
-    state->render_state->model_matrix = model;
-    update_matrices(state);
-
-    // rocket orientation
-    glm::mat3 orientation = glm::mat3(glm::toMat3(state->rocket.orientation));
-
-    auto position = state->rocket.state.position;
-    auto velocity = state->rocket.state.velocity;
-
-    auto prograde = velocity / glm::length(velocity) * (double) NAVBALL_RADIUS * 1.01;
-    auto normal = glm::cross(position, velocity);
-    normal *= NAVBALL_RADIUS * 1.01 / glm::length(normal);
-    auto radial = glm::cross(prograde, normal);
-    radial *= NAVBALL_RADIUS * 1.01 / glm::length(radial);
-
-    auto prograde2 = glm::vec3{(float) prograde[0], (float) prograde[1], (float) prograde[2]};
-    auto normal2 = glm::vec3{(float) normal[0], (float) normal[1], (float) normal[2]};
-    auto radial2 = glm::vec3{(float) radial[0], (float) radial[1], (float) radial[2]};
+    // compute positions of markers
+    float r = NAVBALL_RADIUS * 1.01f;
+    glm::vec3 prograde = orientation * glm::normalize(velocity) * r;
+    glm::vec3 normal = orientation * glm::normalize(glm::cross(position, velocity)) * r;
+    glm::vec3 radial = glm::normalize(glm::cross(prograde, normal)) * r;
 
     glDisable(GL_DEPTH_TEST);
 
-    // draw prograde marker
-    auto prograde3 = glm::inverse(orientation) * glm::vec3{-prograde2[0], -prograde2[1], -prograde2[2]};
-    if (prograde3[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, prograde3);
-        update_matrices(state);
+    // prograde / retrograde
+    if (prograde[2] > 0) {
+        state->render_state->model_matrix = glm::translate(model, -prograde);
         glBindTexture(GL_TEXTURE_2D, state->render_state->prograde_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    // draw retrograde marker
-    auto retrograde = glm::inverse(orientation) * glm::vec3{prograde2[0], prograde2[1], prograde2[2]};
-    if (retrograde[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, retrograde);
-        update_matrices(state);
+    } else {
+        state->render_state->model_matrix = glm::translate(model, prograde);
         glBindTexture(GL_TEXTURE_2D, state->render_state->retrograde_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
+    update_matrices(state);
+    state->render_state->navball_marker_mesh.draw();
 
-    // draw normal marker
-    auto normal3 = glm::inverse(orientation) * glm::vec3{-normal2[0], -normal2[1], -normal2[2]};
-    if (normal3[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, normal3);
-        update_matrices(state);
+    // normal / anti-normal
+    if (normal[2] > 0) {
+        state->render_state->model_matrix = glm::translate(model, -normal);
         glBindTexture(GL_TEXTURE_2D, state->render_state->normal_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    // draw anti-normal marker
-    auto anti_normal = glm::inverse(orientation) * glm::vec3{normal2[0], normal2[1], normal2[2]};
-    if (anti_normal[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, anti_normal);
-        update_matrices(state);
+    } else {
+        state->render_state->model_matrix = glm::translate(model, normal);
         glBindTexture(GL_TEXTURE_2D, state->render_state->anti_normal_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
+    update_matrices(state);
+    state->render_state->navball_marker_mesh.draw();
 
-    // draw radial-in marker
-    auto radial_in = glm::inverse(orientation) * glm::vec3{radial2[0], radial2[1], radial2[2]};
-    if (radial_in[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, radial_in);
-        update_matrices(state);
+    // radial-in / radial-out
+    if (radial[2] <= 0) {
+        state->render_state->model_matrix = glm::translate(model, radial);
         glBindTexture(GL_TEXTURE_2D, state->render_state->radial_in_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    // draw radial-out marker
-    auto radial_out = glm::inverse(orientation) * glm::vec3{-radial2[0], -radial2[1], -radial2[2]};
-    if (radial_out[2] <= 0) {
-        state->render_state->model_matrix = glm::translate(model, radial_out);
-        update_matrices(state);
+    } else {
+        state->render_state->model_matrix = glm::translate(model, -radial);
         glBindTexture(GL_TEXTURE_2D, state->render_state->radial_out_marker_texture);
-        state->render_state->navball_marker_mesh.draw();
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
+    update_matrices(state);
+    state->render_state->navball_marker_mesh.draw();
 
+    glBindTexture(GL_TEXTURE_2D, 0);
     glEnable(GL_DEPTH_TEST);
 }
 
