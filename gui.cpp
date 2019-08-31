@@ -9,7 +9,7 @@ extern "C" {
 #endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/quaternion_trigonometric.hpp>
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
@@ -360,7 +360,7 @@ int main(void) {
     },
     body_append_satellite(state.focus, &state.rocket);
     orbit_from_state(&orbit, state.focus, state.rocket.state.position, state.rocket.state.velocity, state.time);
-    state.rocket.orientation = glm::dmat4(1.f);
+    state.rocket.orientation = glm::identity<glm::dquat>();
 
     state.last_fps_measure = real_clock();
     state.last_timewarp_measure = real_clock();
@@ -443,26 +443,26 @@ int main(void) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(1, 0, 0)));
+            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(1, 0, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(1, 0, 0)));
+            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(1, 0, 0));
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(0, 1, 0)));
+            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(0, 1, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(0, 1, 0)));
+            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(0, 1, 0));
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), -x, glm::dvec3(0, 0, 1)));
+            state.rocket.orientation *= glm::angleAxis(-x, glm::dvec3(0, 0, 1));
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dmat3(glm::rotate(glm::dmat4(1), +x, glm::dvec3(0, 0, 1)));
+            state.rocket.orientation *= glm::angleAxis(+x, glm::dvec3(0, 0, 1));
         }
 
         state.n_frames_since_last += 1;

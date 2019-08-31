@@ -4,6 +4,7 @@
 #include "orbit.hpp"
 
 #include <glm/glm.hpp>
+#include <glm/ext/quaternion_double.hpp>
 
 struct State {
     glm::dvec3 position;
@@ -29,7 +30,7 @@ struct State {
 // TODO: Orbiter should be a component of CelestialBody and Rocket
 struct Rocket : CelestialBody {
     State state;
-    glm::dmat3 orientation;
+    glm::dquat orientation;
     double throttle = 0.;
 };
 

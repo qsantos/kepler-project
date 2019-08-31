@@ -376,7 +376,7 @@ static void render_bodies(GlobalState* state, const glm::dvec3& scene_origin) {
         - scene_origin
         + state->rocket.state.position;
     model = glm::translate(model, glm::vec3(position));
-    model *= glm::mat4(state->rocket.orientation);
+    model *= glm::mat4(glm::toMat4(state->rocket.orientation));
     model = glm::rotate(model, M_PIf32/2, glm::vec3(1.f, 0.f, 0.f));
     state->render_state->model_matrix = model;
     update_matrices(state);
@@ -776,7 +776,7 @@ static void render_navball_sphere(GlobalState* state) {
     model = glm::scale(model, glm::vec3(NAVBALL_RADIUS));
 
     // rocket orientation
-    model /= glm::mat4(state->rocket.orientation);
+    model /= glm::mat4(glm::toMat4(state->rocket.orientation));
 
     // surface orientation
     model = glm::rotate(model, -M_PIf32 / 2.f, glm::vec3(0.f, 0.f, 1.f));
@@ -855,7 +855,7 @@ static void render_navball_markers(GlobalState* state) {
     update_matrices(state);
 
     // rocket orientation
-    glm::mat3 orientation = glm::mat3(state->rocket.orientation);
+    glm::mat3 orientation = glm::mat3(glm::toMat3(state->rocket.orientation));
 
     auto position = state->rocket.state.position;
     auto velocity = state->rocket.state.velocity;
