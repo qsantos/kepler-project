@@ -30,7 +30,8 @@ struct State {
 // TODO: Orbiter should be a component of CelestialBody and Rocket
 struct Rocket : CelestialBody {
     State state;
-    glm::dquat orientation;
+    glm::dquat orientation = glm::identity<glm::dquat>();
+    glm::dquat angular_velocity = glm::identity<glm::dquat>();
     double throttle = 0.;
 };
 

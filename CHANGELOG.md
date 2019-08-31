@@ -9,6 +9,7 @@
 - Show orbital and state information
 - Use 2 as time-warp base multiplier
 - Fix navball markers sometimes sticking out
+- Give rocket angular momentum
 
 # v0.5.1 - 2019-08-28
 - Fix crash on Windows due to uninitialized data

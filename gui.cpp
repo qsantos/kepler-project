@@ -9,6 +9,8 @@ extern "C" {
 #endif
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
@@ -359,7 +361,6 @@ int main(void) {
     },
     body_append_satellite(state.focus, &state.rocket);
     orbit_from_state(&orbit, state.focus, state.rocket.state.position, state.rocket.state.velocity, state.time);
-    state.rocket.orientation = glm::identity<glm::dquat>();
 
     state.last_fps_measure = real_clock();
     state.last_timewarp_measure = real_clock();
@@ -379,22 +380,26 @@ int main(void) {
         last = now;
 
         // update rocket state
+        size_t n_steps;
         if (state.rocket.throttle == 0.) {
-            double n_steps = floor(unprocessed_time / SIMULATION_STEP);
-            unprocessed_time -= n_steps * SIMULATION_STEP;
-            state.time += n_steps * SIMULATION_STEP;
-            state.n_steps_since_last += (size_t) n_steps;
+            n_steps = (size_t) floor(unprocessed_time / SIMULATION_STEP);
+            unprocessed_time -= (double) n_steps * SIMULATION_STEP;
+            state.time += (double) n_steps * SIMULATION_STEP;
 
             state.rocket.state.position = orbit_position_at_time(state.rocket.orbit, state.time);
             state.rocket.state.velocity = orbit_velocity_at_time(state.rocket.orbit, state.time);
         } else {
+            n_steps = 0;
             while (unprocessed_time >= SIMULATION_STEP && (real_clock() - last) < 1. / 64.) {
                 rocket_update(&state.rocket, state.time, SIMULATION_STEP, state.rocket.throttle * 100);
                 unprocessed_time -= SIMULATION_STEP;
                 state.time += SIMULATION_STEP;
-                state.n_steps_since_last += 1;
+                n_steps += 1;
             }
         }
+        state.n_steps_since_last += n_steps;
+
+        state.rocket.orientation *= glm::pow(state.rocket.angular_velocity, SIMULATION_STEP * (double) n_steps);
 
         update_rocket_soi(&state);
 
@@ -442,26 +447,26 @@ int main(void) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(+x, 0, 0));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(+x, 0, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(-x, 0, 0));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(-x, 0, 0));
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(0, +x, 0));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, +x, 0));
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(0, -x, 0));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, -x, 0));
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(0, 0, -x));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, -x));
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.orientation *= glm::dquat(glm::dvec3(0, 0, +x));
+            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, +x));
         }
 
         state.n_frames_since_last += 1;
