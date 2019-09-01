@@ -43,8 +43,8 @@ struct GlobalState {
     int windowed_y = 0;
     int windowed_width = 1024;
     int windowed_height = 768;
-    int viewport_width = 1024;
-    int viewport_height = 768;
+    int window_width = 1024;
+    int window_height = 768;
 
     RenderState* render_state = NULL;
 

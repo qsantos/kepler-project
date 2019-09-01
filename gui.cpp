@@ -119,9 +119,8 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     GlobalState* state = static_cast<GlobalState*>(glfwGetWindowUserPointer(window));
 
-    state->viewport_width = width;
-    state->viewport_height = height;
-    glViewport(0, 0, width, height);
+    state->window_width = width;
+    state->window_height = height;
 }
 
 void toggle_fullscreen(GLFWwindow* window) {
@@ -224,8 +223,8 @@ static void cursor_position_callback(GLFWwindow* window, double x, double y) {
         // approximate map and drop at low altitude
         double H = state->view_altitude;
         double R = state->focus->radius;
-        double dtheta = degrees(atan(dx / state->viewport_width * 2 * H / R));
-        double dphi = degrees(atan(dy / state->viewport_height * H / R));
+        double dtheta = degrees(atan(dx / state->window_width * 2 * H / R));
+        double dphi = degrees(atan(dy / state->window_height * H / R));
 
         // clamp speed at high altitude
         if (abs(dtheta) > abs(dx / 4.)) {
@@ -386,7 +385,7 @@ int main(void) {
     }
 
     // initialize viewport
-    glfwGetFramebufferSize(window, &state.viewport_width, &state.viewport_height);
+    glfwGetFramebufferSize(window, &state.window_width, &state.window_height);
 
     state.render_state = make_render_state(state.bodies);
 

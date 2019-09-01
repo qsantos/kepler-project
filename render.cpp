@@ -25,6 +25,10 @@ static const float NEELDLE_LENGTH = NAVBALL_FRAME_RADIUS - NAVBALL_RADIUS;
 static const float NEELDLE_MIN_ANGLE = (float) radians(-135.);
 static const float NEELDLE_MAX_ANGLE = (float) radians(-45.);
 
+static const int THUMBNAIL_SIZE = 250;
+static const double THUMBNAIL_RATIO_THRESHOLD = 50.;
+static const double THUMBNAIL_ALTITUDE_FACTOR = 3.;
+
 struct RenderState {
     // matrices
     glm::mat4 model_matrix;
@@ -248,7 +252,9 @@ void reset_matrices(GlobalState* state, bool zoom) {
     view = glm::rotate(view, float(glm::radians(state->view_theta)), glm::vec3(0.0f, 0.0f, 1.0f));
     state->render_state->view_matrix = view;
 
-    float aspect = float(state->viewport_width) / float(state->viewport_height);
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    float aspect = float(viewport[2]) / float(viewport[3]);  // width / height
     state->render_state->projection_matrix = glm::perspective(glm::radians(45.0f), aspect, .1f, 1e7f);
 
     update_matrices(state);
@@ -459,7 +465,9 @@ static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin
     glm::vec3 light_source = position;
 
     float size = .1f;
-    float aspect = float(state->viewport_width) / float(state->viewport_height);
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    float aspect = float(viewport[2]) / float(viewport[3]);  // width / height
     glm::vec2 dims(size, size * aspect);
 
     float intensity = .2f * visibility;
@@ -773,8 +781,8 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
 
 static void render_navball_sphere(GlobalState* state) {
     // view (bottom center)
-    float w = (float) state->viewport_width;
-    float h = (float) state->viewport_height;
+    float w = (float) state->window_width;
+    float h = (float) state->window_height;
     auto model = glm::translate(glm::mat4(1.0f), glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
 
     // set size
@@ -845,11 +853,11 @@ static void render_navball_markers(GlobalState* state) {
 
     // use orthographic projection
     state->render_state->view_matrix = glm::mat4(1.0f);
-    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->window_width, (float) state->window_height, 0.f, -2e3f, 2e3f);
 
     // bottom center
-    float w = (float) state->viewport_width;
-    float h = (float) state->viewport_height;
+    float w = (float) state->window_width;
+    float h = (float) state->window_height;
     auto model = glm::translate(glm::mat4(1.0f), glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
 
     // convert state rocket to single precision
@@ -904,8 +912,8 @@ static void render_navball_markers(GlobalState* state) {
 
 static void render_level_indicator(GlobalState* state) {
     // general information
-    float w = (float) state->viewport_width;
-    float h = (float) state->viewport_height;
+    float w = (float) state->window_width;
+    float h = (float) state->window_height;
 
     // view (bottom center)
     auto model = glm::mat4(1.0f);
@@ -929,17 +937,18 @@ static void render_navball_frame(GlobalState* state) {
 
     // use orthographic projection
     state->render_state->view_matrix = glm::mat4(1.0f);
-    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->window_width, (float) state->window_height, 0.f, -2e3f, 2e3f);
     update_matrices(state);
 
     // general information
-    float w = (float) state->viewport_width;
-    float h = (float) state->viewport_height;
+    float w = (float) state->window_width;
+    float h = (float) state->window_height;
 
     // view (bottom center)
     auto model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
     model = glm::scale(model, glm::vec3(2 * NAVBALL_FRAME_RADIUS));
+    model = glm::scale(model, glm::vec3(1, -1, 1));
 
     // setup matrices
     state->render_state->model_matrix = model;
@@ -1013,7 +1022,7 @@ static void render_hud(GlobalState* state) {
 
     // use orthographic projection
     state->render_state->view_matrix = glm::mat4(1.0f);
-    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->viewport_width, (float) state->viewport_height, 0.f, -2e3f, 2e3f);
+    state->render_state->projection_matrix = glm::ortho(0.f, (float) state->window_width, (float) state->window_height, 0.f, -2e3f, 2e3f);
     update_matrices(state);
 
     state->render_state->general_info.clear();
@@ -1021,7 +1030,7 @@ static void render_hud(GlobalState* state) {
     state->render_state->general_info.draw();
 
     state->render_state->orbital_info.clear();
-    state->render_state->orbital_info.x = (float) state->viewport_width - 19.f * 20.f;
+    state->render_state->orbital_info.x = (float) state->window_width - 19.f * 20.f;
     print_orbital_info(state, &state->render_state->orbital_info);
     state->render_state->orbital_info.draw();
 
@@ -1036,7 +1045,7 @@ void render(GlobalState* state) {
         state->render_state->picking_objects.clear();
     }
 
-    glClearColor(0.f, 0.f, 0.f, .0f);
+    glViewport(0, 0, state->window_width, state->window_height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glm::dvec3 scene_origin;
@@ -1058,8 +1067,25 @@ void render(GlobalState* state) {
     render_helpers(state, scene_origin);
     render_star(state, scene_origin);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (state->view_altitude / state->focus->radius > THUMBNAIL_RATIO_THRESHOLD) {
+        glViewport(10, 10, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        double view_altitude = state->view_altitude;
+        state->view_altitude = state->focus->radius * THUMBNAIL_ALTITUDE_FACTOR;
+
+        render_skybox(state);
+        render_bodies(state, scene_origin);
+        render_star_glow(state, scene_origin);
+        render_helpers(state, scene_origin);
+        render_star(state, scene_origin);
+
+        state->view_altitude = view_altitude;;
+    }
+
+    glViewport(0, 0, state->window_width, state->window_height);
     glClear(GL_DEPTH_BUFFER_BIT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     render_hud(state);
 }
 
@@ -1106,12 +1132,12 @@ CelestialBody* pick(GlobalState* state) {
     const int search_radius = 20;
 
     int cx = (int) state->cursor_x;
-    int cy = state->viewport_height - (int) state->cursor_y;
+    int cy = state->window_height - (int) state->cursor_y;
 
     int min_x = std::max(cx - search_radius, 0);
-    int max_x = std::min(cx + search_radius, state->viewport_width - 1);
+    int max_x = std::min(cx + search_radius, state->window_width - 1);
     int min_y = std::max(cy - search_radius, 0);
-    int max_y = std::min(cy + search_radius, state->viewport_height - 1);
+    int max_y = std::min(cy + search_radius, state->window_height - 1);
 
     int w = max_x - min_x + 1;
     int h = max_y - min_y + 1;

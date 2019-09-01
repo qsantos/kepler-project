@@ -1,4 +1,7 @@
-# v0.6.0 - Unreleased
+# v0.7.0 - Unreleased
+- Add thumbnail view
+
+# v0.6.0 - 2019-08-31
 - Fix execution on Nvidia GPUs
 - Update help message
 - Reduce useless noise in console on Nvidia GPUs
