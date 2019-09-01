@@ -84,6 +84,7 @@ struct RenderState {
     TextPanel orbital_info = TextPanel(5.f, 5.f);
 
     bool picking_active = false;
+    size_t current_picking_name = 0;
     std::vector<CelestialBody*> picking_objects;
 };
 
@@ -210,7 +211,7 @@ static void use_program(GlobalState* state, GLuint program, bool zoom=true) {
     var = glGetUniformLocation(program, "picking_active");
     if (var >= 0) {
         glUniform1i(var, state->render_state->picking_active);
-        set_picking_name(state->render_state->picking_objects.size());
+        set_picking_name(state->render_state->current_picking_name);
     }
 }
 
@@ -1110,13 +1111,16 @@ void set_picking_object(GlobalState* state, CelestialBody* object) {
     }
 
     state->render_state->picking_objects.push_back(object);
-    set_picking_name(state->render_state->picking_objects.size());
+    size_t name = state->render_state->picking_objects.size();
+    state->render_state->current_picking_name = name;
+    set_picking_name(name);
 }
 
 void clear_picking_object(GlobalState* state) {
     if (!state->render_state->picking_active) {
         return;
     }
+    state->render_state->current_picking_name = 0;
     set_picking_name(0);
 }
 
