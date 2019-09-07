@@ -22,7 +22,8 @@ static const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 // Fix for loss of precision of GLM with quaternions of small angles
 template<typename T>
 T angle(glm::qua<T> const& x) {
-    if (x.w > .5) {
+    constexpr T threshold = glm::cos(static_cast<T>(.5));
+    if (x.w > threshold) {
         return asin(sqrt(x.x * x.x + x.y * x.y + x.z * x.z)) * static_cast<T>(2);
     } else {
         return acos(x.w) * static_cast<T>(2);
@@ -38,10 +39,8 @@ glm::qua<T> pow(glm::qua<T> const& x, T y) {
     //To deal with non-unit quaternions
     T magnitude = sqrt(x.x * x.x + x.y * x.y + x.z * x.z + x.w *x.w);
 
-    if (x.w / magnitude == static_cast<T>(1)) {
-    }
-
-    if(abs(x.w / magnitude) > static_cast<T>(.5)) {
+    constexpr T threshold = glm::cos(static_cast<T>(.5));
+    if (glm::abs(x.w / magnitude) > threshold) {
         //Scalar component is close to 1; using it to recover angle would lose precision
         //Instead, we use the non-scalar components since sin() is accurate around 0
 
