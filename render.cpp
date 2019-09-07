@@ -8,6 +8,7 @@ extern "C" {
 }
 
 #include "mesh.hpp"
+#include "model.hpp"
 #include "text_panel.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -61,8 +62,6 @@ struct RenderState {
     // textures
     GLuint star_glow_texture;
     GLuint lens_flare_texture;
-    GLuint rocket_texture_on;
-    GLuint rocket_texture_off;
     GLuint skybox_texture;
     GLuint navball_texture;
     GLuint navball_frame_texture;
@@ -82,6 +81,8 @@ struct RenderState {
     TextPanel general_info = TextPanel(5.f, 5.f);
     TextPanel help = TextPanel(5.f, 157.f);
     TextPanel orbital_info = TextPanel(5.f, 5.f);
+
+    Model rocket_model;
 
     bool picking_active = false;
     size_t current_picking_name = 0;
@@ -128,8 +129,6 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     // textures
     render_state->star_glow_texture          = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture         = load_texture("data/textures/lens_flares.png");
-    render_state->rocket_texture_on          = load_texture("data/textures/rocket_on.png");
-    render_state->rocket_texture_off         = load_texture("data/textures/rocket_off.png");
     render_state->skybox_texture             = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
     render_state->navball_texture            = load_texture("data/textures/navball.png");
     render_state->navball_frame_texture      = load_texture("data/textures/navball-frame.png");
@@ -172,6 +171,8 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
         free(help);
     }
 
+    render_state->rocket_model.load("data/models/rocket.blend");
+
     return render_state;
 }
 
@@ -181,7 +182,7 @@ void delete_render_state(RenderState* render_state) {
 
 const time_t J2000 = 946728000UL;  // 2000-01-01T12:00:00Z
 
-static void set_color(float red, float green, float blue, float alpha=1.f) {
+void set_color(float red, float green, float blue, float alpha=1.f) {
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 
@@ -384,20 +385,12 @@ static void render_bodies(GlobalState* state, const glm::dvec3& scene_origin) {
         + state->rocket.state.position;
     model = glm::translate(model, glm::vec3(position));
     model *= glm::mat4(glm::toMat4(state->rocket.orientation));
-    model = glm::rotate(model, M_PIf32/2, glm::vec3(1.f, 0.f, 0.f));
     state->render_state->model_matrix = model;
     update_matrices(state);
 
     set_picking_object(state, &state->rocket);
-    glDisable(GL_CULL_FACE);
-    if (state->rocket.throttle == 0.) {
-        glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture_off);
-    } else {
-        glBindTexture(GL_TEXTURE_2D, state->render_state->rocket_texture_on);
-    }
-    state->render_state->square.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
-    glEnable(GL_CULL_FACE);
+    state->render_state->rocket_model.draw();
     clear_picking_object(state);
 }
 

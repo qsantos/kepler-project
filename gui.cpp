@@ -400,7 +400,7 @@ int main(void) {
 
     Orbit orbit;
     state.rocket.name = "Rocket";
-    state.rocket.radius = 1.;
+    state.rocket.radius = 5.;
     state.rocket.sphere_of_influence = 0.;
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;

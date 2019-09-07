@@ -1,6 +1,7 @@
 # v0.7.0 - Unreleased
 - Add thumbnail view
 - Fixed clicking on position markers switch to rocket
+- Use 3D model for rocket
 
 # v0.6.0 - 2019-08-31
 - Fix execution on Nvidia GPUs

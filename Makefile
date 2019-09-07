@@ -2,7 +2,7 @@ CCFLAGS+=-O3 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla -g
 CFLAGS+=$(CCFLAGS) -std=c99 -Wstrict-prototypes
 CXXFLAGS+=$(CCFLAGS) -std=c++11
 LDFLAGS+=-O3
-LDLIBS:=-lm -lcjson -lGL -lGLEW -lglfw -lstdc++
+LDLIBS:=-lm -lcjson -lGL -lGLEW -lglfw -lassimp -lstdc++
 TARGETS:=test example gui
 GIT_VERSION=$(shell git describe --tags --always)
 
@@ -24,7 +24,7 @@ all: $(TARGETS)
 
 example: example.o body.o orbit.o recipes.o util.o load.o lambert.o
 test: test.o body.o orbit.o util.o load.o recipes.o lambert.o rocket.o
-gui: gui.o render.o mesh.o texture.o shaders.o text_panel.o body.o orbit.o load.o util.o rocket.o
+gui: gui.o render.o mesh.o texture.o shaders.o text_panel.o body.o orbit.o load.o util.o rocket.o model.o
 uv2cubemap:
 
 set_version:

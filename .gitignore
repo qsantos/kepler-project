@@ -10,3 +10,4 @@ TODO.md
 junk/
 *.pyc
 .mypy_cache/
+dna.txt
