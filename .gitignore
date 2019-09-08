@@ -4,6 +4,7 @@ test
 example
 simulation
 gui
+*.dll
 *.exe
 tags
 TODO.md
