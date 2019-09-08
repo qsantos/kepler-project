@@ -6,7 +6,7 @@ RUN echo "deb http://ftp.fr.debian.org/debian/ buster main">/etc/apt/sources.lis
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         cppcheck git make \
-        g++ libglew-dev libglfw3-dev libglm-dev libstb-dev libcjson-dev \
+        g++ libassimp-dev libglew-dev libglfw3-dev libglm-dev libstb-dev libcjson-dev \
         wget ca-certificates zip unzip cmake mingw-w64 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -59,3 +59,15 @@ RUN wget "https://github.com/glfw/glfw/releases/download/3.3/glfw-3.3.bin.WIN64.
 # stb_image
 RUN mkdir "$INSTALL_DIR/include/stb"
 RUN wget "https://raw.githubusercontent.com/nothings/stb/2c2908f50515dcd939f24be261c3ccbcd277bb49/stb_image.h" -O "$INSTALL_DIR/include/stb/stb_image.h"
+
+# assimp
+RUN wget "https://github.com/assimp/assimp/archive/v4.1.0.tar.gz" -O "assimp-v0.4.1.0.tar.gz" \
+    && tar xvf "assimp-v0.4.1.0.tar.gz" \
+    && rm "assimp-v0.4.1.0.tar.gz" \
+    && cd "assimp-4.1.0" \
+    && cmake -DCMAKE_TOOLCHAIN_FILE="$CMAKE_CFG" -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" . \
+    && make assimp \
+    && cp -r include/* "$INSTALL_DIR/include/" \
+    && cp lib/libassimp.dll.a "$INSTALL_DIR/lib/libassimp.a" \
+    && cd .. \
+    && rm -Rf "assimp-4.1.0" \

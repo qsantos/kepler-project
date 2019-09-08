@@ -1,0 +1,10 @@
+junk/
+*.exe
+*.dll
+*.o
+tags
+.mypy_cache/
+test
+example
+simulation
+dna.txt
