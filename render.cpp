@@ -171,7 +171,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
         free(help);
     }
 
-    render_state->rocket_model.load("data/models/rocket.blend");
+    render_state->rocket_model.load("data/models/h2f2obj/f.obj");
 
     return render_state;
 }

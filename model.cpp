@@ -1,13 +1,17 @@
 #include "model.hpp"
 
+extern "C" {
+#include "texture.h"
+}
+
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <GL/glew.h>
 
-Mesh2::Mesh2(const vector<Vertex>& vertices_, const vector<unsigned int>& indices_, glm::vec3 color_) :
+Mesh2::Mesh2(const vector<Vertex>& vertices_, const vector<unsigned int>& indices_, GLuint diffuse_map_) :
     vertices{vertices_},
     indices{indices_},
-    color{color_}
+    diffuse_map{diffuse_map_}
 {
     glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
@@ -18,16 +22,12 @@ Mesh2::Mesh2(const vector<Vertex>& vertices_, const vector<unsigned int>& indice
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(unsigned int), this->indices.data(), GL_STATIC_DRAW);
 }
 
-void set_color(float red, float green, float blue, float alpha=1.f);
-
 void Mesh2::draw(void) {
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
 
     GLint program;
     glGetIntegerv(GL_CURRENT_PROGRAM, &program);
-
-    set_color(this->color.x, this->color.y, this->color.z, 1.);
 
     GLint var = glGetAttribLocation(program, "v_position");
     glEnableVertexAttribArray(var);
@@ -45,20 +45,34 @@ void Mesh2::draw(void) {
         glVertexAttribPointer(var, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoords));
     }
 
-    /*
-    // vertex tangent
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Tangent));
+    var = glGetAttribLocation(program, "v_tangent");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+    }
 
-    // vertex bitangent
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Bitangent));
-    */
+    var = glGetAttribLocation(program, "v_bitangent");
+    if (var >= 0) {
+        glEnableVertexAttribArray(var);
+        glVertexAttribPointer(var, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
+    }
 
-    //glDrawElements(GL_TRIANGLES, (GLsizei) indices.size(), GL_UNSIGNED_INT, 0);
+    glBindTexture(GL_TEXTURE_2D, this->diffuse_map);
     glDrawRangeElements(GL_TRIANGLES, 0, (GLsizei) this->vertices.size() - 1, (GLsizei) indices.size(), GL_UNSIGNED_INT, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+GLuint Model::load_material_texture(aiMaterial *mat, aiTextureType type) {
+    for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
+        aiString filename;
+        mat->GetTexture(type, i, &filename);
+
+        std::string path = this->base_path + "/" + filename.C_Str();
+        return load_texture(path.c_str());
+    }
+    return 0;
 }
 
 Mesh2 Model::do_mesh(aiMesh *mesh, const aiScene *scene) {
@@ -67,47 +81,55 @@ Mesh2 Model::do_mesh(aiMesh *mesh, const aiScene *scene) {
     vector<Vertex> vertices;
     vector<unsigned int> indices;
 
+    // vertices
     for (size_t i = 0; i < mesh->mNumVertices; i += 1) {
         Vertex vertex;
 
-        vertex.position = {
-            mesh->mVertices[i].x,
-            mesh->mVertices[i].y,
-            mesh->mVertices[i].z,
-        };
+        // position
+        if (mesh->HasPositions()) {
+            vertex.position = {
+                mesh->mVertices[i].x,
+                mesh->mVertices[i].y,
+                mesh->mVertices[i].z,
+            };
+        }
 
-        vertex.normal = {
-            mesh->mNormals[i].x,
-            mesh->mNormals[i].y,
-            mesh->mNormals[i].z,
-        };
+        // normals
+        if (mesh->HasNormals()) {
+            vertex.normal = {
+                mesh->mNormals[i].x,
+                mesh->mNormals[i].y,
+                mesh->mNormals[i].z,
+            };
+        }
 
-        // texture coordinates
-        if (mesh->mTextureCoords[0]) {
+        // texcoords
+        if (mesh->HasTextureCoords(0)) {
             vertex.texcoords = {
                 mesh->mTextureCoords[0][i].x,
                 mesh->mTextureCoords[0][i].y,
             };
-        } else {
-            vertex.texcoords = {0.0f, 0.0f};
         }
 
-        vertex.tangent = {
-            mesh->mTangents[i].x,
-            mesh->mTangents[i].y,
-            mesh->mTangents[i].z,
-        };
+        // tangent and bitangent
+        if (mesh->HasTangentsAndBitangents()) {
+            vertex.tangent = {
+                mesh->mTangents[i].x,
+                mesh->mTangents[i].y,
+                mesh->mTangents[i].z,
+            };
 
-        vertex.bitangent = {
-            mesh->mBitangents[i].x,
-            mesh->mBitangents[i].y,
-            mesh->mBitangents[i].z,
-        };
+            vertex.bitangent = {
+                mesh->mBitangents[i].x,
+                mesh->mBitangents[i].y,
+                mesh->mBitangents[i].z,
+            };
+        }
 
         vertices.push_back(vertex);
     }
 
-    // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+    // indices
     for (size_t i = 0; i < mesh->mNumFaces; i += 1) {
         aiFace face = mesh->mFaces[i];
         for (size_t j = 0; j < face.mNumIndices; j += 1) {
@@ -115,14 +137,13 @@ Mesh2 Model::do_mesh(aiMesh *mesh, const aiScene *scene) {
         }
     }
 
+    // material
     auto material = scene->mMaterials[mesh->mMaterialIndex];
 
-    aiColor3D diffuse;
-    material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
-    glm::vec3 color = {diffuse.r, diffuse.g, diffuse.b};
+    GLuint diffuse_map = this->load_material_texture(material, aiTextureType_DIFFUSE);
 
     // return a mesh object created from the extracted mesh data
-    return Mesh2(vertices, indices, color);
+    return Mesh2(vertices, indices, diffuse_map);
 }
 
 void Model::do_node(aiNode* node, const aiScene* scene) {
@@ -137,14 +158,17 @@ void Model::do_node(aiNode* node, const aiScene* scene) {
 }
 
 
-void Model::load(const char* path) {
+void Model::load(const std::string& path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (scene == NULL || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == NULL) {
-        fprintf(stderr, "Failed to load model %s: %s\n", path, importer.GetErrorString());
+        fprintf(stderr, "Failed to load model %s: %s\n", path.c_str(), importer.GetErrorString());
         exit(EXIT_FAILURE);
     }
+
+    std::string s(path);
+    this->base_path = s.substr(0, s.find_last_of('/'));
 
     this->do_node(scene->mRootNode, scene);
 }
