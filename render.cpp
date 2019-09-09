@@ -54,7 +54,6 @@ struct RenderState {
     CubeMesh cube = CubeMesh(10.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
     RectMesh square = RectMesh(1, 1);
-    RectMesh level_indicator_mesh = RectMesh(1, .4);
     RectMesh navball_marker_mesh = RectMesh(NAVBALL_MARKER_SIZE, -NAVBALL_MARKER_SIZE);
     map<CelestialBody*, OrbitMesh> orbit_meshes;
     map<CelestialBody*, OrbitApsesMesh> apses_meshes;
@@ -904,28 +903,6 @@ static void render_navball_markers(GlobalState* state) {
     glEnable(GL_DEPTH_TEST);
 }
 
-static void render_level_indicator(GlobalState* state) {
-    // general information
-    float w = (float) state->window_width;
-    float h = (float) state->window_height;
-
-    // view (bottom center)
-    auto model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(w / 2.f, h - NAVBALL_RADIUS, -1e3f));
-    model = glm::scale(model, glm::vec3(LEVEL_INDICATOR_WIDTH, -LEVEL_INDICATOR_WIDTH, LEVEL_INDICATOR_WIDTH));
-
-    // setup matrices
-    state->render_state->model_matrix = model;
-    update_matrices(state);
-
-    // draw level indicator
-    glDisable(GL_DEPTH_TEST);
-    glBindTexture(GL_TEXTURE_2D, state->render_state->level_indicator_texture);
-    state->render_state->level_indicator_mesh.draw();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glEnable(GL_DEPTH_TEST);
-}
-
 static void render_navball_frame(GlobalState* state) {
     use_program(state, state->render_state->hud_shader);
 
@@ -999,8 +976,6 @@ static void render_navball(GlobalState* state) {
     // disable stencil buffer
     glDisable(GL_STENCIL_TEST);
 
-    glDisable(GL_STENCIL_TEST);
-    render_level_indicator(state);
     render_navball_frame(state);
 }
 
