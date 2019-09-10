@@ -10,10 +10,12 @@ RUN echo "deb http://ftp.fr.debian.org/debian/ buster main">/etc/apt/sources.lis
         wget ca-certificates zip unzip cmake mingw-w64 \
     && rm -rf /var/lib/apt/lists/*
 
+ENV DLLS_DIR="/opt/dlls"
 ENV INSTALL_DIR="/usr/local/x86_64-w64-mingw32"
 ENV CMAKE_CFG="/home/Toolchain-mingw32.cmake"
 
 COPY Toolchain-mingw32.cmake "$CMAKE_CFG"
+RUN mkdir -p "$DLLS_DIR/"
 
 # cJSON
 RUN wget "https://github.com/DaveGamble/cJSON/archive/v1.7.12.tar.gz" -O "cJSON-1.7.12.tar.gz" \
@@ -23,6 +25,7 @@ RUN wget "https://github.com/DaveGamble/cJSON/archive/v1.7.12.tar.gz" -O "cJSON-
     && cmake -DCMAKE_TOOLCHAIN_FILE="$CMAKE_CFG" -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR/" . \
     && make install \
     && mv "$INSTALL_DIR/lib/libcjson.dll.a" "$INSTALL_DIR/lib/libcjson.a" \
+    && mv "$INSTALL_DIR/lib/libcjson.dll" "$DLLS_DIR/" \
     && cd .. \
     && rm -Rf "cJSON-1.7.12"
 
@@ -41,8 +44,9 @@ RUN wget "https://github.com/nigels-com/glew/releases/download/glew-2.1.0/glew-2
     && unzip "glew-2.1.0-win32.zip" \
     && rm "glew-2.1.0-win32.zip" \
     && cd "glew-2.1.0" \
-    && cp -r include/* /usr/local/x86_64-w64-mingw32/include/ \
-    && cp lib/Release/x64/* /usr/local/x86_64-w64-mingw32/lib/ \
+    && cp -r "include/GL" "$INSTALL_DIR/include/" \
+    && cp "lib/Release/x64/glew32.lib" "$INSTALL_DIR/lib/" \
+    && cp "bin/Release/x64/glew32.dll" "$DLLS_DIR/" \
     && cd .. \
     && rm -Rf "glew-2.1.0"
 
@@ -51,8 +55,9 @@ RUN wget "https://github.com/glfw/glfw/releases/download/3.3/glfw-3.3.bin.WIN64.
     && unzip "glfw-3.3.bin.WIN64.zip" \
     && rm "glfw-3.3.bin.WIN64.zip" \
     && cd "glfw-3.3.bin.WIN64" \
-    && cp -r include/* "$INSTALL_DIR/include/" \
-    && cp lib-mingw-w64/* "$INSTALL_DIR/lib/" \
+    && cp -r "include/GLFW" "$INSTALL_DIR/include/" \
+    && cp "lib-mingw-w64/libglfw3.a" "$INSTALL_DIR/lib/" \
+    && cp "lib-mingw-w64/glfw3.dll" "$DLLS_DIR/" \
     && cd .. \
     && rm -Rf "glfw-3.3.bin.WIN64"
 
@@ -67,7 +72,8 @@ RUN wget "https://github.com/assimp/assimp/archive/v4.1.0.tar.gz" -O "assimp-v0.
     && cd "assimp-4.1.0" \
     && cmake -DCMAKE_TOOLCHAIN_FILE="$CMAKE_CFG" -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" . \
     && make assimp \
-    && cp -r include/* "$INSTALL_DIR/include/" \
-    && cp lib/libassimp.dll.a "$INSTALL_DIR/lib/libassimp.a" \
+    && cp -r "include/assimp" "$INSTALL_DIR/include/" \
+    && cp "lib/libassimp.dll.a" "$INSTALL_DIR/lib/libassimp.a" \
+    && cp "bin/libassimp.dll" "$DLLS_DIR/" \
     && cd .. \
-    && rm -Rf "assimp-4.1.0" \
+    && rm -Rf "assimp-4.1.0"
