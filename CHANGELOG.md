@@ -3,6 +3,7 @@
 - Fixed clicking on position markers switch to rocket
 - Use 3D model for rocket
 - Improve navball appearance
+- Change throttle bindings to free up left shift and left control modifier keys
 
 # v0.6.0 - 2019-08-31
 - Fix execution on Nvidia GPUs

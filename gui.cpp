@@ -472,24 +472,28 @@ int main(void) {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        // throttle
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-            state.rocket.throttle += elapsed * THROTTLE_SPEED;
-            if (state.rocket.throttle > 1.) {
-                state.rocket.throttle = 1;
-            }
-        }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-            state.rocket.throttle -= elapsed * THROTTLE_SPEED;
-            if (state.rocket.throttle < 0.) {
-                state.rocket.throttle = 0;
-            }
-        }
+        // throttle up
         if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
-            state.rocket.throttle = 1;
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+                state.rocket.throttle = 1;
+            } else {
+                state.rocket.throttle += elapsed * THROTTLE_SPEED;
+                if (state.rocket.throttle > 1.) {
+                    state.rocket.throttle = 1;
+                }
+            }
         }
+
+        // throttle down
         if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-            state.rocket.throttle = 0;
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+                state.rocket.throttle = 0;
+            } else {
+                state.rocket.throttle -= elapsed * THROTTLE_SPEED;
+                if (state.rocket.throttle < 0.) {
+                    state.rocket.throttle = 0;
+                }
+            }
         }
 
         // orientation

@@ -1,10 +1,10 @@
 # Controls
 
 w/a/s/d/q/e  rocket orientation
-Left Shift   throttle up
-Left Ctrl    throttle down
-w            full throttle
-x            cut throttle
+z            throttle up
+x            throttle down
+Shift+z      full throttle
+Shift+x      cut throttle
 t            toggle SAS
 
 # Navigation
