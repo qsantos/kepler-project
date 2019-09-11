@@ -4,6 +4,7 @@
 - Use 3D model for rocket
 - Improve navball appearance
 - Change throttle bindings to free up left shift and left control modifier keys
+- Ability to select target
 
 # v0.6.0 - 2019-08-31
 - Fix execution on Nvidia GPUs

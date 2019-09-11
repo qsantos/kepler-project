@@ -21,6 +21,7 @@ struct GlobalState {
     std::map<std::string, CelestialBody*> bodies;
     CelestialBody* root;
     CelestialBody* focus;
+    CelestialBody* target = NULL;
     Rocket rocket;
 
     double fps = 60.;

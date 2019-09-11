@@ -198,9 +198,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         if (action == GLFW_PRESS) {
             CelestialBody* target = pick(state);
-            if (target != NULL) {
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+                state->target = target;
+                printf("Switched target to %s\n", target != NULL ? target->name : "None");
+            } else if (target != NULL) {
                 state->focus = target;
-                printf("Switched to %s\n", target->name);
+                printf("Switched focus to %s\n", target->name);
             }
         }
     } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {

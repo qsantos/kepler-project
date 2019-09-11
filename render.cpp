@@ -595,7 +595,6 @@ static void render_orbits(GlobalState* state, const glm::dvec3& scene_origin) {
     glPointSize(5);
 
     // unfocused orbits
-    set_color(1, 1, 0, .1f);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (is_ancestor_of(body, state->focus)) {
@@ -605,10 +604,19 @@ static void render_orbits(GlobalState* state, const glm::dvec3& scene_origin) {
             continue;
         }
 
+        // transform matrices
         auto position = body_global_position_at_time(body->orbit->primary, state->time) - scene_origin;
         state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position));
         update_matrices(state);
 
+        // select color
+        if (body == state->target) {
+            set_color(1, 0, 0, .3f);
+        } else {
+            set_color(1, 1, 0, .1f);
+        }
+
+        // draw
         set_picking_object(state, body);
         state->render_state->orbit_meshes.at(body).draw();
         state->render_state->apses_meshes.at(body).draw();
@@ -616,17 +624,25 @@ static void render_orbits(GlobalState* state, const glm::dvec3& scene_origin) {
     }
 
     // focused orbits
-    set_color(1, 1, 0);
     for (auto key_value_pair : state->bodies) {
         auto body = key_value_pair.second;
         if (body == state->root || !is_ancestor_of(body, state->focus)) {
             continue;
         }
 
+        // transform matrices
         auto position = body_global_position_at_time(body, state->time) - scene_origin;
         state->render_state->model_matrix = glm::translate(glm::mat4(1.f), glm::vec3(position[0], position[1], position[2]));
         update_matrices(state);
 
+        // select color
+        if (body == state->target) {
+            set_color(1, 0, 0);
+        } else {
+            set_color(1, 1, 0);
+        }
+
+        // draw
         set_picking_object(state, body);
         OrbitMesh(body->orbit, state->time, true).draw();
         OrbitApsesMesh(body->orbit, state->time, true).draw();
@@ -636,6 +652,7 @@ static void render_orbits(GlobalState* state, const glm::dvec3& scene_origin) {
     // rocket
     CelestialBody* body = &state->rocket;
 
+    set_color(0, 1, 1);
     set_picking_object(state, body);
     if (body == state->focus) {
         auto position = body_global_position_at_time(body, state->time) - scene_origin;
@@ -683,6 +700,9 @@ static void print_general_info(GlobalState* state, TextPanel* out) {
 
     // focus
     out->print("Focus: %s\n", state->focus->name);
+
+    // target
+    out->print("Target: %s\n", state->target != NULL ? state->target->name : "None");
 
     // distance
     char* s = human_quantity(state->view_altitude + state->focus->radius, "m");
