@@ -1,4 +1,4 @@
-CCFLAGS+=-O3 -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wvla -g
+CCFLAGS+=-O3 -Wall -Wextra -Wpedantic -Wconversion -Woverflow -Wshadow -Wvla -g
 CFLAGS+=$(CCFLAGS) -std=c99 -Wstrict-prototypes
 CXXFLAGS+=$(CCFLAGS) -std=c++11
 LDFLAGS+=-O3
