@@ -12,7 +12,8 @@ test-and-build:
     - make destroy
     # Windows GUI
     - cp /usr/lib/gcc/x86_64-w64-mingw32/8.3-win32/{libgcc_s_seh-1.dll,libstdc++-6.dll,libssp-0.dll} .
-    - cp /opt/dlls/* .
+    - mkdir -p bin/
+    - cp /opt/dlls/* bin/
     - make windows
     - make destroy
   artifacts:

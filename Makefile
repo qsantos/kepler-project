@@ -33,12 +33,17 @@ set_version:
 
 %.tgz: set_version
 	$(MAKE) gui
-	tar --transform 's/^/$*\//' --exclude ".*" -zcf $@ gui data/
-	
+	mkdir "$*"
+	cp -a gui data/ "$*"
+	tar --exclude ".*" -zcf $@ "$*"
+	rm -Rf "$*"
 
 %.zip: set_version
 	PLATFORM=win32 $(MAKE) gui
-	zip --exclude "*/.*" --quiet -r - gui.exe *.dll data/ >$@
+	mkdir "$*"
+	cp -a gui.exe bin/*.dll data/ "$*"
+	zip --exclude "*/.*" --quiet -r - "$*" >$@
+	rm -Rf "$*"
 
 linux: $(GIT_VERSION).tgz
 windows: $(GIT_VERSION).zip
