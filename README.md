@@ -1,3 +1,11 @@
+# Show, Don't Tell
+
+![Exploring the Earth, the Moon and Jupiter](media/explore.ogv)
+
+![Observing how the phases of the Moon work](media/moon.ogv)
+
+![Piloting a spaceship in orbit](media/spaceship.ogv)
+
 # Requirements
 
 ## Ubuntu or Debian
