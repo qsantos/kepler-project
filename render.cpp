@@ -77,7 +77,7 @@ struct RenderState {
 
     // models
     TextPanel general_info = TextPanel(5.f, 5.f);
-    TextPanel help = TextPanel(5.f, 157.f);
+    TextPanel help = TextPanel(5.f, 195.f);
     TextPanel orbital_info = TextPanel(5.f, 5.f);
 
     Model rocket_model;

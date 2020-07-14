@@ -1,5 +1,4 @@
 # Controls
-
 w/a/s/d/q/e  rocket orientation
 z            throttle up
 x            throttle down
@@ -8,7 +7,6 @@ Shift+x      cut throttle
 t            toggle SAS
 
 # Navigation
-
 Escape       exit
 Left click   switch focus to celestial body
 Ctrl+click   select target
@@ -16,7 +14,6 @@ Right click  drag and drop to move the view
 Mouse wheel  zoom in and out
 
 # Display
-
 F11          toggle fullscreen
 y            toggle wireframe mode
 o            toggle orbits and other helpers
@@ -25,7 +22,6 @@ H            toggle HUD
 V            toggle vertical synchronization
 
 # Time
-
 , (comma)    slow down
 . (period)   speed up
 / (slash)    reset to normal time speed
