@@ -4,6 +4,7 @@
 #include "body.hpp"
 
 #include <map>
+#include <string>
 
 using Dict = std::map<std::string, CelestialBody*>;
 

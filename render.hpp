@@ -5,6 +5,7 @@
 #include "rocket.hpp"
 
 #include <map>
+#include <string>
 
 struct RenderState;
 
