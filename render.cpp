@@ -20,7 +20,6 @@ using std::map;
 
 static const float NAVBALL_RADIUS = 100.f;
 static const float NAVBALL_MARKER_SIZE = 50.f;
-static const float LEVEL_INDICATOR_WIDTH = 100.f;
 static const float NAVBALL_FRAME_RADIUS = NAVBALL_RADIUS * 1.25;
 static const float NEELDLE_LENGTH = NAVBALL_FRAME_RADIUS - NAVBALL_RADIUS;
 static const float NEELDLE_MIN_ANGLE = (float) radians(-135.);
