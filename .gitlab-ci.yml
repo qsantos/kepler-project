@@ -1,4 +1,4 @@
-image: registry.gitlab.com/qsantos/orbit/ci
+image: registry.gitlab.com/qsantos/kepler-project/ci
 
 test-and-build:
   script:
