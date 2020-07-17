@@ -13,7 +13,7 @@
 Run the following command in your terminal:
 
 ```
-$ sudo apt-get install make g++ libglew-dev libglfw3-dev libglm-dev libstb-dev libcjson-dev
+$ sudo apt-get install make g++ libglew-dev libglfw3-dev libglm-dev libstb-dev libcjson-dev libassimp-dev
 ```
 
 Then, from the source directory, type:
@@ -25,6 +25,15 @@ $ ./gui
 ```
 
 ## Windows
+
+### Cross-compiling from Debian
+
+Run:
+
+```
+$ sudo apt-get install cmake mingw-w64
+$ sudo ./cross-compilation-deps
+```
 
 ### MSYS2
 
@@ -38,3 +47,4 @@ You will need to manually install the following libraries:
 - [GLEW](https://github.com/nigels-com/glew/)
 - [GLFW](https://github.com/glfw/glfw/)
 - [stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)
+- [assimp](https://github.com/assimp/assimp/)
