@@ -1,3 +1,6 @@
+# v0.9
+- Move spaceship's center of mass inside hull
+
 # v0.8.0 - 2020-07-17
 - Fix crash on time-warp inversion
 - Fix help overlapping with general info in HUD

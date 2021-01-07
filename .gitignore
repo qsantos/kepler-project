@@ -12,3 +12,4 @@ junk/
 *.pyc
 .mypy_cache/
 dna.txt
+*.blend1
