@@ -13,3 +13,4 @@ junk/
 .mypy_cache/
 dna.txt
 *.blend1
+media/
