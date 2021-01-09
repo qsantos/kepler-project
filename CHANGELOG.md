@@ -2,6 +2,7 @@
 - Move spaceship's center of mass inside hull
 - Fix star flickering when far away
 - Fix star glow going out unexpectedly
+- Stop polluting logs with performance warnings
 
 # v0.8.0 - 2020-07-17
 - Fix crash on time-warp inversion

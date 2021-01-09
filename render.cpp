@@ -517,12 +517,16 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin,
         glGenQueries(2, occlusion_query_buffer);
         visibility = 1.f;
     } else {
+        // occlusion querying causes performance warnings
+        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_FALSE);
         // query the total number of samples rendered without depth test
         int total_samples = 0;
         glGetQueryObjectiv(occlusion_query_buffer[0], GL_QUERY_RESULT, &total_samples);
         // query the number of samples that pass the depth test
         int passed_samples= 0;
         glGetQueryObjectiv(occlusion_query_buffer[1], GL_QUERY_RESULT, &passed_samples);
+        // restore performance warnings
+        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_TRUE);
         // deduce visibility of star glow
         if (total_samples == 0) {
             // force glow when star is so far no pixel might be rendered
