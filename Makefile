@@ -22,9 +22,9 @@ endif
 
 all: $(TARGETS)
 
-example: example.o body.o orbit.o recipes.o util.o load.o lambert.o
-test: test.o body.o orbit.o util.o load.o recipes.o lambert.o rocket.o
-gui: gui.o render.o mesh.o texture.o shaders.o text_panel.o body.o orbit.o load.o util.o rocket.o model.o
+example: example.o body.o orbit.o recipes.o util.o load.o lambert.o logging.o
+test: test.o body.o orbit.o util.o load.o recipes.o lambert.o rocket.o logging.o
+gui: gui.o render.o mesh.o texture.o shaders.o text_panel.o body.o orbit.o load.o util.o rocket.o model.o logging.o
 uv2cubemap:
 
 set_version:

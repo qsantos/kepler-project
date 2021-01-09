@@ -1,11 +1,8 @@
 #include "body.hpp"
 
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-
 extern "C" {
 #include "util.h"
+#include "logging.h"
 }
 
 static const double G = 6.67259e-11;
@@ -184,7 +181,7 @@ glm::dvec3 body_global_position_at_time(CelestialBody* body, double time) {
         return {0, 0, 0};
     }
     if (body->orbit->primary == body) {
-        fprintf(stderr, "%s is its own primary!\n", body->name);
+        CRITICAL("'%s' is its own primary", body->name);
         exit(EXIT_FAILURE);
     }
     glm::dvec3 primary_position = body_global_position_at_time(body->orbit->primary, time);

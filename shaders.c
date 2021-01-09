@@ -1,11 +1,13 @@
 #include "shaders.h"
 
 #include "util.h"
+#include "logging.h"
 
 #include <stdio.h>
 #include <stdarg.h>
 
 void attach_shader(GLuint program, GLenum shader_type, const char* source, const char* filename) {
+    DEBUG("[GLSL] %s compilation", filename);
     GLuint shader = glCreateShader(shader_type);
 
     glShaderSource(shader, 1, &source, NULL);
@@ -22,13 +24,13 @@ void attach_shader(GLuint program, GLenum shader_type, const char* source, const
         if (info_log_length == 0) {
             // OK
         } else {
-            fprintf(stderr, "WARNING: compilation of %s generated warnings\n%s", filename, info_log);
+            WARNING("[GLSL] while compiling %s:\n%s", filename, info_log);
         }
     } else {
         if (info_log_length == 0) {
-            fprintf(stderr, "ERROR: compilation of %s failed (no info log)\n", filename);
+            CRITICAL("[GLSL] while compiling %s (no info logo)", filename);
         } else {
-            fprintf(stderr, "ERROR: compilation of %s failed\n%s", filename, info_log);
+            CRITICAL("[GLSL] while compiling %s:\n%s", filename, info_log);
         }
         free(info_log);
         exit(EXIT_FAILURE);
@@ -37,6 +39,7 @@ void attach_shader(GLuint program, GLenum shader_type, const char* source, const
 
     glAttachShader(program, shader);
     glDeleteShader(shader);
+    DEBUG("[GLSL] %s compiled", filename);
 }
 
 void attach_shader_from_file(GLuint program, GLenum shader_type, const char* filename) {
@@ -117,7 +120,7 @@ GLuint make_program(size_t n_shaders, ...) {
     int ret = make_main(dummy_buffer, 0, n_shaders, shaders) + 1;
     if (ret < 0) {
         free(shaders);
-        fprintf(stderr, "Error while sizing the main shader (%i)\n", ret);
+        CRITICAL("[GLSL] Failed to size the main shader (%i)", ret);
         exit(EXIT_FAILURE);
     }
 
@@ -126,17 +129,18 @@ GLuint make_program(size_t n_shaders, ...) {
     if (ret < 0) {
         free(buffer);
         free(shaders);
-        fprintf(stderr, "Error while generating the main shader (%i)\n", ret);
+        CRITICAL("[GLSL] Failed to generate the main shader (%i)", ret);
         exit(EXIT_FAILURE);
     }
 
     // attach main
-    attach_shader(program, GL_VERTEX_SHADER, buffer, "<main>");
-    attach_shader(program, GL_FRAGMENT_SHADER, buffer, "<main>");
+    attach_shader(program, GL_VERTEX_SHADER, buffer, "<main.vert>");
+    attach_shader(program, GL_FRAGMENT_SHADER, buffer, "<main.frag>");
 
     free(buffer);
     free(shaders);
 
+    DEBUG("[GLSL] Program linkage");
     glLinkProgram(program);
 
     // check status and info log
@@ -150,19 +154,19 @@ GLuint make_program(size_t n_shaders, ...) {
         if (info_log_length == 0) {
             // OK
         } else {
-            fprintf(stderr, "WARNING: linking of program generated warnings\n%s", info_log);
+            WARNING("[GLSL] while linking the program:\n%s", info_log);
         }
     } else {
         if (info_log_length == 0) {
-            fprintf(stderr, "ERROR: linking of program failed (no info log)\n");
+            CRITICAL("[GLSL] while linking the program (no info log)");
         } else {
-            fprintf(stderr, "ERROR: linking of program failed\n%s", info_log);
+            CRITICAL("[GLSL] while linking the program:\n%s", info_log);
         }
         free(info_log);
         exit(EXIT_FAILURE);
     }
     free(info_log);
 
-
+    DEBUG("[GLSL] Program linked");
     return program;
 }

@@ -1,4 +1,7 @@
-# v0.9
+# v0.9 - 2020-01-09
+- Output log to file (last.log)
+- Output timestamps with logs
+- More log messages
 - Move spaceship's center of mass inside hull
 - Fix star flickering when far away
 - Fix star glow going out unexpectedly

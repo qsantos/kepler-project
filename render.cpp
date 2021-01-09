@@ -3,6 +3,7 @@
 extern "C" {
 #include "version.h"
 #include "util.h"
+#include "logging.h"
 #include "texture.h"
 #include "shaders.h"
 }
@@ -91,6 +92,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     auto render_state = new RenderState;
 
     // shaders
+    DEBUG("Shaders compilation");
     render_state->skybox_shader = make_program(2, "skybox", "logz");
     render_state->cubemap_shader = make_program(4, "cubemap", "lighting", "picking", "logz");
     render_state->lighting_shader = make_program(4, "base", "lighting", "picking", "logz");
@@ -100,6 +102,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->star_glow_shader = make_program(3, "base", "star_glow", "logz");
     render_state->lens_flare_shader = make_program(3, "base", "lens_flare", "logz");
     render_state->billboard_shader = make_program(2, "base", "billboard");
+    DEBUG("Shaders compiled");
 
     // fix orientation of cubemap (e.g. Y up → Z up)
     glUseProgram(render_state->cubemap_shader);
@@ -125,6 +128,7 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     }
 
     // textures
+    DEBUG("Textures loading");
     render_state->star_glow_texture          = load_texture("data/textures/star_glow.png");
     render_state->lens_flare_texture         = load_texture("data/textures/lens_flares.png");
     render_state->skybox_texture             = load_cubemap("data/textures/skybox/GalaxyTex_{}.jpg");
@@ -138,7 +142,6 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     render_state->radial_in_marker_texture   = load_texture("data/textures/markers/Radial-in.png");
     render_state->radial_out_marker_texture  = load_texture("data/textures/markers/Radial-out.png");
     render_state->throttle_needle_texture    = load_texture("data/textures/needle.png");
-
 
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
@@ -157,19 +160,23 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
             continue;
         }
 
-        fprintf(stderr, "WARNING: failed to find texture or cubemap for %s\n", body->name);
+        WARNING("Missing texture for %s", body->name);
     }
+    DEBUG("Textures loaded");
 
-    // models
     char* help = load_file("data/help.txt");
     if (help == NULL) {
+        WARNING("Could not load help file at data/help.txt");
         render_state->help.print("COULD NOT LOAD HELP FILE\n");
     } else {
         render_state->help.print("%s", help);
         free(help);
     }
 
+    // models
+    DEBUG("Models loading");
     render_state->rocket_model.load("data/models/h2f2obj/f.obj");
+    DEBUG("Models loaded");
 
     return render_state;
 }
@@ -1047,6 +1054,7 @@ static void render_hud(GlobalState* state) {
 }
 
 void render(GlobalState* state) {
+    TRACE("Render started");
     if (state->render_state->picking_active) {
         state->render_state->picking_objects.clear();
     }
@@ -1068,15 +1076,18 @@ void render(GlobalState* state) {
     }
 
     // main rendering
+    TRACE("Main render started");
     render_skybox(state);
     render_bodies(state, scene_origin);
     static GLuint main_occlusion_query_buffer[2];
     render_star_glow(state, scene_origin, main_occlusion_query_buffer);
     render_helpers(state, scene_origin);
     render_star(state, scene_origin);
+    TRACE("Main render dispatched");
 
     // thumbnail rendering
     if (state->view_altitude / state->focus->radius > THUMBNAIL_RATIO_THRESHOLD) {
+        TRACE("Thumbnail render started");
         glViewport(10, 10, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
         glClear(GL_DEPTH_BUFFER_BIT);
         double view_altitude = state->view_altitude;
@@ -1090,6 +1101,7 @@ void render(GlobalState* state) {
         render_star(state, scene_origin);
 
         state->view_altitude = view_altitude;;
+        TRACE("Thumbnail render finished");
     }
 
     glViewport(0, 0, state->window_width, state->window_height);
@@ -1097,6 +1109,7 @@ void render(GlobalState* state) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     render_hud(state);
+    TRACE("Render dispatched");
 }
 
 void set_picking_name(size_t name) {
@@ -1187,7 +1200,7 @@ CelestialBody* pick(GlobalState* state) {
 
     size_t n_objects = state->render_state->picking_objects.size();
     if (name > n_objects) {
-        fprintf(stderr, "WARNING: picked %zu but only %zu known objects\n", name, n_objects);
+        ERROR("Picked object %zu but only %zu known objects", name, n_objects);
         return NULL;
     } else {
         return state->render_state->picking_objects[name - 1];

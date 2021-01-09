@@ -8,6 +8,7 @@
 
 extern "C" {
 #include "util.h"
+#include "logging.h"
 }
 
 #include <cmath>
@@ -730,6 +731,7 @@ void test_rk4(void) {
 }
 
 int main(void) {
+    set_log_level(LOGLEVEL_ERROR);
     test_coordinates();    printf("."); fflush(stdout);
     test_body();           printf("."); fflush(stdout);
     test_orbits();         printf("."); fflush(stdout);

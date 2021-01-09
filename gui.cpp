@@ -1,5 +1,6 @@
 extern "C" {
     #include "util.h"
+    #include "logging.h"
 }
 #include "load.hpp"
 #include "render.hpp"
@@ -97,19 +98,17 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
         default:                                type_str = "unknown"; break;
     }
 
+    int level;
     const char* severity_str;
     switch (severity) {
-        case GL_DEBUG_SEVERITY_HIGH:         severity_str = "error"; break;
-        case GL_DEBUG_SEVERITY_MEDIUM:       severity_str = "warning"; break;
-        case GL_DEBUG_SEVERITY_LOW:          severity_str = "info"; break;
-        case GL_DEBUG_SEVERITY_NOTIFICATION: severity_str = "debug"; break;
-        default:                             severity_str = "unknown"; break;
+        case GL_DEBUG_SEVERITY_HIGH:         severity_str = "ERROR";   level = 40; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       severity_str = "WARNING"; level = 30; break;
+        case GL_DEBUG_SEVERITY_LOW:          severity_str = "INFO";    level = 20; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: severity_str = "DEBUG";   level = 10; break;
+        default:                             severity_str = "UNKNOWN"; level = 50; break;
     }
 
-    fprintf(stderr, "[%s] %s (%s) [%#x]: %s", source_str, severity_str, type_str, id, message);
-    if (message[strlen(message) - 1] != '\n') {
-        fprintf(stderr, "\n");
-    }
+    log_message(level, severity_str, "[OpenGL] (%s, %s, %#x): %s", source_str, type_str, id, message);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -117,6 +116,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
     state->window_width = width;
     state->window_height = height;
+    INFO("Window resized to %dx%d\n", width, height);
 }
 
 void toggle_fullscreen(GLFWwindow* window) {
@@ -124,6 +124,7 @@ void toggle_fullscreen(GLFWwindow* window) {
 
     GLFWmonitor* monitor = glfwGetWindowMonitor(window);
     if (monitor == NULL) {
+        INFO("Switching to fullscreen");
         // save windowed state
         glfwGetWindowPos(window, &state->windowed_x, &state->windowed_y);
         glfwGetWindowSize(window, &state->windowed_width, &state->windowed_height);
@@ -132,16 +133,20 @@ void toggle_fullscreen(GLFWwindow* window) {
         monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
         glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+
+        INFO("Switched to fullscreen");
     } else {
+        INFO("Switching to windowed");
         // restore windowed state
         glfwSetWindowMonitor(window, NULL, state->windowed_x, state->windowed_y, state->windowed_width, state->windowed_height, 0);
+        INFO("Switched to windowed");
     }
 
     glfwSwapInterval(state->enable_vsync);
 }
 
 void error_callback(int error, const char* description) {
-    fprintf(stderr, "[GLFW] [%#x] %s\n", error, description);
+    ERROR("[GLFW] (%#x) %s", error, description);
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -152,37 +157,74 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (action == GLFW_PRESS) {
         if (key == GLFW_KEY_ESCAPE) {
             glfwSetWindowShouldClose(window, true);
+            INFO("Exit required");
         } else if (key == GLFW_KEY_F11) {
             toggle_fullscreen(window);
         } else if (key == GLFW_KEY_T) {
             state->rocket.sas_enabled = !state->rocket.sas_enabled;
+            if (state->rocket.sas_enabled) {
+                INFO("SAS enabled");
+            } else {
+                INFO("SAS disnabled");
+            }
         } else if (key == GLFW_KEY_Y) {
             state->show_wireframe = !state->show_wireframe;
+            if (state->show_wireframe) {
+                INFO("Wireframe mode ennabled");
+            } else {
+                INFO("Wireframe mode disnabled");
+            }
         } else if (key == GLFW_KEY_COMMA) {
             state->target_timewarp /= 2.;
+            INFO("Reduced time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
         } else if (key == GLFW_KEY_PERIOD) {
             if (state->real_timewarp == state->target_timewarp) {
                 state->target_timewarp *= 2.;
             }
+            INFO("Increased time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
         } else if (key == GLFW_KEY_SLASH) {
             state->target_timewarp = 1.;
+            INFO("Reset time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
         } else if (key == GLFW_KEY_I) {
             state->target_timewarp *= -1.;
+            INFO("Inverted time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
+            if (state->show_helpers) {
+                INFO("Helpers enabled");
+            } else {
+                INFO("Helpers disabled");
+            }
         } else if (key == GLFW_KEY_V) {
             state->enable_vsync = !state->enable_vsync;
+            if (state->enable_vsync) {
+                INFO("VSync enabled");
+            } else {
+                INFO("VSync disabled");
+            }
         } else if (key == GLFW_KEY_H) {
             if (mods & GLFW_MOD_SHIFT) {
                 state->show_hud = !state->show_hud;
+                if (state->show_hud) {
+                    INFO("HUD enabled");
+                } else {
+                    INFO("HUD disabled");
+                }
             } else {
                 state->show_help = !state->show_help;
+                if (state->show_help) {
+                    INFO("Help enabled");
+                } else {
+                    INFO("Help disabled");
+                }
             }
         } else if (key == GLFW_KEY_EQUAL) {
             if (std::string(state->root->name) == "Sun") {
                 state->time = (double) (time(NULL) - J2000);
+                INFO("Reset to current time");
             } else {
                 state->time = 0.f;
+                INFO("Reset to epoch");
             }
         }
     }
@@ -197,10 +239,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
             CelestialBody* target = pick(state);
             if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
                 state->target = target;
-                printf("Switched target to %s\n", target != NULL ? target->name : "None");
+                if (target) {
+                    INFO("Switched target to %s", target->name);
+                } else {
+                    INFO("Target unselected");
+                }
             } else if (target != NULL) {
                 state->focus = target;
-                printf("Switched focus to %s\n", target->name);
+                INFO("Switched focus to %s", target->name);
             }
         }
     } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -256,6 +302,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 }
 
 GLFWwindow* init_glfw(void) {
+    DEBUG("GLFW initialization");
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -265,7 +313,7 @@ GLFWwindow* init_glfw(void) {
     glfwWindowHint(GLFW_SAMPLES, 4);
     GLFWwindow* window = glfwCreateWindow(1024, 768, "Orbit", NULL, NULL);
     if (window == NULL) {
-        fprintf(stderr, "Failed to create GFLW window\n");
+        CRITICAL("Failed to create GFLW window");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
@@ -279,7 +327,7 @@ GLFWwindow* init_glfw(void) {
 
     GLenum err = glewInit();
     if (err != GLEW_OK) {
-        printf("GLEW init failed: %s!n", glewGetErrorString(err));
+        CRITICAL("GLEW init failed: %s", glewGetErrorString(err));
         exit(EXIT_FAILURE);
     }
 
@@ -291,10 +339,13 @@ GLFWwindow* init_glfw(void) {
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
+    DEBUG("GLFW initialized");
     return window;
 }
 
 void init_ogl(void) {
+    DEBUG("OpenGL initialization");
+
     // enable OpenGL debugging
     GLint flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -328,6 +379,8 @@ void init_ogl(void) {
             0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_FLOAT, white_pixel
         );
     }
+
+    DEBUG("OpenGL initialized");
 }
 
 void update_rocket_soi(GlobalState* state) {
@@ -343,7 +396,7 @@ void update_rocket_soi(GlobalState* state) {
         vel += orbit_velocity_at_time(primary->orbit, state->time);
         rocket->state = State{pos, vel};
 
-        fprintf(stderr, "%s exited SoI from %s to %s\n", rocket->name, primary->name, primary->orbit->primary->name);
+        INFO("%s exited SoI from %s to %s", rocket->name, primary->name, primary->orbit->primary->name);
         primary = primary->orbit->primary;
     }
 
@@ -360,7 +413,7 @@ void update_rocket_soi(GlobalState* state) {
             vel -= sat_vel;
             rocket->state = State{pos, vel};
 
-            fprintf(stderr, "%s entered SoI of %s from %s\n", rocket->name, satellite->name, primary->name);
+            INFO("%s entered SoI of %s from %s", rocket->name, satellite->name, primary->name);
             primary = satellite;
             break;
         }
@@ -372,17 +425,23 @@ void update_rocket_soi(GlobalState* state) {
 
 int main(void) {
     setlocale(LC_ALL, "");
+    set_log_file("last.log");
+    set_log_level(LOGLEVEL_INFO);
+    INFO("Starting GUI");
+
+    GlobalState state;
+
+    DEBUG("Loading Solar System config");
+    if (load_bodies(&state.bodies, "data/solar_system.json") < 0) {
+        CRITICAL("Failed to load '%s'", "data/solar_system.json");
+        exit(EXIT_FAILURE);
+    }
+    DEBUG("Loaded Solar System config");
 
     GLFWwindow* window = init_glfw();
     init_ogl();
 
-    GlobalState state;
     glfwSetWindowUserPointer(window, &state);
-
-    if (load_bodies(&state.bodies, "data/solar_system.json") < 0) {
-        fprintf(stderr, "Failed to load '%s'\n", "data/solar_system.json");
-        exit(EXIT_FAILURE);
-    }
 
     // initialize viewport
     glfwGetFramebufferSize(window, &state.window_width, &state.window_height);

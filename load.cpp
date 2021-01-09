@@ -2,14 +2,13 @@
 
 #include "body.hpp"
 
-#include <cstdio>
-#include <cstdlib>
 #include <cstring>
 
 #include <cjson/cJSON.h>
 
 extern "C" {
 #include "util.h"
+#include "logging.h"
 }
 
 static double get_param_required(cJSON* json, const char* object_name, const char* param_name);
@@ -22,12 +21,12 @@ static Orbit* parse_orbit(Dict* bodies, cJSON* jbodies, cJSON* jorbit, const cha
 static double get_param_required(cJSON* json, const char* object_name, const char* param_name) {
     cJSON* jparam = cJSON_GetObjectItemCaseSensitive(json, param_name);
     if (jparam == NULL) {
-        fprintf(stderr, "%s has not %s\n", object_name, param_name);
+        CRITICAL("'%s' is missing required parameter '%s'", object_name, param_name);
         exit(EXIT_FAILURE);
     }
     if (!cJSON_IsNumber(jparam)) {
-        fprintf(stderr, "The %s of %s is not a number\n", param_name, object_name);
-        return 0.;
+        CRITICAL("The required parameter '%s' of '%s' is not a number", param_name, object_name);
+        exit(EXIT_FAILURE);
     }
     return jparam->valuedouble;
 }
@@ -38,7 +37,7 @@ static double get_param_optional(cJSON* json, const char* object_name, const cha
         return 0.;
     }
     if (!cJSON_IsNumber(jparam)) {
-        fprintf(stderr, "%s of %s is not a number\n", param_name, object_name);
+        ERROR("The optional parameter '%s' of '%s' is not a number", param_name, object_name);
         return 0.;
     }
     return jparam->valuedouble;
@@ -52,12 +51,12 @@ static Orbit* parse_orbit(Dict* bodies, cJSON* jbodies, cJSON* jorbit, const cha
     // primary
     cJSON* jprimary = cJSON_GetObjectItemCaseSensitive(jorbit, "primary");
     if (jprimary == NULL) {
-        fprintf(stderr, "Orbit of '%s' has no primary\n", body_name);
-        return NULL;
+        CRITICAL("'%s' has an orbit but no primary", body_name);
+        exit(EXIT_FAILURE);
     }
     if (!cJSON_IsString(jprimary)) {
-        fprintf(stderr, "Name of primary of '%s' is not a string\n", body_name);
-        return NULL;
+        CRITICAL("The name of the primary of '%s' is not a string", body_name);
+        exit(EXIT_FAILURE);
     }
     CelestialBody* primary = parse_body(bodies, jbodies, jprimary->valuestring);
 
@@ -97,7 +96,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
 
     cJSON* jbody = cJSON_GetObjectItemCaseSensitive(jbodies, name);
     if (jbody == NULL) {
-        fprintf(stderr, "Body '%s' not found\n", name);
+        CRITICAL("Body '%s' not found", name);
         exit(EXIT_FAILURE);
     }
 
@@ -110,7 +109,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
     if (radius != 0.) {
         body_set_radius(ret, radius);
     } else {
-        printf("%s has no radius!\n", name);
+        WARNING("'%s' has no radius!", name);
     }
 
     double gravitational_parameter = get_param_optional(jbody, name, "gravitational_parameter");
@@ -120,7 +119,7 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
     } else if (mass != 0.) {
         body_set_mass(ret, mass);
     } else {
-        //fprintf(stderr, "%s has neither mass or gravitational_parameter\n", name);
+        WARNING("'%s' has neither mass or gravitational_parameter", name);
     }
 
     double rotational_period = get_param_optional(jbody, name, "rotational_period");
@@ -143,12 +142,12 @@ static CelestialBody* parse_body(Dict* bodies, cJSON* jbodies, const char* name)
 int parse_bodies(Dict* bodies, const char* json) {
     cJSON* jbodies = cJSON_Parse(json);
     if (jbodies == NULL) {
-        fprintf(stderr, "Failed to parse JSON (%s)\n", cJSON_GetErrorPtr());
+        CRITICAL("Failed to parse JSON (%s)", cJSON_GetErrorPtr());
         return -1;
     }
 
     if (!cJSON_IsObject(jbodies)) {
-        fprintf(stderr, "Expected JSON object at root\n");
+        CRITICAL("Expected JSON object at root");
         return -1;
     }
 
@@ -163,7 +162,7 @@ int parse_bodies(Dict* bodies, const char* json) {
 int load_bodies(Dict* bodies, const char* filename) {
     char* json = load_file(filename);
     if (json == NULL) {
-        fprintf(stderr, "Failed to open '%s'\n", filename);
+        CRITICAL("Failed to open '%s'", filename);
         return -1;
     }
     int ret = parse_bodies(bodies, json);

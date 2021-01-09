@@ -2,6 +2,7 @@
 
 extern "C" {
 #include "util.h"
+#include "logging.h"
 }
 
 #ifdef MSYS2
@@ -11,9 +12,6 @@ extern "C" {
 #include <GL/glew.h>
 
 #include <vector>
-
-#include <cmath>
-#include <cstdio>
 
 Mesh::Mesh(unsigned mode_, int length_, bool is_3d_) :
     mode{mode_},
@@ -522,7 +520,7 @@ static void append_object_and_children_coordinates(std::vector<float>& positions
     positions.push_back((float) pos[2]);
     for (size_t i = 0; i < body->n_satellites; i += 1) {
         if (body->satellites[i] == body) {
-            fprintf(stderr, "%s is its own satellite!\n", body->name);
+            CRITICAL("'%s' is its own satellite", body->name);
             exit(EXIT_FAILURE);
         }
         append_object_and_children_coordinates(positions, scene_origin, time, body->satellites[i]);

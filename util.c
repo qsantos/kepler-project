@@ -3,13 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "logging.h"
+
 void* _malloc(size_t s, const char* filename, int line, const char* funcname) {
     if (s == 0) {
         return NULL;
     }
     void* ret = malloc(s);
     if (ret == NULL) {
-        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
+        CRITICAL("Failed to allocate %zu bytes at %s:%i in %s", s, filename, line, funcname);
         exit(EXIT_FAILURE);
     }
     return ret;
@@ -21,7 +23,7 @@ void* _realloc(void* p, size_t s, const char* filename, int line, const char* fu
     }
     void* ret = realloc(p, s);
     if (ret == NULL) {
-        fprintf(stderr, "Failed to allocate %zu bytes at %s:%i in %s\n", s, filename, line, funcname);
+        CRITICAL("Failed to allocate %zu bytes at %s:%i in %s", s, filename, line, funcname);
         exit(EXIT_FAILURE);
     }
     return ret;

@@ -2,6 +2,7 @@
 
 extern "C" {
 #include "texture.h"
+#include "logging.h"
 }
 
 #include <assimp/Importer.hpp>
@@ -159,11 +160,12 @@ void Model::do_node(aiNode* node, const aiScene* scene) {
 
 
 void Model::load(const std::string& path) {
+    DEBUG("Model %s loading", path.c_str());
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (scene == NULL || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == NULL) {
-        fprintf(stderr, "Failed to load model %s: %s\n", path.c_str(), importer.GetErrorString());
+        CRITICAL("Failed to load model %s: %s", path.c_str(), importer.GetErrorString());
         exit(EXIT_FAILURE);
     }
 
@@ -171,6 +173,7 @@ void Model::load(const std::string& path) {
     this->base_path = s.substr(0, s.find_last_of('/'));
 
     this->do_node(scene->mRootNode, scene);
+    DEBUG("Model %s loaded", path.c_str());
 }
 
 void Model::draw(void) {
