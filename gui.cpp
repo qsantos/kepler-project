@@ -72,10 +72,6 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
     (void) length;
     (void) userParam;
 
-    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
-        return;
-    }
-
     const char* source_str;
     switch (source) {
         case GL_DEBUG_SOURCE_API:             source_str = "API"; break;
@@ -87,14 +83,6 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
         default:                              source_str = "unknown"; break;
     }
 
-    const char* severity_str;
-    switch (severity) {
-        case GL_DEBUG_SEVERITY_HIGH:         severity_str = "error"; break;
-        case GL_DEBUG_SEVERITY_MEDIUM:       severity_str = "warning"; break;
-        case GL_DEBUG_SEVERITY_LOW:          severity_str = "info"; break;
-        case GL_DEBUG_SEVERITY_NOTIFICATION: severity_str = "debug"; break;
-        default:                             severity_str = "unknown"; break;
-    }
     const char* type_str;
     switch (type) {
         case GL_DEBUG_TYPE_ERROR:               type_str = "error"; break;
@@ -107,6 +95,15 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severi
         case GL_DEBUG_TYPE_POP_GROUP:           type_str = "pop group"; break;
         case GL_DEBUG_TYPE_OTHER:               type_str = "other"; break;
         default:                                type_str = "unknown"; break;
+    }
+
+    const char* severity_str;
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:         severity_str = "error"; break;
+        case GL_DEBUG_SEVERITY_MEDIUM:       severity_str = "warning"; break;
+        case GL_DEBUG_SEVERITY_LOW:          severity_str = "info"; break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION: severity_str = "debug"; break;
+        default:                             severity_str = "unknown"; break;
     }
 
     fprintf(stderr, "[%s] %s (%s) [%#x]: %s", source_str, severity_str, type_str, id, message);
@@ -306,6 +303,7 @@ void init_ogl(void) {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(glDebugOutput, nullptr);
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+        glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
     }
 
     glEnable(GL_CULL_FACE);
