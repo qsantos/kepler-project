@@ -740,7 +740,7 @@ static void print_general_info(GlobalState* state, TextPanel* out) {
 
     // FPS
     double now = real_clock();
-    out->print("%.0f FPS\n", state->fps);
+    out->print("%.0f FPS (VSync %s)\n", state->fps, state->enable_vsync ? "on" : "off");
 
     // update FPS measure every second
     if (now - state->last_fps_measure > 1.) {

@@ -1,5 +1,6 @@
 # v0.10
 - Fix VSync not toggling immediately
+- Show whether VSync is enabled
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
