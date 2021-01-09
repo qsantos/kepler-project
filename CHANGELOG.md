@@ -2,6 +2,7 @@
 - Fix VSync not toggling immediately
 - Show whether VSync is enabled
 - Fix HUD alignment of negative three-digit angles
+- [Windows] Fix generation of timestamps in logs
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
@@ -41,7 +42,7 @@
 - Added keybinding to toggle SAS
 
 # v0.5.1 - 2019-08-28
-- Fix crash on Windows due to uninitialized data
+- [Windows] Fix crash due to uninitialized data
 
 # v0.5.0 - 2019-08-27
 - Changed keybinding for wireframe mode from W to T
@@ -109,7 +110,7 @@
 - Added HUD
 - Added keybinding for wireframe mode
 - Added keybinding for help message
-- Added Windows support
+- [Windows] Added as target
 
 # v0.1.0 - 2019-08-05
 - Rewrite spyce GUI in C++ (basic features):

@@ -26,7 +26,7 @@ void log_message(int level, const char* severity, const char* format, ...) {
 
     time_t now = time(NULL);
     char timestamp[21];
-    strftime(timestamp, sizeof(timestamp), "%FT%TZ", gmtime(&now));
+    strftime(timestamp, sizeof(timestamp), "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
 
     const char* message = NULL;
     char buffer[4096];
