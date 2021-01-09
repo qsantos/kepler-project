@@ -769,9 +769,9 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Semi-minor axis   %14.1f m\n", orbit->semi_minor_axis);
     out->print("Semi-latus rectum %14.1f m\n", orbit->semi_latus_rectum);
     out->print("Eccentricity      %16.3f\n", orbit->eccentricity);
-    out->print("Longitude of AN          %5.1f deg\n", degrees(orbit->longitude_of_ascending_node));
-    out->print("Inclination              %5.1f deg\n", degrees(orbit->inclination));
-    out->print("Argument of periapsis    %5.1f deg\n", degrees(orbit->argument_of_periapsis));
+    out->print("Longitude of AN         %6.1f deg\n", degrees(orbit->longitude_of_ascending_node));
+    out->print("Inclination             %6.1f deg\n", degrees(orbit->inclination));
+    out->print("Argument of periapsis   %6.1f deg\n", degrees(orbit->argument_of_periapsis));
     out->print("Period            %14.1f s\n", orbit->period);
 
     out->print("\n");
@@ -788,12 +788,12 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("\n");
     out->print("Altitude          %14.1f m\n", glm::length(pos) - orbit->primary->radius);
     out->print("Distance          %14.1f m\n", glm::length(pos));
-    out->print("Mean anomaly             %5.1f deg\n", degrees(mean_anomaly));
-    out->print("Eccentric anomaly        %5.1f deg\n", degrees(eccentric_anomaly));
-    out->print("True anomaly             %5.1f deg\n", degrees(true_anomaly));
-    out->print("Pitch:                   %5.1f deg\n", degrees(glm::pitch(state->rocket.orientation)));
-    out->print("Yaw:                     %5.1f deg\n", degrees(glm::yaw(state->rocket.orientation)));
-    out->print("Roll:                    %5.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
+    out->print("Mean anomaly            %6.1f deg\n", degrees(mean_anomaly));
+    out->print("Eccentric anomaly       %6.1f deg\n", degrees(eccentric_anomaly));
+    out->print("True anomaly            %6.1f deg\n", degrees(true_anomaly));
+    out->print("Pitch:                  %6.1f deg\n", degrees(glm::pitch(state->rocket.orientation)));
+    out->print("Yaw:                    %6.1f deg\n", degrees(glm::yaw(state->rocket.orientation)));
+    out->print("Roll:                   %6.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
     out->print("Orbital speed     %12.1f m/s\n", glm::length(vel));
 
     out->print("\n");
