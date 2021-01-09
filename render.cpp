@@ -513,7 +513,9 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin)
         int passedSamples= 0;
         glGetQueryObjectiv(occlusionQuery[0], GL_QUERY_RESULT, &totalSamples );
         glGetQueryObjectiv(occlusionQuery[1], GL_QUERY_RESULT, &passedSamples);
-        if (passedSamples == 0) {
+        if (totalSamples == 0) {
+            visibility = 1.0f;
+        } else if (passedSamples == 0) {
             visibility = 0.0f;
         } else {
             float param = (float) passedSamples/ (float) totalSamples;
