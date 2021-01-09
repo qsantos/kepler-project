@@ -1,3 +1,6 @@
+# v0.10
+- Fix VSync not toggling immediately
+
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
 - Output timestamps with logs
