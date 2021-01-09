@@ -31,7 +31,6 @@ $ ./gui
 Run:
 
 ```
-$ sudo apt-get install cmake mingw-w64
 $ sudo ./cross-compilation-deps
 ```
 
