@@ -1,3 +1,7 @@
+# v0.8.0 - 2020-07-17
+- Fix crash on time-warp inversion
+- Fix help overlapping with general info in HUD
+
 # v0.7.0 - 2019-09-11
 - Add thumbnail view
 - Fixed clicking on position markers switch to rocket
