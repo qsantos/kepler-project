@@ -427,6 +427,7 @@ static GLuint init_lens_flare(void) {
 
         float l = t == 0 ? 0.f : .5f;
 
+        // x, y, z, u, v, offset
         data[k++] = -s; data[k++] = -s; data[k++] = 0.f; data[k++] = l + 0.0f; data[k++] = 0.f; data[k++] = o;
         data[k++] = +s; data[k++] = -s; data[k++] = 0.f; data[k++] = l + 0.5f; data[k++] = 0.f; data[k++] = o;
         data[k++] = -s; data[k++] = +s; data[k++] = 0.f; data[k++] = l + 0.0f; data[k++] = 1.f; data[k++] = o;
@@ -498,27 +499,38 @@ static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin) {
+static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin, GLuint occlusion_query_buffer[2]) {
     if (state->render_state->picking_active) {
         return;
     }
 
+    // NOTE: the visibility of the star glow (and associated lens flare) is
+    // decided using occlusion queries; this means querying the GPU for the
+    // number of rendered samples, which stalls until the rendering is done; to
+    // mitigate this, we use the query of the previous frame; with this
+    // approach, there will still be stalling between two frames, but not in
+    // the middle of one (avoids compounding effects from several queries)
     // Update queries from previous frame, or create the query objects if needed
-    float visibility = 1.f;
-    static GLuint occlusionQuery[2] = {0, 0};
-    if (occlusionQuery[0] == 0) {
-        glGenQueries(2, occlusionQuery);
+
+    float visibility;
+    if (occlusion_query_buffer[0] == 0) {
+        glGenQueries(2, occlusion_query_buffer);
+        visibility = 1.f;
     } else {
-        int totalSamples = 0;
-        int passedSamples= 0;
-        glGetQueryObjectiv(occlusionQuery[0], GL_QUERY_RESULT, &totalSamples );
-        glGetQueryObjectiv(occlusionQuery[1], GL_QUERY_RESULT, &passedSamples);
-        if (totalSamples == 0) {
-            visibility = 1.0f;
-        } else if (passedSamples == 0) {
+        // query the total number of samples rendered without depth test
+        int total_samples = 0;
+        glGetQueryObjectiv(occlusion_query_buffer[0], GL_QUERY_RESULT, &total_samples);
+        // query the number of samples that pass the depth test
+        int passed_samples= 0;
+        glGetQueryObjectiv(occlusion_query_buffer[1], GL_QUERY_RESULT, &passed_samples);
+        // deduce visibility of star glow
+        if (total_samples == 0) {
+            // force glow when star is so far no pixel might be rendered
+            visibility = 1.f;
+        } else if (passed_samples == 0) {
             visibility = 0.0f;
         } else {
-            float param = (float) passedSamples/ (float) totalSamples;
+            float param = (float) passed_samples/ (float) total_samples;
             visibility = 1.f - expf(-4.f * param);
         }
     }
@@ -558,15 +570,15 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin)
     glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), -1.f);
     glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
 
-    // Query for passed samples
-    glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[0]);
+    // Query for total samples
+    glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[0]);
     glDisable(GL_DEPTH_TEST);
     state->render_state->square.draw();
     glEnable(GL_DEPTH_TEST);
     glEndQuery(GL_SAMPLES_PASSED);
 
-    // Query for total samples
-    glBeginQuery(GL_SAMPLES_PASSED, occlusionQuery[1]);
+    // Query for passed samples
+    glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[1]);
     state->render_state->square.draw();
     glEndQuery(GL_SAMPLES_PASSED);
 
@@ -1051,12 +1063,15 @@ void render(GlobalState* state) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
+    // main rendering
     render_skybox(state);
     render_bodies(state, scene_origin);
-    render_star_glow(state, scene_origin);
+    static GLuint main_occlusion_query_buffer[2];
+    render_star_glow(state, scene_origin, main_occlusion_query_buffer);
     render_helpers(state, scene_origin);
     render_star(state, scene_origin);
 
+    // thumbnail rendering
     if (state->view_altitude / state->focus->radius > THUMBNAIL_RATIO_THRESHOLD) {
         glViewport(10, 10, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -1065,7 +1080,8 @@ void render(GlobalState* state) {
 
         render_skybox(state);
         render_bodies(state, scene_origin);
-        render_star_glow(state, scene_origin);
+        static GLuint thumbnail_occlusion_query_buffer[2];
+        render_star_glow(state, scene_origin, thumbnail_occlusion_query_buffer);
         render_helpers(state, scene_origin);
         render_star(state, scene_origin);
 
