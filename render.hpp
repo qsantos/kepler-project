@@ -33,7 +33,7 @@ struct GlobalState {
     double target_timewarp = 1.;
     double real_timewarp = 1.;
     double last_timewarp_measure;
-    long n_steps_since_last = 0;
+    double n_steps_since_last = 0;
 
     bool drag_active = false;
     double cursor_x;

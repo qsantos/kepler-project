@@ -520,11 +520,11 @@ int main(int argc, char** argv) {
         last = now;
 
         // update rocket state
-        long n_steps;
+        double n_steps;
         if (unprocessed_time < 0 || state.rocket.throttle == 0.) {
-            n_steps = (long) trunc(unprocessed_time / SIMULATION_STEP);
-            unprocessed_time -= (double) n_steps * SIMULATION_STEP;
-            state.time += (double) n_steps * SIMULATION_STEP;
+            n_steps = trunc(unprocessed_time / SIMULATION_STEP);
+            unprocessed_time -= n_steps * SIMULATION_STEP;
+            state.time += n_steps * SIMULATION_STEP;
 
             state.rocket.state.position = orbit_position_at_time(state.rocket.orbit, state.time);
             state.rocket.state.velocity = orbit_velocity_at_time(state.rocket.orbit, state.time);
