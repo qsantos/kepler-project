@@ -717,9 +717,13 @@ static void print_general_info(GlobalState* state, TextPanel* out) {
     if (std::string(state->root->name) == "Sun") {
         time_t simulation_time = J2000 + (time_t) state->time;
         struct tm* t = localtime(&simulation_time);
-        char buffer[512];
-        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S %z", t);
-        out->print("Date: %s\n", buffer);
+        if (t == NULL) {
+            out->print("Date: unknown (does time still exist at that point?)\n");
+        } else {
+            char buffer[512];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S %z", t);
+            out->print("Date: %s\n", buffer);
+        }
     }
 
     // focus
