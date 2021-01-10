@@ -24,38 +24,46 @@ void log_message(int level, const char* severity, const char* format, ...) {
         return;
     }
 
-    time_t now = time(NULL);
-    char timestamp[21];
-    strftime(timestamp, sizeof(timestamp), "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
-
-    const char* message = NULL;
     char buffer[4096];
+    size_t offset = 0;
+
+    // automatic prefix
+    time_t now = time(NULL);
+    struct tm* parts = gmtime(&now);
+    int a = snprintf(
+        buffer + offset,
+        sizeof(buffer) - offset,
+        "%04d-%02d-%02dT%02d:%02d:%02dZ  %8s  ",
+        1900 + parts->tm_year,
+        parts->tm_mon + 1,
+        parts->tm_mday,
+        parts->tm_hour,
+        parts->tm_min,
+        parts->tm_sec,
+        severity
+    );
+    if (a >= 0) {
+        offset += (size_t) a;
+    }
+
+    // message given as argument
     va_list args;
-    int a = snprintf(buffer, sizeof(buffer), "%20s  %8s  ", timestamp, severity);
-    if (a < 0) {
-        message = "Failed to format message prefix\n";
-        goto output_message;
-    }
-
     va_start(args, format);
-    int b = vsnprintf(buffer + a, sizeof(buffer) - (size_t) a, format, args);
+    int b = vsnprintf(buffer + offset, sizeof(buffer) - offset, format, args);
     va_end(args);
-    if (b < 0) {
-        message = "Failed to format message\n";
-        goto output_message;
+    if (b >= 0) {
+        offset += (size_t) b;
+
+        // force newline
+        if (offset < sizeof(buffer) - 1 && buffer[offset - 1] != '\n') {
+            buffer[offset] = '\n';
+            buffer[offset + 1] = '\0';
+        }
     }
 
-    size_t n = (size_t) (a + b);
-    if (n < sizeof(buffer) - 1 && buffer[n - 1] != '\n') {
-        buffer[n] = '\n';
-        buffer[n + 1] = '\0';
-    }
-    message = buffer;
-
-output_message:
-    fputs(message, stderr);
+    fputs(buffer, stderr);
     if (log_file != NULL) {
-        fputs(message, log_file);
+        fputs(buffer, log_file);
         fflush(log_file);
     }
 }
