@@ -14,6 +14,8 @@ extern "C" {
 #include <cstring>
 
 static const double SIMULATION_STEP = 1. / 128.;
+static const double TIMEWARP_FLOOR = 2.2250738585072014e-308;  // 0x1.0p-1022
+static const double TIMEWARP_CEILING = 8.98846567431158e+307;  // 0x1.0p980
 static const double THROTTLE_SPEED = .5;
 
 static const double HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION = pow(2., 100.);
@@ -176,13 +178,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
                 INFO("Wireframe mode disnabled");
             }
         } else if (key == GLFW_KEY_COMMA) {
-            state->target_timewarp /= 2.;
-            INFO("Reduced time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
-        } else if (key == GLFW_KEY_PERIOD) {
-            if (state->real_timewarp == state->target_timewarp) {
-                state->target_timewarp *= 2.;
+            if (state->target_timewarp / 2. >= TIMEWARP_FLOOR) {
+                state->target_timewarp /= 2.;
+                INFO("Reduced time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
             }
-            INFO("Increased time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
+        } else if (key == GLFW_KEY_PERIOD) {
+            if (state->real_timewarp == state->target_timewarp && state->target_timewarp * 2 <= TIMEWARP_CEILING) {
+                state->target_timewarp *= 2;
+                INFO("Increased time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
+            }
         } else if (key == GLFW_KEY_SLASH) {
             state->target_timewarp = 1.;
             INFO("Reset time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
