@@ -813,7 +813,11 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Time to apoapsis  %14.1f s\n", time_to_apospsis);
     out->print("Time to AN        %14.1f s\n", time_to_ascending_node);
     out->print("Time to DN        %14.1f s\n", time_to_descending_node);
-    out->print("Time to escape    %14.1f s\n", time_to_escape);
+    if (isnan(time_to_escape)) {
+        out->print("Time to escape                   -\n", time_to_escape);
+    } else {
+        out->print("Time to escape    %14.1f s\n", time_to_escape);
+    }
 }
 
 static void render_navball_sphere(GlobalState* state) {
