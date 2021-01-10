@@ -7,6 +7,7 @@
 - Friendlier display in orbital information for circular orbits
 - Smoother lines
 - Thinner position markers
+- Fix arrow of time going in reverse when time-wrap above one billion
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)

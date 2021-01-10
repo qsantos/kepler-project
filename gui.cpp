@@ -520,9 +520,9 @@ int main(int argc, char** argv) {
         last = now;
 
         // update rocket state
-        int n_steps;
+        long n_steps;
         if (unprocessed_time < 0 || state.rocket.throttle == 0.) {
-            n_steps = (int) trunc(unprocessed_time / SIMULATION_STEP);
+            n_steps = (long) trunc(unprocessed_time / SIMULATION_STEP);
             unprocessed_time -= (double) n_steps * SIMULATION_STEP;
             state.time += (double) n_steps * SIMULATION_STEP;
 
