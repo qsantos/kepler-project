@@ -31,7 +31,7 @@ struct State {
 struct Rocket : CelestialBody {
     State state;
     glm::dquat orientation = glm::identity<glm::dquat>();
-    glm::dquat angular_velocity = glm::identity<glm::dquat>();
+    glm::dquat angular_velocity_quat = glm::identity<glm::dquat>();
     double throttle = 0.;
     bool sas_enabled = true;
 };

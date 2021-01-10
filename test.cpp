@@ -136,8 +136,8 @@ CelestialBody make_dummy_object(double radius, double gravitational_parameter, d
         0,  // sidereal_day
         0,  // synodic_day
         0,  // tilt
-        0,  // surface_velocity
-        0,  // rotational_speed
+        0,  // angular_speed
+        {},  // angular_velocity
     };
 }
 
@@ -251,8 +251,8 @@ static void test_body(void) {
         assertEquals(b.sidereal_day, o.period);
         assertEquals(b.synodic_day, INFINITY);
         body_set_rotation(&b, 42.41);
-        assertIsClose(b.rotational_speed * b.sidereal_day, 2.*M_PI);
-        assertIsClose(2*M_PI*b.radius / b.surface_velocity, b.sidereal_day);
+        assertIsClose(b.angular_speed * b.sidereal_day, 2.*M_PI);
+        assertIsClose(glm::length(b.angular_velocity), b.angular_speed);
     }
 
     CelestialCoordinates positive_pole;

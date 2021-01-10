@@ -510,7 +510,7 @@ int main(int argc, char** argv) {
         state.n_steps_since_last += n_steps;
 
         double k = SIMULATION_STEP * (double) n_steps * HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
-        state.rocket.orientation *= pow(state.rocket.angular_velocity, k);
+        state.rocket.orientation *= pow(state.rocket.angular_velocity_quat, k);
 
         update_rocket_soi(&state);
 
@@ -564,42 +564,42 @@ int main(int argc, char** argv) {
 
         // X
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(+x, 0, 0));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(+x, 0, 0));
             user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(-x, 0, 0));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(-x, 0, 0));
             user_input = true;
         }
 
         // Y
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, +x, 0));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(0, +x, 0));
             user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, -x, 0));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(0, -x, 0));
             user_input = true;
         }
 
         // Z
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, -x));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(0, 0, -x));
             user_input = true;
         }
         if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            state.rocket.angular_velocity *= glm::dquat(glm::dvec3(0, 0, +x));
+            state.rocket.angular_velocity_quat *= glm::dquat(glm::dvec3(0, 0, +x));
             user_input = true;
         }
 
         // SAS
         if (state.rocket.sas_enabled && !user_input) {
-            double l = angle(state.rocket.angular_velocity);
+            double l = angle(state.rocket.angular_velocity_quat);
             double sas_torque = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;
             if (sas_torque > l) {
-                state.rocket.angular_velocity = glm::identity<glm::dquat>();
+                state.rocket.angular_velocity_quat = glm::identity<glm::dquat>();
             } else {
-                state.rocket.angular_velocity = pow(state.rocket.angular_velocity, 1. - sas_torque / l);
+                state.rocket.angular_velocity_quat = pow(state.rocket.angular_velocity_quat, 1. - sas_torque / l);
             }
         }
 

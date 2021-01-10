@@ -872,22 +872,18 @@ static void render_navball_sphere(GlobalState* state) {
         glm::dvec3 pos = state->rocket.state.position;
 
         // C: positive/north pole
-        glm::dvec3 pole = {0, 0, body->radius};
-        double x_angle = body->positive_pole->ecliptic_latitude - M_PI / 2.;
-        pole = glm::dmat3(glm::rotate(glm::dmat4(1), x_angle, glm::dvec3(1., 0., 0.))) * pole;
-        double z_angle = body->positive_pole->ecliptic_longitude - M_PI / 2.;
-        pole = glm::dmat3(glm::rotate(glm::dmat4(1), z_angle, glm::dvec3(0., 0., 1.))) * pole;
+        glm::dvec3 axis = body->angular_velocity;
 
         // deduce angles a, b, c
-        double a = glm::angle(glm::normalize(pos),  glm::normalize(pole));
-        double b = glm::angle(glm::normalize(pole), glm::normalize(vert));
+        double a = glm::angle(glm::normalize(pos),  glm::normalize(axis));
+        double b = glm::angle(glm::normalize(axis), glm::normalize(vert));
         double c = glm::angle(glm::normalize(pos),  glm::normalize(vert));
 
         // deduce angle B
         double B = acos((cos(b) - cos(a)*cos(c)) / (sin(a) * sin(c)));
 
         // orient angle B
-        if (glm::orientedAngle(glm::normalize(pos), glm::normalize(pole), glm::normalize(vert)) < 0) {
+        if (glm::orientedAngle(glm::normalize(pos), glm::normalize(axis), glm::normalize(vert)) < 0) {
             B = -B;
         }
 

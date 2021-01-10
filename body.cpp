@@ -8,7 +8,7 @@ extern "C" {
 static const double G = 6.67259e-11;
 
 void body_init(CelestialBody* body) {
-    *body = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    *body = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {}};
 }
 
 void body_clear(CelestialBody* body) {
@@ -28,10 +28,6 @@ static void _body_update_sphere_of_influence(CelestialBody* body) {
         double soi = a * pow(mu_b / mu_p, 0.4);
         body->sphere_of_influence = soi;
     }
-}
-
-static void _body_update_surface_velocity(CelestialBody* body) {
-    body->surface_velocity = body->radius * body->rotational_speed;
 }
 
 static void _body_update_tilt(CelestialBody* body) {
@@ -83,14 +79,27 @@ static void _body_update_tidal_locking(CelestialBody* body) {
     }
 }
 
+static void _body_update_angular_velocity(CelestialBody* body) {
+    if (body->angular_speed == 0.) {
+        body->angular_velocity = {0., 0., 0.};
+        return;
+    }
+    glm::dvec3 axis = {0., 0., 1.};
+    if (body->positive_pole != NULL) {
+        double x_angle = body->positive_pole->ecliptic_latitude - M_PI / 2.;
+        axis = glm::dmat3(glm::rotate(glm::dmat4(1), x_angle, glm::dvec3(1., 0., 0.))) * axis;
+        double z_angle = body->positive_pole->ecliptic_longitude - M_PI / 2.;
+        axis = glm::dmat3(glm::rotate(glm::dmat4(1), z_angle, glm::dvec3(0., 0., 1.))) * axis;
+    }
+    body->angular_velocity = axis * body->angular_speed;
+}
+
 void body_set_name(CelestialBody* body, const char* name) {
     body->name = name;
 }
 
 void body_set_radius(CelestialBody* body, double radius) {
     body->radius = radius;
-    _body_update_surface_velocity(body);
-
 }
 
 void body_set_gravparam(CelestialBody* body, double gravitational_parameter) {
@@ -121,16 +130,17 @@ void body_set_orbit(CelestialBody* body, Orbit* orbit) {
 
 void body_set_rotation(CelestialBody* body, double sidereal_day) {
     body->sidereal_day = sidereal_day;
-    body->rotational_speed = 2.*M_PI / sidereal_day;
+    body->angular_speed = 2.*M_PI / sidereal_day;
     _body_update_tidal_locking(body);
     _body_update_tilt(body);
-    _body_update_surface_velocity(body);
     _body_update_solar_day(body);
+    _body_update_angular_velocity(body);
 }
 
 void body_set_axis(CelestialBody* body, CelestialCoordinates* positive_pole) {
     body->positive_pole = positive_pole;
     _body_update_tilt(body);
+    _body_update_angular_velocity(body);
 }
 
 double body_gravity(CelestialBody* body, double distance) {

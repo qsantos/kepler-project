@@ -27,9 +27,8 @@ struct CelestialBody {
     double sidereal_day;
     double synodic_day;  // aka. solar day for Earth
     double tilt;
-    double surface_velocity;
-    double rotational_speed;
-
+    double angular_speed;
+    glm::dvec3 angular_velocity;
 };
 
 void body_init (CelestialBody* body);
