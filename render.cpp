@@ -88,7 +88,7 @@ struct RenderState {
     std::vector<CelestialBody*> picking_objects;
 };
 
-RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
+RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies, const std::string& textures_directory) {
     auto render_state = new RenderState;
 
     // shaders
@@ -146,14 +146,14 @@ RenderState* make_render_state(const map<std::string, CelestialBody*>& bodies) {
     for (auto key_value_pair : bodies) {
         auto body = key_value_pair.second;
 
-        auto cubemap_path = "data/textures/solar/" + std::string(body->name) + "/{}.jpg";
+        auto cubemap_path = textures_directory + "/" + std::string(body->name) + "/{}.jpg";
         auto cubemap = load_cubemap(cubemap_path.c_str());
         if (cubemap != 0) {
             render_state->body_cubemaps[body] = cubemap;
             continue;
         }
 
-        auto texture_path = "data/textures/solar/" + std::string(body->name) + ".jpg";
+        auto texture_path = textures_directory + "/" + std::string(body->name) + ".jpg";
         auto texture = load_texture(texture_path.c_str());
         if (texture != 0) {
             render_state->body_textures[body] = texture;

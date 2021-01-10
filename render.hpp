@@ -9,7 +9,7 @@
 
 struct RenderState;
 
-RenderState* make_render_state(const std::map<std::string, CelestialBody*>& bodies);
+RenderState* make_render_state(const std::map<std::string, CelestialBody*>& bodies, const std::string& textures_directory);
 void delete_render_state(RenderState* render_state);
 
 struct GlobalState {

@@ -1,0 +1,20 @@
+{
+    "systems": {
+        "solar": {
+            "default_focus": "Earth",
+            "display_name": "Solar System",
+            "root": "Sun",
+            "spaceship_altitude": 300e3,
+            "system_data": "data/solar_system.json",
+            "textures_directory": "data/textures/solar"
+        },
+        "kerbol": {
+            "default_focus": "Kerbin",
+            "display_name": "Kerbol System",
+            "root": "Kerbol",
+            "spaceship_altitude": 100e3,
+            "system_data": "data/kerbol_system.json",
+            "textures_directory": "data/textures/kerbol"
+        }
+    }
+}

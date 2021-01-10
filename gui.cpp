@@ -1,6 +1,7 @@
 extern "C" {
     #include "util.h"
     #include "logging.h"
+    #include "config.h"
 }
 #include "load.hpp"
 #include "render.hpp"
@@ -424,20 +425,45 @@ void update_rocket_soi(GlobalState* state) {
     orbit_from_state(rocket->orbit, primary, rocket->state.position, rocket->state.velocity, state->time);
 }
 
-int main(void) {
+void usage(const char* name) {
+    INFO("%s [--system (solar|kerbol)]", name);
+}
+
+int main(int argc, char** argv) {
     setlocale(LC_ALL, "");
     set_log_file("last.log");
     set_log_level(LOGLEVEL_INFO);
     INFO("Starting GUI");
 
+    // parse args
+    const char* system_id = "solar";
+    for (int i = 1; i < argc; i++) {
+        const char* arg = argv[i];
+        if (strcmp(arg, "--system") == 0 || strcmp(arg, "-s") == 0) {
+            if (i >= argc - 1) {
+                CRITICAL("Command-line argument %s missing value", arg);
+                usage(argv[0]);
+                exit(EXIT_FAILURE);
+            }
+            system_id = argv[i + 1];
+            i++;
+        } else {
+            CRITICAL("Unexpected command-line argument '%s'", arg);
+            usage(argv[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    Config config = load_config("data/config.json", system_id);
+
     GlobalState state;
 
-    DEBUG("Loading Solar System config");
-    if (load_bodies(&state.bodies, "data/solar_system.json") < 0) {
-        CRITICAL("Failed to load '%s'", "data/solar_system.json");
+    DEBUG("Loading %s config", config.system.display_name);
+    if (load_bodies(&state.bodies, config.system.system_data) < 0) {
+        CRITICAL("Failed to load '%s'", "data/kerbol_system.json");
         exit(EXIT_FAILURE);
     }
-    DEBUG("Loaded Solar System config");
+    DEBUG("Loaded %s config", config.system.display_name);
 
     GLFWwindow* window = init_glfw();
     init_ogl();
@@ -447,10 +473,10 @@ int main(void) {
     // initialize viewport
     glfwGetFramebufferSize(window, &state.window_width, &state.window_height);
 
-    state.render_state = make_render_state(state.bodies);
+    state.render_state = make_render_state(state.bodies, config.system.textures_directory);
 
-    state.focus = state.bodies.at("Earth");
-    state.root = state.bodies.at("Sun");
+    state.focus = state.bodies.at(config.system.default_focus);
+    state.root = state.bodies.at(config.system.root);
 
     reset_matrices(&state);
 
@@ -460,17 +486,20 @@ int main(void) {
     }
 
     Orbit orbit;
+    orbit_from_periapsis(&orbit, state.focus, state.focus->radius + config.system.spaceship_altitude, 0.);
+    orbit_orientate(&orbit, 0., 0., 0., 0., 0.);
     state.rocket.name = "Rocket";
     state.rocket.radius = 5.;
     state.rocket.sphere_of_influence = 0.;
     state.rocket.n_satellites = 0;
     state.rocket.orbit = &orbit;
     state.rocket.state = {
-        glm::dvec3{6371e3 + 300e3, 0, 0},
-        glm::dvec3{0, 7660, 0},
-    },
+        orbit_position_at_true_anomaly(&orbit, 0.),
+        orbit_velocity_at_true_anomaly(&orbit, 0.),
+    };
     body_append_satellite(state.focus, &state.rocket);
-    orbit_from_state(&orbit, state.focus, state.rocket.state.position, state.rocket.state.velocity, state.time);
+
+    delete_config(&config);
 
     state.last_fps_measure = real_clock();
     state.last_timewarp_measure = real_clock();
