@@ -27,3 +27,4 @@ V            toggle vertical synchronization
 / (slash)    reset to normal time speed
 i            invert the arrow of time
 = (equal)    go back to present
+p            pause / resume

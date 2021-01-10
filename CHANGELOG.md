@@ -10,6 +10,7 @@
 - Fix arrow of time going in reverse when time-wrap above one billion
 - Fix crash two billion years in the future
 - Fix time-wrap capped at four billion billion
+- Press P to pause / resume
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)

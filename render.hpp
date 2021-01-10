@@ -32,6 +32,7 @@ struct GlobalState {
     size_t n_frames_since_last = 0;
 
     double time = 0.;
+    bool paused = false;
     double target_timewarp = 1.;
     double real_timewarp = 1.;
     double last_timewarp_measure;

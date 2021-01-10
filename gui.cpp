@@ -193,6 +193,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         } else if (key == GLFW_KEY_I) {
             state->target_timewarp *= -1.;
             INFO("Inverted time-wrap to %g (%a)\n", state->target_timewarp, state->target_timewarp);
+        } else if (key == GLFW_KEY_P) {
+            state->paused = !state->paused;
+            if (state->paused) {
+                INFO("Paused");
+            } else {
+                INFO("Resumed");
+            }
         } else if (key == GLFW_KEY_O) {
             state->show_helpers = !state->show_helpers;
             if (state->show_helpers) {
@@ -518,6 +525,14 @@ int main(int argc, char** argv) {
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
+        if (state.paused) {
+            render(&state);
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+            state.n_frames_since_last += 1;
+            continue;
+        }
+
         // update time
         double now = real_clock();
         double elapsed = now - last;
@@ -564,7 +579,6 @@ int main(int argc, char** argv) {
         }
 
         render(&state);
-
         glfwSwapBuffers(window);
         glfwPollEvents();
 
@@ -591,6 +605,8 @@ int main(int argc, char** argv) {
                 }
             }
         }
+
+        // TODO: apply timewrap / pause logic to the part below
 
         // orientation
         double x = .04 / HACK_TO_KEEP_GLM_FROM_WRAPING_QUATERNION;

@@ -700,7 +700,9 @@ static void render_helpers(GlobalState* state, const glm::dvec3& scene_origin) {
 
 static void print_general_info(GlobalState* state, TextPanel* out) {
     // time warp
-    if (state->real_timewarp < state->target_timewarp) {
+    if (state->paused) {
+        out->print("PAUSED\n");
+    } else if (state->real_timewarp < state->target_timewarp) {
         out->print("Time x%g (CPU-bound)\n", state->real_timewarp);
     } else {
         out->print("Time x%g\n", state->real_timewarp);
