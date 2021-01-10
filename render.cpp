@@ -1170,7 +1170,9 @@ CelestialBody* pick(GlobalState* state) {
     // render with picking activated
     state->render_state->picking_active = true;
     glDisable(GL_MULTISAMPLE);
+    glDisable(GL_LINE_SMOOTH);
     render(state);
+    glEnable(GL_LINE_SMOOTH);
     glEnable(GL_MULTISAMPLE);
     state->render_state->picking_active = false;
 
