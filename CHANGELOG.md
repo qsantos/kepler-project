@@ -4,6 +4,7 @@
 - Fix HUD alignment of negative three-digit angles
 - [Windows] Fix generation of timestamps in logs
 - Can now explore the Kerbol system
+- Friendlier display in orbital information for circular orbits
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)

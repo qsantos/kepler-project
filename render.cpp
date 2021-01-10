@@ -758,6 +758,7 @@ static void print_general_info(GlobalState* state, TextPanel* out) {
 
 static void print_orbital_info(GlobalState* state, TextPanel* out) {
     auto orbit = state->rocket.orbit;
+    bool circular = orbit->eccentricity < 5e-4;
 
     // orbit
     out->print("Orbit\n");
@@ -771,7 +772,11 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Eccentricity      %16.3f\n", orbit->eccentricity);
     out->print("Longitude of AN         %6.1f deg\n", degrees(orbit->longitude_of_ascending_node));
     out->print("Inclination             %6.1f deg\n", degrees(orbit->inclination));
-    out->print("Argument of periapsis   %6.1f deg\n", degrees(orbit->argument_of_periapsis));
+    if (circular) {
+        out->print("Argument of periapsis            -\n", NAN);
+    } else {
+        out->print("Argument of periapsis   %6.1f deg\n", degrees(orbit->argument_of_periapsis));
+    }
     out->print("Period            %14.1f s\n", orbit->period);
 
     out->print("\n");
@@ -788,9 +793,15 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("\n");
     out->print("Altitude          %14.1f m\n", glm::length(pos) - orbit->primary->radius);
     out->print("Distance          %14.1f m\n", glm::length(pos));
-    out->print("Mean anomaly            %6.1f deg\n", degrees(mean_anomaly));
-    out->print("Eccentric anomaly       %6.1f deg\n", degrees(eccentric_anomaly));
-    out->print("True anomaly            %6.1f deg\n", degrees(true_anomaly));
+    if (circular) {
+        out->print("Mean anomaly                     -\n", degrees(mean_anomaly));
+        out->print("Eccentric anomaly                -\n", degrees(eccentric_anomaly));
+        out->print("True anomaly                     -\n", degrees(true_anomaly));
+    } else {
+        out->print("Mean anomaly            %6.1f deg\n", degrees(mean_anomaly));
+        out->print("Eccentric anomaly       %6.1f deg\n", degrees(eccentric_anomaly));
+        out->print("True anomaly            %6.1f deg\n", degrees(true_anomaly));
+    }
     out->print("Pitch:                  %6.1f deg\n", degrees(glm::pitch(state->rocket.orientation)));
     out->print("Yaw:                    %6.1f deg\n", degrees(glm::yaw(state->rocket.orientation)));
     out->print("Roll:                   %6.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
@@ -809,8 +820,13 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     if (time_to_periapsis < 0.) { time_to_periapsis += orbit->period; }
     if (time_to_ascending_node < 0.) { time_to_ascending_node += orbit->period; }
     if (time_to_descending_node < 0.) { time_to_descending_node += orbit->period; }
-    out->print("Time to periapsis %14.1f s\n", time_to_periapsis);
-    out->print("Time to apoapsis  %14.1f s\n", time_to_apospsis);
+    if (circular) {
+        out->print("Time to periapsis                -\n", time_to_periapsis);
+        out->print("Time to apoapsis                 -\n", time_to_apospsis);
+    } else {
+        out->print("Time to periapsis %14.1f s\n", time_to_periapsis);
+        out->print("Time to apoapsis  %14.1f s\n", time_to_apospsis);
+    }
     out->print("Time to AN        %14.1f s\n", time_to_ascending_node);
     out->print("Time to DN        %14.1f s\n", time_to_descending_node);
     if (isnan(time_to_escape)) {

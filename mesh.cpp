@@ -474,6 +474,10 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
 OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
     Mesh(GL_POINTS, 0, false)
 {
+    if (orbit->eccentricity < 5e-4) {  // almost circular orbit
+        return;
+    }
+
     auto periapsis = orbit_position_at_true_anomaly(orbit, 0.);
     auto apoapsis  = orbit_position_at_true_anomaly(orbit, M_PI);
 
