@@ -6,6 +6,7 @@ struct SystemConfig {
     char* display_name;
     char* root;
     double spaceship_altitude;
+    double star_temperature;
     char* system_data;
     char* textures_directory;
 };

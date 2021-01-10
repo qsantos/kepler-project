@@ -480,6 +480,7 @@ int main(int argc, char** argv) {
 
     state.render_state = make_render_state(state.bodies, config.system.textures_directory);
 
+    state.star_temperature = config.system.star_temperature;
     state.focus = state.bodies.at(config.system.default_focus);
     state.root = state.bodies.at(config.system.root);
 

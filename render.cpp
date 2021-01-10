@@ -400,12 +400,10 @@ static void render_bodies(GlobalState* state, const glm::dvec3& scene_origin) {
 }
 
 static double glow_size(double radius, double temperature, double distance) {
-    // from https://www.seedofandromeda.com/blogs/51-procedural-star-rendering
-    static const double sun_radius = 696e6;
-    static const double sun_surface_temperature = 5778.0;
-
-    double luminosity = (radius / sun_radius) * pow(temperature / sun_surface_temperature, 4.);
-    return 1e17 * pow(luminosity, 0.25) / pow(distance, 0.5);
+    // https://en.wikipedia.org/wiki/Luminosity#Luminosity_formulae
+    static const double stefan_boltzmann_constant = 5.67037419e-8;  // W.m⁻².K⁻⁴
+    double I = stefan_boltzmann_constant * 4. * M_PI * pow(radius, 2.) * pow(temperature, 4.); // W
+    return 3e-5 * I / distance;  // always scaled once by perspective
 }
 
 static GLuint init_lens_flare(void) {
@@ -555,11 +553,6 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin,
     glm::vec4 z = {view * glm::vec4(0.f, 0.f, 1.f, 1.f)};
     glm::vec3 camera_z = {z[0], z[1], z[2]};
 
-    // double d = state->focus->orbit->semi_major_axis;
-    double d = glm::length(star_glow_position - camera_z);
-    double s = glow_size(state->root->radius, 5778., d);
-    glm::vec2 star_glow_size = {s, s};
-
     use_program(state, state->render_state->star_glow_shader);
 
     float unNoiseZ = (float) abs(
@@ -567,40 +560,40 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin,
             + glm::dot(camera_up, glm::vec3(1.f, 3.f, 6.f))
     );
 
-    glBindTexture(GL_TEXTURE_2D, state->render_state->star_glow_texture);
-    glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), visibility);
-    glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
     glUniform3fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_position"), 1, glm::value_ptr(star_glow_position));
     glUniform3fv(glGetUniformLocation(state->render_state->star_glow_shader, "camera_right"), 1, glm::value_ptr(camera_right));
     glUniform3fv(glGetUniformLocation(state->render_state->star_glow_shader, "camera_up"), 1, glm::value_ptr(camera_up));
     glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "unNoiseZ"), unNoiseZ);
 
     glDepthMask(GL_FALSE);
-    s = (float) state->root->radius;
-    star_glow_size = {s, s};
+
+    // draw simple rect for occlusion checking
+    double s = state->root->radius;
+    glm::vec2 star_glow_size = {s, s};
     glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), -1.f);
     glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
-
     // Query for total samples
     glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[0]);
     glDisable(GL_DEPTH_TEST);
     state->render_state->square.draw();
     glEnable(GL_DEPTH_TEST);
     glEndQuery(GL_SAMPLES_PASSED);
-
     // Query for passed samples
     glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[1]);
     state->render_state->square.draw();
     glEndQuery(GL_SAMPLES_PASSED);
 
-    s = glow_size(state->root->radius, 5778., d);
+    // draw star glow
+    glBindTexture(GL_TEXTURE_2D, state->render_state->star_glow_texture);
+    double d = glm::length(star_glow_position - camera_z);
+    s = glow_size(state->root->radius, state->star_temperature, d);
     star_glow_size = {s, s};
     glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), visibility);
     glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
     state->render_state->square.draw();
-    glDepthMask(GL_TRUE);
-
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDepthMask(GL_TRUE);
 
     render_lens_flare(state, scene_origin, visibility);
 }

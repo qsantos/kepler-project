@@ -56,6 +56,7 @@ struct SystemConfig load_system_config(cJSON* config, const char* system_id) {
         .display_name       = get_string(system, system_id, "display_name"),
         .root               = get_string(system, system_id, "root"),
         .spaceship_altitude = get_number(system, system_id, "spaceship_altitude"),
+        .star_temperature   = get_number(system, system_id, "star_temperature"),
         .system_data        = get_string(system, system_id, "system_data"),
         .textures_directory = get_string(system, system_id, "textures_directory"),
     };

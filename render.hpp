@@ -19,6 +19,8 @@ struct GlobalState {
     bool show_hud = true;
     bool enable_vsync = true;
 
+    double star_temperature = 5778.;
+
     std::map<std::string, CelestialBody*> bodies;
     CelestialBody* root;
     CelestialBody* focus;

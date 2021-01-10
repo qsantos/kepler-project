@@ -5,6 +5,7 @@
             "display_name": "Solar System",
             "root": "Sun",
             "spaceship_altitude": 300e3,
+            "star_temperature": 5778,
             "system_data": "data/solar_system.json",
             "textures_directory": "data/textures/solar"
         },
@@ -13,6 +14,7 @@
             "display_name": "Kerbol System",
             "root": "Kerbol",
             "spaceship_altitude": 100e3,
+            "star_temperature": 2840,
             "system_data": "data/kerbol_system.json",
             "textures_directory": "data/textures/kerbol"
         }
