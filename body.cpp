@@ -198,3 +198,16 @@ glm::dvec3 body_global_position_at_time(CelestialBody* body, double time) {
     glm::dvec3 relative_position = orbit_position_at_time(body->orbit, time);
     return primary_position + relative_position;
 }
+
+glm::dvec3 body_global_velocity_at_time(CelestialBody* body, double time) {
+    if (body->orbit == NULL) {
+        return {0, 0, 0};
+    }
+    if (body->orbit->primary == body) {
+        CRITICAL("'%s' is its own primary", body->name);
+        exit(EXIT_FAILURE);
+    }
+    glm::dvec3 primary_velocity = body_global_velocity_at_time(body->orbit->primary, time);
+    glm::dvec3 relative_velocity = orbit_velocity_at_time(body->orbit, time);
+    return primary_velocity + relative_velocity;
+}

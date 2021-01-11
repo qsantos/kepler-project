@@ -16,6 +16,7 @@
 - Fix star glow showing while star is outside of screen but behind planet
 - Fix periapsis not showing on open trajectories
 - Display ascending and descending nodes on orbit
+- Display information about target in HUD
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)

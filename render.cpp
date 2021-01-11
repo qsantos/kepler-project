@@ -737,8 +737,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     bool circular = orbit->eccentricity < 5e-4;
 
     // orbit
-    out->print("Orbit\n");
-    out->print("\n");
+    out->print("> Orbit\n");
     out->print("Primary %s\n", orbit->primary->name);
     out->print("Periapsis         %14.1f m\n", orbit->periapsis);
     out->print("Apoapsis          %14.1f m\n", orbit->apoapsis);
@@ -754,8 +753,6 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
         out->print("Argument of periapsis   %6.1f deg\n", degrees(orbit->argument_of_periapsis));
     }
     out->print("Period            %14.1f s\n", orbit->period);
-
-    out->print("\n");
     out->print("\n");
 
     // current state
@@ -767,8 +764,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     auto vel = orbit_velocity_at_time(orbit, state->time);
     auto surface_vel = glm::cross(orbit->primary->angular_velocity, pos) - vel;
 
-    out->print("Current State\n");
-    out->print("\n");
+    out->print("> Current State\n");
     out->print("Altitude          %14.1f m\n", glm::length(pos) - orbit->primary->radius);
     out->print("Distance          %14.1f m\n", glm::length(pos));
     if (circular) {
@@ -785,12 +781,9 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Roll:                   %6.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
     out->print("Orbital speed     %12.1f m/s\n", glm::length(vel));
     out->print("Surface speed     %12.1f m/s\n", glm::length(surface_vel));
-
-    out->print("\n");
     out->print("\n");
 
-    out->print("Timers\n");
-    out->print("\n");
+    out->print("> Timers\n");
     double time_to_periapsis = orbit_time_at_true_anomaly(orbit, 0.) - state->time;
     double time_to_apospsis = orbit_time_at_true_anomaly(orbit, M_PI) - state->time;
     double time_to_ascending_node = orbit_time_at_true_anomaly(orbit, 2 * M_PI - orbit->argument_of_periapsis) - state->time;
@@ -812,6 +805,17 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
         out->print("Time to escape                   -\n", time_to_escape);
     } else {
         out->print("Time to escape    %14.1f s\n", time_to_escape);
+    }
+    out->print("\n");
+
+    if (state->target != NULL) {
+        out->print("> Target (%s)\n", state->target->name);
+        auto cpos = body_global_position_at_time(&state->rocket, state->time);
+        auto cvel = body_global_velocity_at_time(&state->rocket, state->time);
+        auto tpos = body_global_position_at_time(state->target, state->time);
+        auto tvel = body_global_velocity_at_time(state->target, state->time);
+        out->print("Distance          %14.1f m\n", glm::length(tpos - cpos));
+        out->print("Relative speed  %14.1f m/s\n", glm::length(tvel - cvel));
     }
 }
 

@@ -50,5 +50,6 @@ void body_append_satellite(CelestialBody* body, CelestialBody* satellite);
 void body_remove_satellite(CelestialBody* body, CelestialBody* satellite);
 
 glm::dvec3 body_global_position_at_time(CelestialBody* body, double time);
+glm::dvec3 body_global_velocity_at_time(CelestialBody* body, double time);
 
 #endif
