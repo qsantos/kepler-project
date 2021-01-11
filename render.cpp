@@ -788,6 +788,8 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
     auto pos = orbit_position_at_time(orbit, state->time);
     auto vel = orbit_velocity_at_time(orbit, state->time);
+    auto surface_vel = glm::cross(orbit->primary->angular_velocity, pos) - vel;
+
     out->print("Current State\n");
     out->print("\n");
     out->print("Altitude          %14.1f m\n", glm::length(pos) - orbit->primary->radius);
@@ -805,6 +807,7 @@ static void print_orbital_info(GlobalState* state, TextPanel* out) {
     out->print("Yaw:                    %6.1f deg\n", degrees(glm::yaw(state->rocket.orientation)));
     out->print("Roll:                   %6.1f deg\n", degrees(glm::roll(state->rocket.orientation)));
     out->print("Orbital speed     %12.1f m/s\n", glm::length(vel));
+    out->print("Surface speed     %12.1f m/s\n", glm::length(surface_vel));
 
     out->print("\n");
     out->print("\n");
