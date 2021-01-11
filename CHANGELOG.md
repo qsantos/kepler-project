@@ -1,4 +1,4 @@
-# v0.10
+# v0.10 - 2020-01-11
 - Fix VSync not toggling immediately
 - Show whether VSync is enabled
 - Fix HUD alignment of negative three-digit angles
