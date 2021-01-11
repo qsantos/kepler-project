@@ -8,8 +8,8 @@ in vec3 lighting_normal;
 out vec4 o_color;
 
 // lighting
-const vec4 light_ambient = vec4(1., 1., 1., 1.);
-const vec4 light_diffuse = vec4(3., 3., 3., 1.);
+const vec4 light_ambient = vec4(0., 0., 0., 1.);
+const vec4 light_diffuse = vec4(5., 5., 5., 1.);
 const vec4 light_specular = vec4(1., 1., 1., 1.);
 // materials
 const vec4 material_ambient = vec4(.2, .2, .2, 1.);  // fixed pipeline default
@@ -28,7 +28,7 @@ void lighting() {
 
     // geometry-dependent values
     float component_ambient = 1.0;
-    float component_diffuse = max(dot(lighting_normal, incident_light), 0.0);
+    float component_diffuse = pow(max(dot(lighting_normal, incident_light), 0.0), 2.0);
     float component_specular = pow(max(dot(reflected_light, perceived_light), 0.0), 0.3 * shininess);
 
     // light-dependent values

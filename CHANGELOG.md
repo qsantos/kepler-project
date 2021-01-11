@@ -12,6 +12,7 @@
 - Fix time-wrap capped at four billion billion
 - Press P to pause / resume
 - Display surface speed in HUD
+- Better looking day/night transition
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
