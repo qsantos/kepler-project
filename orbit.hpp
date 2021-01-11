@@ -30,7 +30,7 @@ struct Orbit {
     double mean_motion;
     double period;  // aka. sidereal period
 
-    // cached transform matrix
+    // cached transform quaternion
     glm::dquat orientation;  // NOTE: only use after orbit_orientate() has been called
 };
 
