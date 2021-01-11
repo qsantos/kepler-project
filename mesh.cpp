@@ -484,25 +484,30 @@ OrbitMesh::OrbitMesh(Orbit* orbit, double time, bool focused) :
 OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
     Mesh(GL_POINTS, 0, false)
 {
-    if (orbit->eccentricity < 5e-4) {  // almost circular orbit
-        return;
-    }
-
     auto periapsis = orbit_position_at_true_anomaly(orbit, 0.);
     auto apoapsis  = orbit_position_at_true_anomaly(orbit, M_PI);
+    double dn_true_anomaly = 2 * M_PI - orbit->argument_of_periapsis;
+    double an_true_anomaly = 3 * M_PI - orbit->argument_of_periapsis;
+    an_true_anomaly = fmod(an_true_anomaly, 2 * M_PI);
+    auto ascending_node  = orbit_position_at_true_anomaly(orbit, dn_true_anomaly);
+    auto descending_node = orbit_position_at_true_anomaly(orbit, an_true_anomaly);
 
     if (focused) {
         auto offset_from_focus = orbit_position_at_time(orbit, time);
         periapsis -= offset_from_focus;
         apoapsis -= offset_from_focus;
+        ascending_node -= offset_from_focus;
+        descending_node -= offset_from_focus;
     }
 
     std::vector<float> data;
 
     if (orbit->apoapsis > orbit->primary->sphere_of_influence || orbit->eccentricity > 1.) {  // escaping orbit
+        // NOTE: 0 ≤ ν < 2π with q at 0 and Q at π
         double mean_anomaly = orbit_mean_anomaly_at_time(orbit, time);
         double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
         double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
+        double escape_true_anomaly = orbit_true_anomaly_at_escape(orbit);
 
         // only show periapsis if on remaining trajectory
         if (true_anomaly > M_PI) {
@@ -510,14 +515,47 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
             data.push_back((float) periapsis[1]);
             data.push_back((float) periapsis[2]);
         }
-    } else {  // non-escaping closed orbit
-        data.push_back((float) periapsis[0]);
-        data.push_back((float) periapsis[1]);
-        data.push_back((float) periapsis[2]);
 
-        data.push_back((float) apoapsis[0]);
-        data.push_back((float) apoapsis[1]);
-        data.push_back((float) apoapsis[2]);
+        // only show ascending node if on remaining trajectory
+        if (true_anomaly < M_PI ?
+                true_anomaly < dn_true_anomaly && dn_true_anomaly < escape_true_anomaly :
+                true_anomaly < dn_true_anomaly || dn_true_anomaly < escape_true_anomaly
+        ) {
+            data.push_back((float) ascending_node[0]);
+            data.push_back((float) ascending_node[1]);
+            data.push_back((float) ascending_node[2]);
+        }
+
+        // only show decending node if on remaining trajectory
+        if (true_anomaly < M_PI ?
+                true_anomaly < an_true_anomaly && an_true_anomaly < escape_true_anomaly :
+                true_anomaly < an_true_anomaly || an_true_anomaly < escape_true_anomaly
+        ) {
+            data.push_back((float) descending_node[0]);
+            data.push_back((float) descending_node[1]);
+            data.push_back((float) descending_node[2]);
+        }
+
+    } else {  // non-escaping closed orbit
+        if (orbit->eccentricity >= 5e-4) {  // not an almost circular orbit
+            data.push_back((float) periapsis[0]);
+            data.push_back((float) periapsis[1]);
+            data.push_back((float) periapsis[2]);
+
+            data.push_back((float) apoapsis[0]);
+            data.push_back((float) apoapsis[1]);
+            data.push_back((float) apoapsis[2]);
+        }
+
+        if (orbit->inclination >= 5e-4) {  // somewhat inclined orbit
+            data.push_back((float) ascending_node[0]);
+            data.push_back((float) ascending_node[1]);
+            data.push_back((float) ascending_node[2]);
+
+            data.push_back((float) descending_node[0]);
+            data.push_back((float) descending_node[1]);
+            data.push_back((float) descending_node[2]);
+        }
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);

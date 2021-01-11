@@ -15,6 +15,7 @@
 - Better looking day/night transition
 - Fix star glow showing while star is outside of screen but behind planet
 - Fix periapsis not showing on open trajectories
+- Display ascending and descending nodes on orbit
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
