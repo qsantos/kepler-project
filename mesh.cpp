@@ -504,8 +504,8 @@ OrbitApsesMesh::OrbitApsesMesh(Orbit* orbit, double time, bool focused) :
         double eccentric_anomaly = orbit_eccentric_anomaly_at_mean_anomaly(orbit, mean_anomaly);
         double true_anomaly = orbit_true_anomaly_at_eccentric_anomaly(orbit, eccentric_anomaly);
 
-        // only show periapsis if not reached yet
-        if (true_anomaly < 0.) {
+        // only show periapsis if on remaining trajectory
+        if (true_anomaly > M_PI) {
             data.push_back((float) periapsis[0]);
             data.push_back((float) periapsis[1]);
             data.push_back((float) periapsis[2]);
