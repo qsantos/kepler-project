@@ -54,6 +54,7 @@ struct RenderState {
     CubeMesh cube = CubeMesh(10.f);
     UVSphereMesh uv_sphere = UVSphereMesh(1, 4);
     RectMesh square = RectMesh(1, 1);
+    PointMesh point = PointMesh();
     RectMesh navball_marker_mesh = RectMesh(NAVBALL_MARKER_SIZE, -NAVBALL_MARKER_SIZE);
     map<CelestialBody*, OrbitMesh> orbit_meshes;
     map<CelestialBody*, OrbitApsesMesh> apses_meshes;
@@ -453,7 +454,7 @@ static GLuint init_lens_flare(void) {
     return vbo;
 }
 
-static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin, float visibility) {
+static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin) {
     static GLuint lens_flare_vbo = 0;
     if (lens_flare_vbo == 0) {
         lens_flare_vbo = init_lens_flare();
@@ -462,13 +463,13 @@ static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin
     auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
     glm::vec3 light_source = position;
 
-    float size = .1f;
+    float size = .0625f;
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
     float aspect = float(viewport[2]) / float(viewport[3]);  // width / height
     glm::vec2 dims(size, size * aspect);
 
-    float intensity = .2f * visibility;
+    float intensity = .2f;
 
     use_program(state, state->render_state->lens_flare_shader);
 
@@ -504,7 +505,7 @@ static void render_lens_flare(GlobalState* state, const glm::dvec3& scene_origin
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin, GLuint occlusion_query_buffer[2]) {
+static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin, GLuint* occlusion_query_buffer) {
     if (state->render_state->picking_active) {
         return;
     }
@@ -517,31 +518,8 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin,
     // the middle of one (avoids compounding effects from several queries)
     // Update queries from previous frame, or create the query objects if needed
 
-    float visibility;
-    if (occlusion_query_buffer[0] == 0) {
-        glGenQueries(2, occlusion_query_buffer);
-        visibility = 1.f;
-    } else {
-        // occlusion querying causes performance warnings
-        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_FALSE);
-        // query the total number of samples rendered without depth test
-        int total_samples = 0;
-        glGetQueryObjectiv(occlusion_query_buffer[0], GL_QUERY_RESULT, &total_samples);
-        // query the number of samples that pass the depth test
-        int passed_samples= 0;
-        glGetQueryObjectiv(occlusion_query_buffer[1], GL_QUERY_RESULT, &passed_samples);
-        // restore performance warnings
-        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_PERFORMANCE, GL_DEBUG_SEVERITY_MEDIUM, 0, nullptr, GL_TRUE);
-        // deduce visibility of star glow
-        if (total_samples == 0) {
-            // force glow when star is so far no pixel might be rendered
-            visibility = 1.f;
-        } else if (passed_samples == 0) {
-            visibility = 0.0f;
-        } else {
-            float param = (float) passed_samples/ (float) total_samples;
-            visibility = 1.f - expf(-4.f * param);
-        }
+    if (*occlusion_query_buffer == 0) {
+        glGenQueries(1, occlusion_query_buffer);
     }
 
     auto position = body_global_position_at_time(state->root, state->time) - scene_origin;
@@ -572,30 +550,29 @@ static void render_star_glow(GlobalState* state, const glm::dvec3& scene_origin,
     glm::vec2 star_glow_size = {s, s};
     glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), -1.f);
     glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
-    // Query for total samples
-    glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[0]);
-    glDisable(GL_DEPTH_TEST);
-    state->render_state->square.draw();
-    glEnable(GL_DEPTH_TEST);
-    glEndQuery(GL_SAMPLES_PASSED);
     // Query for passed samples
-    glBeginQuery(GL_SAMPLES_PASSED, occlusion_query_buffer[1]);
-    state->render_state->square.draw();
+    glBeginQuery(GL_SAMPLES_PASSED, *occlusion_query_buffer);
+    state->render_state->point.draw();
     glEndQuery(GL_SAMPLES_PASSED);
+
+    glBeginConditionalRender(*occlusion_query_buffer, GL_QUERY_WAIT);
 
     // draw star glow
     glBindTexture(GL_TEXTURE_2D, state->render_state->star_glow_texture);
     double d = glm::length(star_glow_position - camera_z);
     s = glow_size(state->root->radius, state->star_temperature, d);
     star_glow_size = {s, s};
-    glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), visibility);
+    glUniform1f(glGetUniformLocation(state->render_state->star_glow_shader, "visibility"), 1.f);
     glUniform2fv(glGetUniformLocation(state->render_state->star_glow_shader, "star_glow_size"), 1, glm::value_ptr(star_glow_size));
+    glBindTexture(GL_TEXTURE_2D, state->render_state->star_glow_texture);
     state->render_state->square.draw();
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glDepthMask(GL_TRUE);
 
-    render_lens_flare(state, scene_origin, visibility);
+    render_lens_flare(state, scene_origin);
+
+    glEndConditionalRender();
 }
 
 static void render_position_markers(GlobalState* state, const glm::dvec3& scene_origin) {
@@ -1097,8 +1074,8 @@ void render(GlobalState* state) {
     TRACE("Main render started");
     render_skybox(state);
     render_bodies(state, scene_origin);
-    static GLuint main_occlusion_query_buffer[2];
-    render_star_glow(state, scene_origin, main_occlusion_query_buffer);
+    static GLuint main_occlusion_query_buffer;
+    render_star_glow(state, scene_origin, &main_occlusion_query_buffer);
     render_helpers(state, scene_origin);
     render_star(state, scene_origin);
     TRACE("Main render dispatched");
@@ -1113,8 +1090,8 @@ void render(GlobalState* state) {
 
         render_skybox(state);
         render_bodies(state, scene_origin);
-        static GLuint thumbnail_occlusion_query_buffer[2];
-        render_star_glow(state, scene_origin, thumbnail_occlusion_query_buffer);
+        static GLuint thumbnail_occlusion_query_buffer;
+        render_star_glow(state, scene_origin, &thumbnail_occlusion_query_buffer);
         render_helpers(state, scene_origin);
         render_star(state, scene_origin);
 

@@ -70,6 +70,16 @@ void Mesh::draw(void) {
     glDrawArrays(this->mode, 0, this->length);
 }
 
+PointMesh::PointMesh(void) :
+    Mesh(GL_POINTS, 1, true)
+{
+    float data[] = {0, 0, 0};
+
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 RectMesh::RectMesh(double width, double height) :
     Mesh(GL_TRIANGLE_STRIP, 4, true)
 {

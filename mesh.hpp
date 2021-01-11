@@ -15,6 +15,10 @@ struct Mesh {
     unsigned vbo;
 };
 
+struct PointMesh : public Mesh {
+    PointMesh(void);
+};
+
 struct RectMesh : public Mesh {
     RectMesh(double width, double height);
 };

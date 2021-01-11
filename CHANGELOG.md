@@ -13,6 +13,7 @@
 - Press P to pause / resume
 - Display surface speed in HUD
 - Better looking day/night transition
+- Fix star glow showing while star is outside of screen but behind planet
 
 # v0.9 - 2020-01-09
 - Output log to file (last.log)
